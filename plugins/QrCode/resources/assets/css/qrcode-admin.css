@@ -9,7 +9,7 @@
     align-items: start;
 }
 
-@media (max-width: 992px) {
+@media (max-width: 1200px) {
     .qrcode-generator-grid {
         grid-template-columns: 1fr;
     }

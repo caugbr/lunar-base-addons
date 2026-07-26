@@ -39,8 +39,8 @@
                         <label for="size">Dimensão do SVG (px)</label>
                         <select name="size" id="size" x-model="size" class="form-input">
                             <option value="200">200 x 200 px</option>
-                            <option value="300">300 x 300 px</option>
-                            <option value="500" selected>500 x 500 px (Padrão)</option>
+                            <option value="300" selected>300 x 300 px</option>
+                            <option value="500">500 x 500 px</option>
                             <option value="800">800 x 800 px (Impressão)</option>
                         </select>
                     </div>
@@ -90,7 +90,7 @@
     function qrCodeApp() {
         return {
             content: '{{ url("/") }}',
-            size: '500', // Define 500px como padrão no Alpine
+            size: '300',
             filename: 'qrcode-site',
             svgPreview: '',
 
