@@ -64,7 +64,6 @@ jobs:
                 const jsonPath = path.join('plugins', folder, 'plugin.json');
                 if (fs.existsSync(jsonPath)) {
                   const data = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
-                  data.slug = data.slug || toKebabCase(folder);
                   data.download_url = `${baseUrl}/${folder}.zip`;
                   catalog.plugins.push(data);
                 }
@@ -78,7 +77,6 @@ jobs:
                 const jsonPath = path.join('themes', folder, 'theme.json');
                 if (fs.existsSync(jsonPath)) {
                   const data = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
-                  data.slug = data.slug || toKebabCase(folder);
                   data.download_url = `${baseUrl}/${folder}.zip`;
                   catalog.themes.push(data);
                 }
