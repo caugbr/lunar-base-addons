@@ -1,0 +1,52 @@
+name: Gerar Pacotes de Addons (Plugins e Temas)
+
+# Dispara a Action sempre que uma nova Release for publicada no GitHub
+on:
+  release:
+    types: [published]
+
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Permissão obrigatória para poder anexar arquivos na Release
+
+    steps:
+      - name: Baixar código do repositório
+        uses: actions/checkout@v4
+
+      - name: Criar diretório temporário para os ZIPs
+        run: mkdir -p dist/
+
+      - name: Compactar Plugins
+        run: |
+          if [ -d "plugins" ]; then
+            for plugin_dir in plugins/*/; do
+              if [ -d "$plugin_dir" ]; then
+                slug=$(basename "$plugin_dir")
+                echo "→ Compactando plugin: $slug"
+                # Entra na pasta do plugin e compacta seu conteúdo gerando $slug.zip em dist/
+                (cd "$plugin_dir" && zip -r "../../dist/${slug}.zip" .)
+              fi
+            done
+          fi
+
+      - name: Compactar Temas
+        run: |
+          if [ -d "themes" ]; then
+            for theme_dir in themes/*/; do
+              if [ -d "$theme_dir" ]; then
+                slug=$(basename "$theme_dir")
+                echo "→ Compactando tema: $slug"
+                # Entra na pasta do tema e compacta seu conteúdo gerando $slug.zip em dist/
+                (cd "$theme_dir" && zip -r "../../dist/${slug}.zip" .)
+              fi
+            done
+          fi
+
+      - name: Anexar arquivos ZIP à Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
