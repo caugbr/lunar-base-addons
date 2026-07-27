@@ -1,0 +1,26 @@
+/* ============================================
+   Content
+   ============================================ */
+
+/* ---------- Content Container ---------- */
+.post-content,
+.page-content {
+    margin: var(--space-md) auto;
+}
+
+/* Clear float after content */
+.post-content::after,
+.page-content::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* ---------- Footer ---------- */
+.post-footer,
+.page-footer {
+    border-top: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+    text-align: right;
+    padding: 2px 0 var(--space-md);
+}

@@ -1,0 +1,32 @@
+/* ============================================
+   LUNAR BASE - Main Stylesheet
+   Orquestrador de módulos
+   ============================================ */
+
+/* Variables */
+@import url("vars.css");
+
+/* Base */
+@import url("base/reset.css");
+@import url("base/typography.css");
+
+/* Layout */
+@import url("layout/layout.css");
+@import url("layout/header.css");
+@import url("layout/footer.css");
+
+/* Components */
+@import url("components/buttons.css");
+@import url("components/badges.css");
+
+/* Sections */
+@import url("sections/sections-base.css");
+@import url("sections/hero.css");
+@import url("sections/features.css");
+
+/* Pages */
+@import url("pages/pages.css");
+@import url("pages/user-content.css");
+
+/* Utilities (sempre por último) */
+@import url("utilities.css");
