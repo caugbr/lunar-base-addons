@@ -1,0 +1,6 @@
+{
+    "name": "Backup",
+    "description": "Gerenciador completo de backups e restauração do sistema",
+    "version": "1.0.0",
+    "provider": "Plugins\\Backup\\BackupServiceProvider"
+}
