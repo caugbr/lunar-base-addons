@@ -28,7 +28,7 @@ class QrCodeServiceProvider extends ServiceProvider
             'route'      => 'admin.qrcode.index',
             'active'     => 'admin.qrcode.*',
             'permission' => 'manage-pages',
-        ], 'Ferramentas');
+        ], 'Configurações', 1);
 
         // 3. Registra os Hooks para Posts e Páginas
         $this->registerHooks();

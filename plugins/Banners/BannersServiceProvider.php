@@ -112,7 +112,7 @@ class BannersServiceProvider extends ServiceProvider
             'route' => 'admin.banners.index',
             'active' => 'admin.banners.*',
             'role' => 'admin',
-        ], 'Taxonomias');
+        ], 'Taxonomias', 1);
 
         \App\Support\AdminMenu::addSubItem('Banners', [
             'label' => 'Novo Banner',

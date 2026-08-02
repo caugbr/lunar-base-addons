@@ -58,6 +58,6 @@ class MenusServiceProvider extends ServiceProvider
             'route' => 'admin.menus.index',
             'active' => 'admin.menus.*',
             'role' => 'admin',
-        ], 'Temas');
+        ], 'Temas', 1);
     }
 }

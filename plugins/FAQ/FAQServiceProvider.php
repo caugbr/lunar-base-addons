@@ -65,6 +65,6 @@ class FAQServiceProvider extends ServiceProvider
             'route' => 'admin.faq.index',
             'active' => 'admin.faq.*',
             'permission' => 'manage-pages',
-        ], 'Temas');
+        ], 'Temas', 1);
     }
 }

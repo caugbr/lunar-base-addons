@@ -24,6 +24,6 @@ class PopulatorServiceProvider extends ServiceProvider
             'route' => 'admin.populator.index',
             'active' => 'admin.populator.*',
             'role' => 'admin',
-        ], 'Configurações');
+        ], 'Configurações', 1);
     }
 }
