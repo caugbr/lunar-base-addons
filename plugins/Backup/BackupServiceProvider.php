@@ -4,6 +4,7 @@ namespace Plugins\Backup;
 
 use Illuminate\Support\ServiceProvider;
 use App\Support\AdminMenu;
+use App\Support\HookManager;
 use Plugins\Backup\Console\Commands\BackupRunCommand;
 
 class BackupServiceProvider extends ServiceProvider
@@ -22,13 +23,26 @@ class BackupServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__ . '/resources/views', 'backup');
 
         // 2. Adiciona item de menu na sidebar do Admin
-        AdminMenu::add([
+        AdminMenu::addSubItem('Ferramentas', [
             'label'      => 'Backups',
             'icon'       => 'archive',
             'route'      => 'admin.backups.index',
             'active'     => 'admin.backups.*',
             'role'       => 'admin',
-        ], 'Sistema');
+        ], 'Exportar / Importar');
+
+        HookManager::register('admin.tools_page', function($params) {
+            if (view()->exists('admin.tools.tool-card')) {
+                return view('admin.tools.tool-card', [
+                    'icon' => 'archive',
+                    'title' => 'Backups',
+                    'text' => 'Faça e gerencie backups completos do seu conteúdo (database, temas e plugins)',
+                    'buttonTarget' => route('admin.backups.index'),
+                    'buttonLabel' => 'Backup',
+                ])->render();
+            }
+            return '';
+        }, 'Backup Plugin');
 
         // 3. Registra comando Artisan
         if ($this->app->runningInConsole()) {

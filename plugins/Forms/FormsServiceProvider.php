@@ -52,7 +52,7 @@ class FormsServiceProvider extends ServiceProvider
             'route' => 'admin.forms.index',
             'active' => 'admin.forms.*',
             'permission' => 'manage-pages',
-        ], 'Taxonomias');
+        ], 'Taxonomias', 1);
 
         \App\Support\AdminMenu::addSubItem('Formulários', [
             'label' => 'Novo Formulário',
