@@ -68,9 +68,12 @@
                     <div class="accordion-body" x-show="open">
                         <div class="checkbox-list">
                             @foreach($pages as $page)
+                            @php
+                                $path = '/' . ($page->namespace ? $page->namespace . '/' : '') . $page->slug;
+                            @endphp
                             <label class="checkbox-label">
                                 <input type="checkbox" value="{{ $page->id }}" data-title="{{ $page->title }}" data-type="page" data-model="App\Models\Page">
-                                <span>{{ $page->title }}</span>
+                                <span title="{{ $path }}">{{ $page->title }}</span>
                             </label>
                             @endforeach
                         </div>

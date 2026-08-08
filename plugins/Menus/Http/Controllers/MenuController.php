@@ -27,7 +27,7 @@ class MenuController extends Controller
      */
     public function create()
     {
-        return view('menus::admin.create'); // 💡 Corrigido: 'admin.forms.create'
+        return view('menus::admin.create');
     }
 
     /**
