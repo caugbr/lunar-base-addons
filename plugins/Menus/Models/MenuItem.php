@@ -13,53 +13,40 @@ class MenuItem extends Model
 
     protected $fillable = [
         'menu_id', 'parent_id', 'label', 'type', 'url',
-        'model_type', 'model_id', 'order', 'target', 'class'
+        'model_type', 'model_id', 'order', 'target', 'class', 'domains'
     ];
 
-    /**
-     * Pertence a um Menu pai
-     */
+    protected $casts = [
+        'domains' => 'array',
+    ];
+
     public function menu(): BelongsTo
     {
         return $this->belongsTo(Menu::class, 'menu_id');
     }
 
-    /**
-     * Pertence a um Item pai (caso seja sub-menu)
-     */
     public function parent(): BelongsTo
     {
         return $this->belongsTo(MenuItem::class, 'parent_id');
     }
 
-    /**
-     * Possui muitas sub-entradas filhas ordenadas
-     */
     public function children(): HasMany
     {
         return $this->hasMany(MenuItem::class, 'parent_id')
             ->orderBy('order', 'asc');
     }
 
-    /**
-     * Relacionamento polimórfico flexível com Page, Post ou Term
-     */
     public function model(): MorphTo
     {
         return $this->morphTo();
     }
 
-    /**
-     * RESOLVEDOR DINÂMICO DE LINKS:
-     * Retorna a URL final de forma reativa, sem risco de links quebrados
-     */
     public function getUrlAttribute(): string
     {
         if ($this->type === 'custom') {
             return $this->url ?? '#';
         }
 
-        // Se estiver vinculado a uma Page, Post ou Term, resolve a URL diretamente do model
         if ($this->model) {
             return $this->model->url;
         }
@@ -67,10 +54,6 @@ class MenuItem extends Model
         return '#';
     }
 
-    /**
-     * RESOLVEDOR DINÂMICO DE RÓTULO:
-     * Se o administrador não digitar um rótulo personalizado, ele busca o título original do modelo
-     */
     public function getLabelAttribute(?string $value): string
     {
         if ($value) {
@@ -82,5 +65,47 @@ class MenuItem extends Model
         }
 
         return '';
+    }
+
+    /**
+     * RESOLVEDOR DE VISIBILIDADE POR DOMÍNIO/NAMESPACE:
+     * Retorna se este item deve ser exibido no contexto atual
+     */
+    public function isVisibleForCurrentSite(): bool
+    {
+        $domains = $this->domains;
+
+        // Se nulo ou não definido, exibe em todos os domínios por padrão
+        if (empty($domains)) {
+            return true;
+        }
+
+        if (is_string($domains)) {
+            $domains = json_decode($domains, true) ?? array_map('trim', explode(',', $domains));
+        }
+
+        if (!is_array($domains) || in_array('*', $domains, true)) {
+            return true;
+        }
+
+        $currentHost      = function_exists('currentSiteDomain') ? currentSiteDomain() : request()->getHost();
+        $currentNamespace = function_exists('currentNamespace') ? currentNamespace() : 'default';
+        $isExtra          = function_exists('isExtraDomain') ? isExtraDomain() : false;
+
+        foreach ($domains as $domain) {
+            $domain = trim($domain);
+
+            // Match por host ou por namespace do site atual
+            if ($domain === $currentHost || $domain === $currentNamespace) {
+                return true;
+            }
+
+            // Alias para o site principal
+            if (in_array($domain, ['main', 'default', 'primary'], true) && !$isExtra) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

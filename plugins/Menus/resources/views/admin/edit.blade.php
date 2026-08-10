@@ -2,7 +2,6 @@
 @section('header_title', 'Estrutura do Menu')
 @section('header_subtitle', 'Editando links de: ' . $menu->name)
 
-{{-- Injeta o CSS de forma limpa --}}
 @once
 @push('styles')
 <link rel="stylesheet" href="{{ asset('plugins/menus/css/menus.css') }}">
@@ -10,7 +9,6 @@
 @endonce
 
 @section('content')
-{{-- Card de Propriedades do Menu --}}
 <div class="admin-card" style="margin-bottom: 1.5rem;">
     <div class="admin-card-header">
         <h2><x-lucide-square-pen class="lucid-icon" /> Propriedades do Menu</h2>
@@ -49,16 +47,15 @@
     </form>
 </div>
 
-{{-- Construtor de Itens do Menu --}}
-<div class="menu-builder-container" x-data="menuBuilder({{ $itemsJson }})" x-cloak>
+<div class="menu-builder-container" x-data="menuBuilder({{ $itemsJson }}, {{ $availableDomainsJson }})" x-cloak>
 
-    {{-- Coluna da Esquerda (Fontes de Links) --}}
+    {{-- Coluna Esquerda --}}
     <div class="sources-column">
         <div class="edit-box">
             <header>Adicionar Itens ao Menu</header>
             <article>
 
-                <!-- Sanfona 1: Páginas -->
+                <!-- Sanfona 1: Páginas (Desambiguadas por namespace) -->
                 <div class="accordion-item" x-data="{ open: false }">
                     <button type="button" class="accordion-header" @click="open = !open">
                         <span>Páginas Dinâmicas</span>
@@ -70,10 +67,11 @@
                             @foreach($pages as $page)
                             @php
                                 $path = '/' . ($page->namespace ? $page->namespace . '/' : '') . $page->slug;
+                                $displayTitle = $page->title . ($page->namespace ? " [ns: {$page->namespace}]" : '');
                             @endphp
                             <label class="checkbox-label">
                                 <input type="checkbox" value="{{ $page->id }}" data-title="{{ $page->title }}" data-type="page" data-model="App\Models\Page">
-                                <span title="{{ $path }}">{{ $page->title }}</span>
+                                <span title="{{ $path }}">{{ $displayTitle }}</span>
                             </label>
                             @endforeach
                         </div>
@@ -134,7 +132,7 @@
         </div>
     </div>
 
-    {{-- Coluna da Direita (Estrutura em Árvore) --}}
+    {{-- Coluna Direita (Árvore) --}}
     <div class="builder-column">
         <div class="admin-card" style="margin-bottom: 0;">
             <div class="admin-card-header">
@@ -145,10 +143,9 @@
             </div>
 
             <p style="font-size: 0.875rem; color: var(--color-text-muted); margin-bottom: 1.5rem;">
-                Adicione links a partir da coluna esquerda, use os controles de setas para organizar a sequência e aninhar sub-menus, e clique em "Salvar Estrutura".
+                Adicione links a partir da coluna esquerda, configure os domínios de exibição e use as setas para organizar a hierarquia.
             </p>
 
-            {{-- Área de Renderização da Árvore Visual --}}
             <div class="menu-items-tree">
                 <template x-if="flatItems.length === 0">
                     <p style="text-align: center; color: var(--color-text-dim); padding: 3rem 0;">
@@ -160,16 +157,19 @@
                     <template x-for="(item, index) in flatItems" :key="index">
                         <div class="tree-item-wrapper" :style="`padding-left: ${item.depth * 2.5}rem;`" :class="{ 'has-depth': item.depth > 0 }">
                             <div class="tree-item">
-                                {{-- Tipo / Rótulo --}}
                                 <div class="tree-item-title">
                                     <span class="item-type-badge" x-text="item.type.toUpperCase()"></span>
                                     <strong x-text="item.label"></strong>
                                     <template x-if="item.type === 'custom'">
                                         <small x-text="item.url" class="admin-text-muted" style="margin-left: 8px; font-weight: normal;"></small>
                                     </template>
+
+                                    <!-- Badge de Domínios -->
+                                    <span style="font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; background: #e0e7ff; color: #3730a3; margin-left: 8px;"
+                                          x-text="item.domains.includes('*') ? 'Todos os domínios' : item.domains.join(', ')">
+                                    </span>
                                 </div>
 
-                                {{-- Controles de Movimentação --}}
                                 <div class="tree-item-controls">
                                     <button type="button" @click="moveUp(index)" :disabled="index === 0" title="Subir">
                                         <x-lucide-chevron-up class="lucid-icon" />
@@ -177,10 +177,10 @@
                                     <button type="button" @click="moveDown(index)" :disabled="index === flatItems.length - 1" title="Descer">
                                         <x-lucide-chevron-down class="lucid-icon" />
                                     </button>
-                                    <button type="button" @click="indent(index)" :disabled="index === 0 || flatItems[index].depth > flatItems[index-1].depth" title="Aninhar (Sub-menu)">
+                                    <button type="button" @click="indent(index)" :disabled="index === 0 || flatItems[index].depth > flatItems[index-1].depth" title="Aninhar">
                                         <x-lucide-chevron-right class="lucid-icon" />
                                     </button>
-                                    <button type="button" @click="outdent(index)" :disabled="item.depth === 0" title="Recuar nível">
+                                    <button type="button" @click="outdent(index)" :disabled="item.depth === 0" title="Recuar">
                                         <x-lucide-chevron-left class="lucid-icon" />
                                     </button>
                                     <button type="button" @click="toggleEdit(index)" class="control-btn-edit" title="Configurações extras">
@@ -192,23 +192,51 @@
                                 </div>
                             </div>
 
-                            {{-- Painel de Configurações Extras do Item --}}
+                            {{-- Configurações do Item --}}
                             <div class="tree-item-settings" x-show="item.editing" x-transition>
                                 <div class="admin-form-row">
-                                    <div class="form-group">
+                                    <div class="form-group" style="flex: 2;">
                                         <label style="font-size: 0.75rem;">Rótulo de exibição</label>
                                         <input type="text" x-model="item.label" class="form-input">
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group" style="flex: 2;">
                                         <label style="font-size: 0.75rem;">Classe CSS extra (opcional)</label>
                                         <input type="text" x-model="item.class" placeholder="ex: btn-destaque" class="form-input">
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group" style="flex: 1;">
                                         <label style="font-size: 0.75rem;">Destino do Link</label>
                                         <select x-model="item.target" class="form-input">
-                                            <option value="_self">Abrir na mesma guia</option>
-                                            <option value="_blank">Abrir em nova guia (_blank)</option>
+                                            <option value="_self">Mesma guia</option>
+                                            <option value="_blank">Nova guia (_blank)</option>
                                         </select>
+                                    </div>
+                                </div>
+
+                                {{-- Seletor de Visibilidade por Domínio --}}
+                                <div class="form-group" style="margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--color-border, #e5e7eb);">
+                                    <label style="font-size: 0.75rem; font-weight: 600; margin-bottom: 6px; display: block;">
+                                        Exibir nos Domínios / Contextos:
+                                    </label>
+                                    <div style="display: flex; gap: 1.25rem; flex-wrap: wrap;">
+                                        <label style="font-size: 0.8rem; display: flex; align-items: center; gap: 5px; cursor: pointer;">
+                                            <input type="checkbox"
+                                                   value="*"
+                                                   :checked="item.domains.includes('*')"
+                                                   @change="toggleDomain(index, '*')">
+                                            <span><strong>Todos os domínios (*)</strong></span>
+                                        </label>
+
+                                        <template x-for="domainOpt in availableDomains" :key="domainOpt.key">
+                                            <label style="font-size: 0.8rem; display: flex; align-items: center; gap: 5px; cursor: pointer;"
+                                                   :style="item.domains.includes('*') ? 'opacity: 0.5;' : ''">
+                                                <input type="checkbox"
+                                                       :value="domainOpt.key"
+                                                       :checked="item.domains.includes(domainOpt.key)"
+                                                       :disabled="item.domains.includes('*')"
+                                                       @change="toggleDomain(index, domainOpt.key)">
+                                                <span x-text="domainOpt.label"></span>
+                                            </label>
+                                        </template>
                                     </div>
                                 </div>
                             </div>
@@ -236,9 +264,10 @@
 @push('scripts')
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 <script>
-    function menuBuilder(initialItems) {
+    function menuBuilder(initialItems, availableDomains) {
         return {
             flatItems: [],
+            availableDomains: availableDomains || [],
             saving: false,
 
             init() {
@@ -256,6 +285,7 @@
                         model_id: item.model_id || null,
                         target: item.target || '_self',
                         class: item.class || '',
+                        domains: (item.domains && item.domains.length) ? item.domains : ['*'],
                         depth: depth,
                         editing: false
                     });
@@ -279,6 +309,7 @@
                         model_id: item.model_id,
                         target: item.target,
                         class: item.class,
+                        domains: (item.domains && item.domains.length) ? item.domains : ['*'],
                         children: []
                     };
 
@@ -295,6 +326,29 @@
                 return tree;
             },
 
+            toggleDomain(index, domainKey) {
+                let current = this.flatItems[index].domains || ['*'];
+
+                if (domainKey === '*') {
+                    this.flatItems[index].domains = ['*'];
+                    return;
+                }
+
+                current = current.filter(d => d !== '*');
+
+                if (current.includes(domainKey)) {
+                    current = current.filter(d => d !== domainKey);
+                } else {
+                    current.push(domainKey);
+                }
+
+                if (current.length === 0) {
+                    current = ['*'];
+                }
+
+                this.flatItems[index].domains = current;
+            },
+
             addCustomLink(url, label) {
                 this.flatItems.push({
                     label: label,
@@ -304,6 +358,7 @@
                     model_id: null,
                     target: '_self',
                     class: '',
+                    domains: ['*'],
                     depth: 0,
                     editing: false
                 });
@@ -322,6 +377,7 @@
                         model_id: parseInt(cb.value),
                         target: '_self',
                         class: '',
+                        domains: ['*'],
                         depth: 0,
                         editing: false
                     });

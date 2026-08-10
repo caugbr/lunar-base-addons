@@ -13,26 +13,17 @@ use App\Models\Term;
 
 class MenuController extends Controller
 {
-    /**
-     * Lista todos os menus criados
-     */
     public function index()
     {
         $menus = Menu::orderBy('name')->get();
-        return view('menus::admin.index', compact('menus')); // 💡 Corrigido: 'admin.forms.index'
+        return view('menus::admin.index', compact('menus'));
     }
 
-    /**
-     * Tela de criação (usamos o formulário inline no index, mas mantemos o método mapeado)
-     */
     public function create()
     {
         return view('menus::admin.create');
     }
 
-    /**
-     * Grava um novo menu e redireciona direto para a tela do construtor (Edit)
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -47,61 +38,69 @@ class MenuController extends Controller
             ->with('success', "Menu '{$menu->name}' criado! Agora adicione os links.");
     }
 
-    /**
-     * A Tela Central do Construtor de Menus
-     */
     public function edit(Menu $menu)
     {
-        // Carrega dados do sistema para as sanfonas de links
         $pages = Page::published()->orderBy('title')->get();
         $posts = Post::published()->orderBy('title')->get();
         $terms = Term::orderBy('name')->get();
 
-        // Serializa a árvore recursiva do banco em JSON para o Alpine
-        $itemsJson = json_encode($this->getSerializedTree($menu->rootItems));
+        // Mapeia domínios extras disponíveis para o seletor no construtor
+        $extraDomains = function_exists('siteDomains') ? siteDomains() : [];
+        $availableDomains = [
+            ['key' => 'main', 'label' => 'Domínio Principal (Padrão)']
+        ];
 
-        return view('menus::admin.edit', compact('menu', 'pages', 'posts', 'terms', 'itemsJson')); // 💡 Corrigido: 'admin.forms.edit'
+        foreach ($extraDomains as $extra) {
+            $key = !empty($extra['namespace']) ? $extra['namespace'] : (!empty($extra['domain']) ? $extra['domain'] : null);
+            if ($key) {
+                $label = !empty($extra['domain']) ? $extra['domain'] : $key;
+                if (!empty($extra['namespace'])) {
+                    $label .= " ({$extra['namespace']})";
+                }
+                $availableDomains[] = [
+                    'key'   => $key,
+                    'label' => $label
+                ];
+            }
+        }
+
+        $itemsJson = json_encode($this->getSerializedTree($menu->rootItems));
+        $availableDomainsJson = json_encode($availableDomains);
+
+        return view('menus::admin.edit', compact('menu', 'pages', 'posts', 'terms', 'itemsJson', 'availableDomainsJson'));
     }
 
-    /**
-     * Auxiliar recursivo para formatar os itens do banco para o JSON do front-end
-     */
     protected function getSerializedTree($items): array
     {
         return $items->map(function ($item) {
             return [
-                'label'      => $item->label, // Chama o acessor inteligente de rótulo
+                'label'      => $item->label,
                 'type'       => $item->type,
                 'url'        => $item->url,
                 'model_type' => $item->model_type,
                 'model_id'   => $item->model_id,
                 'target'     => $item->target,
                 'class'      => $item->class,
+                'domains'    => $item->domains ?? ['*'],
                 'children'   => $this->getSerializedTree($item->children),
             ];
         })->toArray();
     }
 
-    /**
-     * Atualiza o nome, slug e hook do menu de forma convencional
-     */
     public function update(Request $request, Menu $menu)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'slug' => "required|string|max:255|alpha_dash|unique:menus,slug,{$menu->id}",
-            'hook' => "nullable|string|max:255", // Adicionada a validação do hook
+            'hook' => "nullable|string|max:255",
         ]);
 
         $menu->update($validated);
 
-        return redirect()->back() // Redireciona de volta para continuar organizando os links!
+        return redirect()->back()
             ->with('success', 'Propriedades do menu atualizadas com sucesso.');
     }
 
-    /**
-     * Remove o menu e todos os seus itens associados (cascade)
-     */
     public function destroy(Menu $menu)
     {
         $menu->delete();
@@ -109,9 +108,6 @@ class MenuController extends Controller
             ->with('success', 'Menu removido com sucesso.');
     }
 
-    /**
-     * SALVAMENTO RECURSIVO EM ÁRVORE (JSON)
-     */
     public function saveItems(Request $request, Menu $menu)
     {
         $request->validate([
@@ -122,10 +118,7 @@ class MenuController extends Controller
 
         try {
             DB::transaction(function () use ($menu, $tree) {
-                // 1. Limpa todas as entradas de links anteriores deste menu de forma segura
                 $menu->items()->delete();
-
-                // 2. Dispara a inserção recursiva de ramos e folhas da árvore
                 $this->saveMenuItemBranch($menu->id, $tree);
             });
 
@@ -143,14 +136,10 @@ class MenuController extends Controller
         }
     }
 
-    /**
-     * Algoritmo auxiliar recursivo para inserção em cascata
-     */
     protected function saveMenuItemBranch(int $menuId, array $branch, ?int $parentId = null): void
     {
         foreach ($branch as $index => $itemData) {
 
-            // Grava o item atual vinculando seu respectivo parent_id (se houver)
             $item = MenuItem::create([
                 'menu_id'    => $menuId,
                 'parent_id'  => $parentId,
@@ -162,9 +151,9 @@ class MenuController extends Controller
                 'order'      => $index,
                 'target'     => $itemData['target'] ?? '_self',
                 'class'      => $itemData['class'] ?? null,
+                'domains'    => $itemData['domains'] ?? ['*'],
             ]);
 
-            // Se esse item possuir filhos na árvore do JSON, chama a si mesmo recursivamente
             if (!empty($itemData['children']) && is_array($itemData['children'])) {
                 $this->saveMenuItemBranch($menuId, $itemData['children'], $item->id);
             }
