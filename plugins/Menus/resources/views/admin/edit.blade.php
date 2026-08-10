@@ -227,13 +227,11 @@
                                         </label>
 
                                         <template x-for="domainOpt in availableDomains" :key="domainOpt.key">
-                                            <label style="font-size: 0.8rem; display: flex; align-items: center; gap: 5px; cursor: pointer;"
-                                                   :style="item.domains.includes('*') ? 'opacity: 0.5;' : ''">
+                                            <label style="font-size: 0.8rem; display: flex; align-items: center; gap: 5px; cursor: pointer;">
                                                 <input type="checkbox"
-                                                       :value="domainOpt.key"
-                                                       :checked="item.domains.includes(domainOpt.key)"
-                                                       :disabled="item.domains.includes('*')"
-                                                       @change="toggleDomain(index, domainOpt.key)">
+                                                    :value="domainOpt.key"
+                                                    :checked="item.domains.includes(domainOpt.key) && !item.domains.includes('*')"
+                                                    @change="toggleDomain(index, domainOpt.key)">
                                                 <span x-text="domainOpt.label"></span>
                                             </label>
                                         </template>
@@ -327,21 +325,32 @@
             },
 
             toggleDomain(index, domainKey) {
-                let current = this.flatItems[index].domains || ['*'];
+                let current = [...(this.flatItems[index].domains || ['*'])];
 
+                // Se o usuário clicou na caixa "Todos os domínios (*)"
                 if (domainKey === '*') {
-                    this.flatItems[index].domains = ['*'];
+                    // Se '*' JÁ estava marcado, desmarcar ele muda a seleção para o Domínio Principal ('main')
+                    if (current.includes('*')) {
+                        this.flatItems[index].domains = ['main'];
+                    } else {
+                        // Se '*' NÃO estava marcado, marca o '*' e limpa os específicos
+                        this.flatItems[index].domains = ['*'];
+                    }
                     return;
                 }
 
+                // Se o usuário clicou em um domínio específico (ex: 'main', 'parceiros'):
+                // 1. Remove o '*' da lista caso ele estivesse presente
                 current = current.filter(d => d !== '*');
 
+                // 2. Alterna o domínio clicado (adiciona se não tem, remove se tem)
                 if (current.includes(domainKey)) {
                     current = current.filter(d => d !== domainKey);
                 } else {
                     current.push(domainKey);
                 }
 
+                // 3. Se desmarcou todos os específicos, volta automaticamente para '*'
                 if (current.length === 0) {
                     current = ['*'];
                 }
