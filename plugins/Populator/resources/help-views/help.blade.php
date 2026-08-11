@@ -15,4 +15,6 @@
 
     <h4>Dica</h4>
     <p>Crie usuarios antes de gerar posts e paginas, pois elas precisam de autores existentes.</p>
+
+    <x-configurable-plugin-values plugin="Populator" />
 </div>

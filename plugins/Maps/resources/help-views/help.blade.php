@@ -51,4 +51,6 @@
         <li><strong>Permitir arrastar:</strong> habilita/desabilita o arraste do mapa.</li>
         <li><strong>Zoom com scroll:</strong> permite aproximar com a roda do mouse.</li>
     </ul>
+
+    <x-configurable-plugin-values plugin="Maps" />
 </div>

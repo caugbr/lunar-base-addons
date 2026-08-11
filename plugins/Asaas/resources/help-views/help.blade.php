@@ -64,4 +64,6 @@
             Ao testar no ambiente de Sandbox do Asaas, você pode simular o pagamento de cobranças utilizando a ferramenta de teste de PIX e Cartão oferecida pelo próprio painel do Asaas.
         </p>
     </blockquote>
+
+    <x-configurable-plugin-values plugin="Asaas" />
 </div>

@@ -95,4 +95,6 @@
             Os e-mails só serão entregues se as configurações de servidor SMTP estiverem corretamente preenchidas no painel do administrador em <strong>Admin → Configurações → E-mail</strong>.
         </p>
     </blockquote>
+
+    <x-configurable-plugin-values plugin="Forms" />
 </div>

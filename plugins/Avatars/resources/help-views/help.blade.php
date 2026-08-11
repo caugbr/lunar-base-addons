@@ -32,4 +32,6 @@
     <p>
         Quando um Administrador exclui um usuário através do painel, o plugin escuta o evento de deleção do Eloquent e remove fisicamente o arquivo <code>{user_id}.webp</code> do disco, prevenindo arquivos órfãos de mídia no servidor.
     </p>
+
+    <x-configurable-plugin-values plugin="Avatars" />
 </div>

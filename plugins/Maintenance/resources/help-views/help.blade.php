@@ -31,4 +31,6 @@
     <p>
         Quando o bloqueio está ativo, os visitantes comuns recebem um cabeçalho HTTP de status <strong>503 Service Unavailable</strong>. Isso avisa os robôs de busca (Google, Bing) que o site está passando por ajustes temporários, fazendo com que eles <strong>não indexem</strong> a tela de manutenção no lugar do seu conteúdo real.
     </p>
+
+    <x-configurable-plugin-values plugin="Maintenance" />
 </div>

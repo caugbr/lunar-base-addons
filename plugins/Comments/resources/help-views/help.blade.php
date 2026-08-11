@@ -26,4 +26,6 @@
     <p>
         Se o plugin de <strong>Avatares (Avatars System)</strong> estiver ativo, a área de listagem substituirá as iniciais geradas do nome do autor pela foto de perfil WebP customizada dele de forma automática, elevando o visual estético da sua comunidade.
     </p>
+
+    <x-configurable-plugin-values plugin="Comments" />
 </div>

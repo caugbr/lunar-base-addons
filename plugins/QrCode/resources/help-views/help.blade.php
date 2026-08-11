@@ -27,4 +27,6 @@
             A renderização utiliza o mecanismo vetorial nativo em SVG. Isso garante que a imagem não perca resolução ao ser ampliada para impressão e não sobrecarregue o banco de dados.
         </p>
     </blockquote>
+
+    <x-configurable-plugin-values plugin="QrCode" />
 </div>

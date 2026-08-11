@@ -26,4 +26,6 @@
     <p style="margin: 0;">
         Como o Lucide Icons não possui mais logos de marcas registradas, o plugin resolve isso injetando **Inline SVGs** leves de alta resolução. Eles herdam as cores das suas respectivas marcas de forma sutil durante o efeito de hover, sem depender de nenhuma biblioteca ou fonte externa.
     </p>
+
+    <x-configurable-plugin-values plugin="Share" />
 </div>

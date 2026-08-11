@@ -78,4 +78,6 @@ console.log('Sem node_modules, sem frescura.');
         <li><strong>Segurança:</strong> O conteúdo inserido entre as tags é automaticamente escapado (sanitizado) pelo Laravel, prevenindo execução de scripts maliciosos (XSS).</li>
         <li><strong>Personalização:</strong> Se desejar alterar as cores, sombras ou fontes, você pode sobrescrever o arquivo <code>prismhighlight.css</code> no seu tema ativo do Lunar Base.</li>
     </ul>
+
+    <x-configurable-plugin-values plugin="PrismHighlight" />
 </div>

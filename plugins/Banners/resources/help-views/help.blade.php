@@ -52,4 +52,6 @@
         <li>Prefira imagens otimizadas (WebP/JPG) para nao comprometer a performance</li>
         <li>Use o target "Nova aba" para links externos</li>
     </ul>
+
+    <x-configurable-plugin-values plugin="Banners" />
 </div>

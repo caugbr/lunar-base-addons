@@ -40,4 +40,6 @@
     <p>
         O painel do construtor de menus possui controles de setas laterais para mover, subir, descer e aninhar links. Esse design permite gerenciar sub-menus com rapidez e sem os travamentos característicos de bibliotecas de arrastar e soltar (drag-and-drop) em dispositivos móveis.
     </p>
+
+    <x-configurable-plugin-values plugin="Menus" />
 </div>

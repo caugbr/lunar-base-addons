@@ -23,4 +23,6 @@
     <div class="code">
         php artisan backup:run
     </div>
+
+    <x-configurable-plugin-values plugin="Backup" />
 </div>

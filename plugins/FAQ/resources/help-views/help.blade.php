@@ -26,4 +26,6 @@
             A renderização de apresentação utiliza as tags estruturais oficiais do HTML5 (<code>&lt;details&gt;</code> e <code>&lt;summary&gt;</code>). Isso garante que a abertura e o fechamento dos acordeões funcionem de forma ultra-veloz, sem carregar sequer uma única linha de JavaScript no front-end do seu tema público!
         </p>
     </blockquote>
+
+    <x-configurable-plugin-values plugin="FAQ" />
 </div>

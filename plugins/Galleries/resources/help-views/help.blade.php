@@ -178,4 +178,6 @@
     <h4>Menu</h4>
     <p><strong>Configurações → Galleries</strong> (ícone: 🖼️ <code>images</code>)</p>
     <p>Acesso: <code>admin</code> e <code>editor</code>.</p>
+
+    <x-configurable-plugin-values plugin="Galleries" />
 </div>
