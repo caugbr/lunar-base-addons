@@ -105,6 +105,9 @@ class BannersServiceProvider extends ServiceProvider
             }
         }
 
+        $menuAfterItem = config('pluginSettings.Asaas.menuAfterItem', 'Taxonomias');
+        $menuSet = config('pluginSettings.Asaas.menuSet', 1);
+
         // 6. Injeta links no menu lateral administrativo
         \App\Support\AdminMenu::add([
             'label' => 'Banners',
@@ -112,7 +115,7 @@ class BannersServiceProvider extends ServiceProvider
             'route' => 'admin.banners.index',
             'active' => 'admin.banners.*',
             'role' => 'admin',
-        ], 'Taxonomias', 1);
+        ], $menuAfterItem, $menuSet);
 
         \App\Support\AdminMenu::addSubItem('Banners', [
             'label' => 'Novo Banner',

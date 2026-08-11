@@ -1,6 +1,18 @@
 {
     "name": "Maps",
     "description": "Crie mapas OpenStreetMap e defina pontos no mapa.",
-    "version": "1.0.0",
-    "provider": "Plugins\\Maps\\MapsServiceProvider"
+    "version": "1.1.0",
+    "provider": "Plugins\\Maps\\MapsServiceProvider",
+    "configurable": {
+        "menuAfterItem": {
+            "type": "string",
+            "default": "Taxonomias",
+            "description": "Label do item referência para posicionar link no menu da admin"
+        },
+        "menuSet": {
+            "type": "integer",
+            "default": 1,
+            "description": "Índice do set de links para inserir o link no menu da admin"
+        }
+    }
 }

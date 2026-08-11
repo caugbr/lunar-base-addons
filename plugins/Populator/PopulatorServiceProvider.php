@@ -18,12 +18,15 @@ class PopulatorServiceProvider extends ServiceProvider
     {
         $this->loadViewsFrom(__DIR__ . '/resources/views', 'populator');
 
+        $menuAfterItem = config('pluginSettings.Asaas.menuAfterItem', 'Configurações');
+        $menuSet = config('pluginSettings.Asaas.menuSet', 1);
+
         \App\Support\AdminMenu::add([
             'label' => 'Populator',
             'icon'  => 'flask-conical',
             'route' => 'admin.populator.index',
             'active' => 'admin.populator.*',
             'role' => 'admin',
-        ], 'Configurações', 1);
+        ], $menuAfterItem, $menuSet);
     }
 }

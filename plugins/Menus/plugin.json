@@ -1,6 +1,18 @@
 {
     "name": "Menus",
     "description": "Gerencia e adiciona menus customizados ao site.",
-    "version": "1.2.1",
-    "provider": "Plugins\\Menus\\MenusServiceProvider"
+    "version": "1.3.0",
+    "provider": "Plugins\\Menus\\MenusServiceProvider",
+    "configurable": {
+        "menuAfterItem": {
+            "type": "string",
+            "default": "Temas",
+            "description": "Label do item referência para posicionar link no menu da admin"
+        },
+        "menuSet": {
+            "type": "integer",
+            "default": 1,
+            "description": "Índice do set de links para inserir o link no menu da admin"
+        }
+    }
 }

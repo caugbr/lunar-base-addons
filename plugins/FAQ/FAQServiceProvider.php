@@ -58,6 +58,9 @@ class FAQServiceProvider extends ServiceProvider
             ]
         );
 
+        $menuAfterItem = config('pluginSettings.Asaas.menuAfterItem', 'Temas');
+        $menuSet = config('pluginSettings.Asaas.menuSet', 1);
+
         // 3. Injeta a aba FAQ no painel administrativo lateral
         \App\Support\AdminMenu::add([
             'label' => 'FAQ',
@@ -65,6 +68,6 @@ class FAQServiceProvider extends ServiceProvider
             'route' => 'admin.faq.index',
             'active' => 'admin.faq.*',
             'permission' => 'manage-pages',
-        ], 'Temas', 1);
+        ], $menuAfterItem, $menuSet);
     }
 }

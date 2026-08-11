@@ -51,6 +51,9 @@ class MenusServiceProvider extends ServiceProvider
             }
         }
 
+        $menuAfterItem = config('pluginSettings.Asaas.menuAfterItem', 'Temas');
+        $menuSet = config('pluginSettings.Asaas.menuSet', 1);
+
         // Injeta o link no menu lateral administrativo
         \App\Support\AdminMenu::add([
             'label' => 'Menus',

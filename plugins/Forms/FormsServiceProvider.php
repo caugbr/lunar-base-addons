@@ -46,13 +46,16 @@ class FormsServiceProvider extends ServiceProvider
             ]
         );
 
+        $menuAfterItem = config('pluginSettings.Asaas.menuAfterItem', 'Taxonomias');
+        $menuSet = config('pluginSettings.Asaas.menuSet', 1);
+
         \App\Support\AdminMenu::add([
             'label' => 'Formulários',
             'icon'  => 'form',
             'route' => 'admin.forms.index',
             'active' => 'admin.forms.*',
             'permission' => 'manage-pages',
-        ], 'Taxonomias', 1);
+        ], $menuAfterItem, $menuSet);
 
         \App\Support\AdminMenu::addSubItem('Formulários', [
             'label' => 'Novo Formulário',
