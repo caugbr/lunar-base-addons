@@ -1,7 +1,7 @@
 {
     "name": "Qr Code",
     "description": "Gere QR Codes din\u00e2micos para posts, p\u00e1ginas e conte\u00fados avulsos.",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "provider": "Plugins\\QrCode\\QrCodeServiceProvider",
     "configurable": {
         "menuAfterItem": {

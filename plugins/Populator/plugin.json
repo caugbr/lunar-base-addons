@@ -1,7 +1,7 @@
 {
     "name": "Populator",
     "description": "Gera conteudo de teste: usuarios, posts e paginas com imagens placeholder.",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "provider": "Plugins\\Populator\\PopulatorServiceProvider",
     "configurable": {
         "menuAfterItem": {

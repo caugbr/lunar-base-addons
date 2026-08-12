@@ -1,7 +1,7 @@
 {
     "name": "Forms",
     "description": "Formul\u00e1rios din\u00e2micos via shortcode.",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "provider": "Plugins\\Forms\\FormsServiceProvider",
     "configurable": {
         "menuAfterItem": {

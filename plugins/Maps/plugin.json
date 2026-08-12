@@ -1,7 +1,7 @@
 {
     "name": "Maps",
     "description": "Crie mapas OpenStreetMap e defina pontos no mapa.",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "provider": "Plugins\\Maps\\MapsServiceProvider",
     "configurable": {
         "menuAfterItem": {
