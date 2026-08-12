@@ -55,24 +55,22 @@
             <header>Adicionar Itens ao Menu</header>
             <article>
 
-                <!-- 1. Páginas Dinâmicas -->
-                <x-menus::source
-                    title="Páginas Dinâmicas"
-                    type="page"
-                    model="App\Models\Page"
-                    :items="$pages"
-                    badgeField="namespace"
-                />
+                @foreach(\App\Support\PostTypeManager::all() as $typeKey => $type)
+                    @php
+                        $modelClass = $type['model'];
+                        $items = ($modelClass && class_exists($modelClass)) 
+                            ? $modelClass::query()->get() 
+                            : [];
+                    @endphp
+                    <x-menus::source 
+                        :title="$type['label']" 
+                        :type="$typeKey" 
+                        :model="$modelClass" 
+                        :items="$items" 
+                        :titleField="method_exists($modelClass, 'getTitleAttribute') ? 'title' : 'name'"
+                    />
+                @endforeach
 
-                <!-- 2. Posts do Blog -->
-                <x-menus::source
-                    title="Posts do Blog"
-                    type="post"
-                    model="App\Models\Post"
-                    :items="$posts"
-                />
-
-                <!-- 3. Taxonomias e Categorias -->
                 <x-menus::source
                     title="Taxonomias"
                     type="term"
@@ -82,10 +80,8 @@
                     badgeField="taxonomy.name"
                 />
 
-                <!-- 4. Sanfonas injetadas por Plugins de Terceiros via Hook -->
                 <x-hook name="admin.menus.add_sources" desc="Injeta sanfonas de fontes de links no construtor de menus" />
 
-                <!-- 5. Links Customizados (Mantém o formulário livre) -->
                 <div class="accordion-item" x-data="{ open: false, url: '', label: '' }">
                     <button type="button" class="accordion-header" @click="open = !open">
                         <span>Links Personalizados</span>
