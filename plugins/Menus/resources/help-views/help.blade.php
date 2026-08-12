@@ -10,7 +10,7 @@
 
     <h4>Links Polimórficos Dinâmicos (Anti-404)</h4>
     <p>
-        Ao vincular um item de menu a uma Página ou Post do blog, o plugin não grava a URL como texto fixo, mas sim a relação direta com o registro do banco de dados. Caso o slug mude, as URLs dos menus se atualizarão automaticamente, evitando links quebrados de forma transparente!
+        Ao vincular um item de menu a uma Página, Post do blog ou Termo de Taxonomia, o plugin não grava a URL como texto fixo, mas sim a relação direta com o registro do banco de dados. Caso o slug mude, as URLs dos menus se atualizarão automaticamente, evitando links quebrados de forma transparente!
     </p>
 
     <h4>Como Renderizar (Hooks e Mapeamento no Banco)</h4>
@@ -34,6 +34,26 @@
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@endforeach<br>
         &nbsp;&nbsp;&nbsp;&nbsp;&lt;/x-hook&gt;<br>
         &lt;/nav&gt;
+    </div>
+
+    <h4>Extensibilidade: Adicionar Fontes de Links de Outros Plugins</h4>
+    <p>
+        Qualquer plugin externo (ex: e-Commerce, Cursos, Eventos) pode injetar suas próprias sanfonas de seleção na coluna esquerda do construtor de menus escutando o gancho <code>admin.menus.add_sources</code> e utilizando o componente padronizado <code>&lt;x-menus::source /&gt;</code>.
+    </p>
+
+    <h5>Exemplo de Registro no ServiceProvider de um Plugin Externo:</h5>
+    <div class="code">
+        HookManager::register('admin.menus.add_sources', function ($params) {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;$produtos = \Plugins\Produtos\Models\Produto::published()-&gt;get();<br><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;return \Illuminate\Support\Facades\Blade::render('<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;x-menus::source<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;title="Produtos do e-Commerce"<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type="produto"<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;model="Plugins\Produtos\Models\Produto"<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:items="$produtos"<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;', ['produtos' =&gt; $produtos]);<br>
+        }, 'Produtos Plugin');
     </div>
 
     <h4>Controle Hierárquico Inteligente</h4>

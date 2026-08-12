@@ -18,8 +18,8 @@ class PopulatorServiceProvider extends ServiceProvider
     {
         $this->loadViewsFrom(__DIR__ . '/resources/views', 'populator');
 
-        $menuAfterItem = config('pluginSettings.Asaas.menuAfterItem', 'Configurações');
-        $menuSet = config('pluginSettings.Asaas.menuSet', 1);
+        $menuAfterItem = config('pluginSettings.Populator.menuAfterItem', 'Configurações');
+        $menuSet = config('pluginSettings.Populator.menuSet', 1);
 
         \App\Support\AdminMenu::add([
             'label' => 'Populator',

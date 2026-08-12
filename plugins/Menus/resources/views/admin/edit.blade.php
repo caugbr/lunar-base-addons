@@ -55,55 +55,37 @@
             <header>Adicionar Itens ao Menu</header>
             <article>
 
-                <!-- Sanfona 1: Páginas (Desambiguadas por namespace) -->
-                <div class="accordion-item" x-data="{ open: false }">
-                    <button type="button" class="accordion-header" @click="open = !open">
-                        <span>Páginas Dinâmicas</span>
-                        <x-lucide-chevron-down class="lucid-icon" x-show="!open" />
-                        <x-lucide-chevron-up class="lucid-icon" x-show="open" />
-                    </button>
-                    <div class="accordion-body" x-show="open">
-                        <div class="checkbox-list">
-                            @foreach($pages as $page)
-                            @php
-                                $path = '/' . ($page->namespace ? $page->namespace . '/' : '') . $page->slug;
-                                $displayTitle = $page->title . ($page->namespace ? " [ns: {$page->namespace}]" : '');
-                            @endphp
-                            <label class="checkbox-label">
-                                <input type="checkbox" value="{{ $page->id }}" data-title="{{ $page->title }}" data-type="page" data-model="App\Models\Page">
-                                <span title="{{ $path }}">{{ $displayTitle }}</span>
-                            </label>
-                            @endforeach
-                        </div>
-                        <button type="button" @click="addSelectedToMenu($el)" class="admin-btn admin-btn-secondary btn-sm" style="width: 100%; margin-top: 1rem;">
-                            Adicionar ao Menu
-                        </button>
-                    </div>
-                </div>
+                <!-- 1. Páginas Dinâmicas -->
+                <x-menus::source
+                    title="Páginas Dinâmicas"
+                    type="page"
+                    model="App\Models\Page"
+                    :items="$pages"
+                    badgeField="namespace"
+                />
 
-                <!-- Sanfona 2: Posts -->
-                <div class="accordion-item" x-data="{ open: false }">
-                    <button type="button" class="accordion-header" @click="open = !open">
-                        <span>Posts do Blog</span>
-                        <x-lucide-chevron-down class="lucid-icon" x-show="!open" />
-                        <x-lucide-chevron-up class="lucid-icon" x-show="open" />
-                    </button>
-                    <div class="accordion-body" x-show="open">
-                        <div class="checkbox-list">
-                            @foreach($posts as $post)
-                            <label class="checkbox-label">
-                                <input type="checkbox" value="{{ $post->id }}" data-title="{{ $post->title }}" data-type="post" data-model="App\Models\Post">
-                                <span>{{ $post->title }}</span>
-                            </label>
-                            @endforeach
-                        </div>
-                        <button type="button" @click="addSelectedToMenu($el)" class="admin-btn admin-btn-secondary btn-sm" style="width: 100%; margin-top: 1rem;">
-                            Adicionar ao Menu
-                        </button>
-                    </div>
-                </div>
+                <!-- 2. Posts do Blog -->
+                <x-menus::source
+                    title="Posts do Blog"
+                    type="post"
+                    model="App\Models\Post"
+                    :items="$posts"
+                />
 
-                <!-- Sanfona 3: Links Customizados -->
+                <!-- 3. Taxonomias e Categorias -->
+                <x-menus::source
+                    title="Taxonomias"
+                    type="term"
+                    model="App\Models\Term"
+                    :items="$terms"
+                    titleField="name"
+                    badgeField="taxonomy.name"
+                />
+
+                <!-- 4. Sanfonas injetadas por Plugins de Terceiros via Hook -->
+                <x-hook name="admin.menus.add_sources" desc="Injeta sanfonas de fontes de links no construtor de menus" />
+
+                <!-- 5. Links Customizados (Mantém o formulário livre) -->
                 <div class="accordion-item" x-data="{ open: false, url: '', label: '' }">
                     <button type="button" class="accordion-header" @click="open = !open">
                         <span>Links Personalizados</span>
@@ -327,30 +309,23 @@
             toggleDomain(index, domainKey) {
                 let current = [...(this.flatItems[index].domains || ['*'])];
 
-                // Se o usuário clicou na caixa "Todos os domínios (*)"
                 if (domainKey === '*') {
-                    // Se '*' JÁ estava marcado, desmarcar ele muda a seleção para o Domínio Principal ('main')
                     if (current.includes('*')) {
                         this.flatItems[index].domains = ['main'];
                     } else {
-                        // Se '*' NÃO estava marcado, marca o '*' e limpa os específicos
                         this.flatItems[index].domains = ['*'];
                     }
                     return;
                 }
 
-                // Se o usuário clicou em um domínio específico (ex: 'main', 'parceiros'):
-                // 1. Remove o '*' da lista caso ele estivesse presente
                 current = current.filter(d => d !== '*');
 
-                // 2. Alterna o domínio clicado (adiciona se não tem, remove se tem)
                 if (current.includes(domainKey)) {
                     current = current.filter(d => d !== domainKey);
                 } else {
                     current.push(domainKey);
                 }
 
-                // 3. Se desmarcou todos os específicos, volta automaticamente para '*'
                 if (current.length === 0) {
                     current = ['*'];
                 }

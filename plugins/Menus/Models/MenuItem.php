@@ -41,6 +41,10 @@ class MenuItem extends Model
         return $this->morphTo();
     }
 
+    /**
+     * RESOLVEDOR DINÂMICO DE LINKS:
+     * Calcula as URLs de Páginas, Posts, Customizados e Taxonomias
+     */
     public function getUrlAttribute(): string
     {
         if ($this->type === 'custom') {
@@ -48,7 +52,19 @@ class MenuItem extends Model
         }
 
         if ($this->model) {
-            return $this->model->url;
+            // Tratamento especial para Termos de Taxonomia
+            if ($this->model instanceof \App\Models\Term || $this->type === 'term') {
+                $base = function_exists('setting') ? setting('navigation.blog_base', '') : '';
+                $basePrefix = !empty($base) ? trim($base, '/') . '/' : '';
+
+                $taxonomySlug = $this->model->taxonomy->slug ?? 'categoria';
+                $termSlug     = $this->model->slug ?? '';
+
+                return url($basePrefix . $taxonomySlug . '/' . $termSlug);
+            }
+
+            // Se for Page ou Post
+            return $this->model->url ?? '#';
         }
 
         return '#';
@@ -67,15 +83,10 @@ class MenuItem extends Model
         return '';
     }
 
-    /**
-     * RESOLVEDOR DE VISIBILIDADE POR DOMÍNIO/NAMESPACE:
-     * Retorna se este item deve ser exibido no contexto atual
-     */
     public function isVisibleForCurrentSite(): bool
     {
         $domains = $this->domains;
 
-        // Se nulo ou não definido, exibe em todos os domínios por padrão
         if (empty($domains)) {
             return true;
         }
@@ -95,12 +106,10 @@ class MenuItem extends Model
         foreach ($domains as $domain) {
             $domain = trim($domain);
 
-            // Match por host ou por namespace do site atual
             if ($domain === $currentHost || $domain === $currentNamespace) {
                 return true;
             }
 
-            // Alias para o site principal
             if (in_array($domain, ['main', 'default', 'primary'], true) && !$isExtra) {
                 return true;
             }

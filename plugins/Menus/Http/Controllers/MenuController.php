@@ -38,13 +38,45 @@ class MenuController extends Controller
             ->with('success', "Menu '{$menu->name}' criado! Agora adicione os links.");
     }
 
+    // public function edit(Menu $menu)
+    // {
+    //     $pages = Page::published()->orderBy('title')->get();
+    //     $posts = Post::published()->orderBy('title')->get();
+    //     $terms = Term::orderBy('name')->get();
+
+    //     // Mapeia domínios extras disponíveis para o seletor no construtor
+    //     $extraDomains = function_exists('siteDomains') ? siteDomains() : [];
+    //     $availableDomains = [
+    //         ['key' => 'main', 'label' => 'Domínio Principal (Padrão)']
+    //     ];
+
+    //     foreach ($extraDomains as $extra) {
+    //         $key = !empty($extra['namespace']) ? $extra['namespace'] : (!empty($extra['domain']) ? $extra['domain'] : null);
+    //         if ($key) {
+    //             $label = !empty($extra['domain']) ? $extra['domain'] : $key;
+    //             if (!empty($extra['namespace'])) {
+    //                 $label .= " ({$extra['namespace']})";
+    //             }
+    //             $availableDomains[] = [
+    //                 'key'   => $key,
+    //                 'label' => $label
+    //             ];
+    //         }
+    //     }
+
+    //     $itemsJson = json_encode($this->getSerializedTree($menu->rootItems));
+    //     $availableDomainsJson = json_encode($availableDomains);
+
+    //     return view('menus::admin.edit', compact('menu', 'pages', 'posts', 'terms', 'itemsJson', 'availableDomainsJson'));
+    // }
     public function edit(Menu $menu)
     {
         $pages = Page::published()->orderBy('title')->get();
         $posts = Post::published()->orderBy('title')->get();
-        $terms = Term::orderBy('name')->get();
 
-        // Mapeia domínios extras disponíveis para o seletor no construtor
+        // Eager loading do relacionamento taxonomy para otimizar performance
+        $terms = Term::with('taxonomy')->orderBy('name')->get();
+
         $extraDomains = function_exists('siteDomains') ? siteDomains() : [];
         $availableDomains = [
             ['key' => 'main', 'label' => 'Domínio Principal (Padrão)']

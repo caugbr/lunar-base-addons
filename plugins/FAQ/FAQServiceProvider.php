@@ -58,8 +58,8 @@ class FAQServiceProvider extends ServiceProvider
             ]
         );
 
-        $menuAfterItem = config('pluginSettings.Asaas.menuAfterItem', 'Temas');
-        $menuSet = config('pluginSettings.Asaas.menuSet', 1);
+        $menuAfterItem = config('pluginSettings.FAQ.menuAfterItem', 'Temas');
+        $menuSet = config('pluginSettings.FAQ.menuSet', 1);
 
         // 3. Injeta a aba FAQ no painel administrativo lateral
         \App\Support\AdminMenu::add([

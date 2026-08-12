@@ -51,8 +51,8 @@ class MenusServiceProvider extends ServiceProvider
             }
         }
 
-        $menuAfterItem = config('pluginSettings.Asaas.menuAfterItem', 'Temas');
-        $menuSet = config('pluginSettings.Asaas.menuSet', 1);
+        $menuAfterItem = config('pluginSettings.Menus.menuAfterItem', 'Temas');
+        $menuSet = config('pluginSettings.Menus.menuSet', 1);
 
         // Injeta o link no menu lateral administrativo
         \App\Support\AdminMenu::add([
@@ -61,6 +61,6 @@ class MenusServiceProvider extends ServiceProvider
             'route' => 'admin.menus.index',
             'active' => 'admin.menus.*',
             'role' => 'admin',
-        ], 'Temas', 1);
+        ], $menuAfterItem, $menuSet);
     }
 }

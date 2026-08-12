@@ -21,8 +21,8 @@ class QrCodeServiceProvider extends ServiceProvider
         // 1. Carrega as views com o namespace "qrcode"
         $this->loadViewsFrom(__DIR__ . '/resources/views', 'qrcode');
 
-        $menuAfterItem = config('pluginSettings.Asaas.menuAfterItem', 'Configurações');
-        $menuSet = config('pluginSettings.Asaas.menuSet', 1);
+        $menuAfterItem = config('pluginSettings.QrCode.menuAfterItem', 'Configurações');
+        $menuSet = config('pluginSettings.QrCode.menuSet', 1);
 
         // 2. Injeta o item no menu lateral de Ferramentas / Conteúdo
         AdminMenu::add([

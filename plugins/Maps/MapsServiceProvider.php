@@ -66,8 +66,8 @@ class MapsServiceProvider extends ServiceProvider
         // Registra configurações no painel admin
         $this->registerSettings();
 
-        $menuAfterItem = config('pluginSettings.Asaas.menuAfterItem', 'Taxonomias');
-        $menuSet = config('pluginSettings.Asaas.menuSet', 1);
+        $menuAfterItem = config('pluginSettings.Maps.menuAfterItem', 'Taxonomias');
+        $menuSet = config('pluginSettings.Maps.menuSet', 1);
 
         // Adiciona link no menu lateral administrativo (padrão Lunar Base)
         AdminMenu::add([
