@@ -55,7 +55,7 @@
             <header>Adicionar Itens ao Menu</header>
             <article>
 
-                @foreach(\App\Support\PostTypeManager::all() as $typeKey => $type)
+                @foreach(\App\Support\PublicationTypes::all() as $typeKey => $type)
                     @php
                         $modelClass = $type['model'];
                         $items = ($modelClass && class_exists($modelClass)) 

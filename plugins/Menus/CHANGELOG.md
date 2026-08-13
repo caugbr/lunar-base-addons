@@ -1,6 +1,11 @@
 
 # Changelog
 
+## [1.5.1] 2026-08-11
+
+### Fixed
+- PostTypeManager substituído por PublicationTypes
+
 ## [1.5.0] 2026-08-11
 
 ### Added
