@@ -45,10 +45,13 @@ class MenuItem extends Model
      * RESOLVEDOR DINÂMICO DE LINKS:
      * Calcula as URLs de Páginas, Posts, Customizados e Taxonomias
      */
-    public function getUrlAttribute(): string
+    public function getUrlAttribute($value): string
     {
         if ($this->type === 'custom') {
-            return $this->url ?? '#';
+            // Usa o $value enviado pelo Laravel ou busca direto das propriedades do banco
+            $rawUrl = $value ?? ($this->attributes['url'] ?? null);
+
+            return !empty($rawUrl) ? $rawUrl : '#';
         }
 
         if ($this->model) {

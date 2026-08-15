@@ -55,7 +55,7 @@
             <header>Adicionar Itens ao Menu</header>
             <article>
 
-                @foreach(\App\Support\PublicationTypes::all() as $typeKey => $type)
+                {{-- @foreach(\App\Support\PublicationTypes::all() as $typeKey => $type)
                     @php
                         $modelClass = $type['model'];
                         $items = ($modelClass && class_exists($modelClass)) 
@@ -69,7 +69,24 @@
                         :items="$items" 
                         :titleField="method_exists($modelClass, 'getTitleAttribute') ? 'title' : 'name'"
                     />
-                @endforeach
+                @endforeach --}}
+
+                <!-- 1. Páginas Dinâmicas -->
+                <x-menus::source
+                    title="Páginas Dinâmicas"
+                    type="page"
+                    model="App\Models\Page"
+                    :items="$pages"
+                    badgeField="namespace"
+                />
+
+                <!-- 2. Posts do Blog -->
+                <x-menus::source
+                    title="Posts do Blog"
+                    type="post"
+                    model="App\Models\Post"
+                    :items="$posts"
+                />
 
                 <x-menus::source
                     title="Taxonomias"

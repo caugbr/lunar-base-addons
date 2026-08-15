@@ -19,13 +19,33 @@ class AsaasPaymentService
     /**
      * Gera o Link de Pagamento e salva o registro no Banco Cego
      */
-    public function generateCheckoutLink(float $amount, string $productName, string $externalReference, string $method = 'undefined'): array
+    // public function generateCheckoutLink(float $amount, string $productName, string $externalReference, string $method = 'undefined'): array
+    // {
+    //     $linkData = $this->apiClient->createPaymentLink($amount, $productName, $externalReference, $method);
+
+    //     // Salva na tabela local com ZERO dados pessoais
+    //     $invoice = AsaasInvoice::create([
+    //         'payment_id'         => $linkData['id'],
+    //         'external_reference' => $externalReference,
+    //         'payment_method'     => $method,
+    //         'amount'             => $amount,
+    //         'status'             => 'pending',
+    //         'invoice_url'        => $linkData['url'],
+    //     ]);
+
+    //     return [
+    //         'success'     => true,
+    //         'invoice_id'  => $invoice->id,
+    //         'payment_id'  => $linkData['id'],
+    //         'invoice_url' => $linkData['url'], // URL que seu botão de compra vai abrir!
+    //     ];
+    // }
+public function generateCheckoutLink(float $amount, string $productName, string $externalReference, string $method = 'undefined'): array
     {
         $linkData = $this->apiClient->createPaymentLink($amount, $productName, $externalReference, $method);
 
-        // Salva na tabela local com ZERO dados pessoais
         $invoice = AsaasInvoice::create([
-            'payment_id'         => $linkData['id'],
+            'payment_id'         => $linkData['id'], // edpnvrzbywygegdz
             'external_reference' => $externalReference,
             'payment_method'     => $method,
             'amount'             => $amount,
@@ -37,19 +57,38 @@ class AsaasPaymentService
             'success'     => true,
             'invoice_id'  => $invoice->id,
             'payment_id'  => $linkData['id'],
-            'invoice_url' => $linkData['url'], // URL que seu botão de compra vai abrir!
+            'invoice_url' => $linkData['url'],
         ];
     }
 
     /**
      * Confirma o pagamento vindo do Webhook e avisa os outros módulos via Hook
      */
-    public function confirmPayment(string $paymentId, string $status, ?string $customerId = null): ?AsaasInvoice
+    public function confirmPayment(string $paymentId, string $status, ?string $customerId = null, ?string $paymentLinkId = null): ?AsaasInvoice
     {
+
+        // 1. Tenta buscar pelo ID real de transação (se já foi atualizado antes)
         $invoice = AsaasInvoice::where('payment_id', $paymentId)->first();
 
+        // 2. Se não achou e temos o ID do Link (ex: edpnvrzbywygegdz), busca por ele
+        if (!$invoice && $paymentLinkId) {
+
+            $invoice = AsaasInvoice::where('payment_id', $paymentLinkId)->first();
+
+            if ($invoice) {
+
+                // Atualiza o ID do link temporário pelo ID de transação real na tabela
+                $invoice->payment_id = $paymentId;
+                $invoice->save();
+            }
+        }
+
         if (!$invoice) {
-            // Se o link foi gerado direto no Asaas, cria o registro histórico
+            \Log::warning('[ASAAS SERVICE] Fatura não encontrada por nenhuma das chaves de ID. Criando registro genérico de fallback.', [
+                'paymentId' => $paymentId,
+                'paymentLinkId' => $paymentLinkId
+            ]);
+
             $invoice = AsaasInvoice::create([
                 'payment_id'         => $paymentId,
                 'customer_id'        => $customerId,
@@ -71,13 +110,7 @@ class AsaasPaymentService
 
         $invoice->update($updateData);
 
-        // 💡 DISPARA O HOOK DO LUNAR BASE PARA O PRODUTO ENTREGAR O CONTEÚDO!
         if ($status === 'paid') {
-            // HookManager::fire('asaas.payment_approved', [
-            //     'invoice'            => $invoice,
-            //     'external_reference' => $invoice->external_reference,
-            //     'customer_id'        => $customerId,
-            // ]);
             Event::dispatch('asaas.payment_approved', [
                 'invoice'            => $invoice,
                 'external_reference' => $invoice->external_reference,

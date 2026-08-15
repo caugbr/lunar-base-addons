@@ -24,20 +24,55 @@ class AsaasApiClient
             : 'https://www.asaas.com/api/v3';
 
         if (empty($this->apiKey)) {
-            Log::warning('AsaasApiClient: Chave de API não configurada.');
+            \Log::warning('AsaasApiClient: Chave de API não configurada.');
         }
     }
 
     /**
      * Cria um Link de Pagamento / Checkout Hospedado no Asaas
      */
-    public function createPaymentLink(float $amount, string $productName, string $externalReference, string $method = 'UNDEFINED'): array
+    // public function createPaymentLink(float $amount, string $productName, string $externalReference, string $method = 'UNDEFINED'): array
+    // {
+    //     $billingType = match($method) {
+    //         'pix'         => 'PIX',
+    //         'credit_card' => 'CREDIT_CARD',
+    //         'boleto'      => 'BOLETO',
+    //         default       => 'UNDEFINED', // Permite todas as opções no checkout do Asaas
+    //     };
+
+    //     $successUrl = rtrim(config('app.url'), '/') . '/api/v1/asaas/success';
+
+    //     $response = Http::withHeaders([
+    //         'access_token' => $this->apiKey,
+    //         'User-Agent'   => 'LunarBase-Asaas/1.0',
+    //         'Content-Type' => 'application/json',
+    //     ])->post($this->baseUrl . '/paymentLinks', [
+    //         'name'              => $productName,
+    //         'billingType'       => $billingType,
+    //         'chargeType'        => 'DETACHED',
+    //         'value'             => $amount,
+    //         'dueDateLimitDays'  => 3,
+    //         'externalReference' => $externalReference,
+    //         'callback'          => [
+    //             'successUrl'   => $successUrl,
+    //             'autoRedirect' => true,
+    //         ]
+    //     ]);
+
+    //     if (!$response->successful()) {
+    //         \Log::error('Asaas API Error ao criar Payment Link', ['response' => $response->body()]);
+    //         throw new Exception('Erro na comunicação com o Asaas: ' . ($response->json()['errors'][0]['description'] ?? 'Erro desconhecido'));
+    //     }
+
+    //     return $response->json();
+    // }
+public function createPaymentLink(float $amount, string $productName, string $externalReference, string $method = 'UNDEFINED'): array
     {
         $billingType = match($method) {
             'pix'         => 'PIX',
             'credit_card' => 'CREDIT_CARD',
             'boleto'      => 'BOLETO',
-            default       => 'UNDEFINED', // Permite todas as opções no checkout do Asaas
+            default       => 'UNDEFINED',
         };
 
         $successUrl = rtrim(config('app.url'), '/') . '/api/v1/asaas/success';
@@ -60,11 +95,17 @@ class AsaasApiClient
         ]);
 
         if (!$response->successful()) {
-            Log::error('Asaas API Error ao criar Payment Link', ['response' => $response->body()]);
+            \Log::error('[ASAAS API] Erro ao criar Payment Link.', [
+                'externalReference' => $externalReference,
+                'status' => $response->status(),
+                'response' => $response->body()
+            ]);
             throw new Exception('Erro na comunicação com o Asaas: ' . ($response->json()['errors'][0]['description'] ?? 'Erro desconhecido'));
         }
 
-        return $response->json();
+        $responseData = $response->json();
+
+        return $responseData;
     }
 
     /**
