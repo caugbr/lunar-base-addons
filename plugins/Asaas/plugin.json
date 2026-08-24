@@ -1,7 +1,7 @@
 {
     "name": "Asaas",
     "description": "Plugin para pagamentos com o banco Asaas",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "provider": "Plugins\\Asaas\\AsaasServiceProvider",
     "configurable": {
         "menuAfterItem": {
