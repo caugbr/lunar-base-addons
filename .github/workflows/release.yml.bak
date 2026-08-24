@@ -1,0 +1,97 @@
+name: Gerar Pacotes de Addons (Plugins e Temas)
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Baixar código do repositório
+        uses: actions/checkout@v4
+
+      - name: Criar diretório temporário
+        run: mkdir -p dist/
+
+      - name: Compactar Plugins
+        run: |
+          if [ -d "plugins" ]; then
+            for plugin_dir in plugins/*/; do
+              if [ -d "$plugin_dir" ]; then
+                slug=$(basename "$plugin_dir")
+                echo "→ Compactando plugin: $slug"
+                (cd "$plugin_dir" && zip -r "../../dist/${slug}.zip" .)
+              fi
+            done
+          fi
+
+      - name: Compactar Temas
+        run: |
+          if [ -d "themes" ]; then
+            for theme_dir in themes/*/; do
+              if [ -d "$theme_dir" ]; then
+                slug=$(basename "$theme_dir")
+                echo "→ Compactando tema: $slug"
+                (cd "$theme_dir" && zip -r "../../dist/${slug}.zip" .)
+              fi
+            done
+          fi
+
+      # -------------------------------------------------------------
+      # PASSO NOVO: Gera o marketplace.json automaticamente!
+      # -------------------------------------------------------------
+      - name: Gerar marketplace.json automaticamente
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+
+            const tag = context.ref.replace('refs/tags/', '');
+            const repo = context.repo.owner + '/' + context.repo.repo;
+            const baseUrl = `https://github.com/${repo}/releases/download/${tag}`;
+
+            const catalog = { plugins: [], themes: [] };
+
+            // 1. Processa os Plugins
+            if (fs.existsSync('plugins')) {
+              const folders = fs.readdirSync('plugins');
+              folders.forEach(folder => {
+                const jsonPath = path.join('plugins', folder, 'plugin.json');
+                if (fs.existsSync(jsonPath)) {
+                  const data = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
+                  data.download_url = `${baseUrl}/${folder}.zip`;
+                  catalog.plugins.push(data);
+                }
+              });
+            }
+
+            // 2. Processa os Temas
+            if (fs.existsSync('themes')) {
+              const folders = fs.readdirSync('themes');
+              folders.forEach(folder => {
+                const jsonPath = path.join('themes', folder, 'theme.json');
+                if (fs.existsSync(jsonPath)) {
+                  const data = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
+                  data.download_url = `${baseUrl}/${folder}.zip`;
+                  catalog.themes.push(data);
+                }
+              });
+            }
+
+            // Salva o marketplace.json na pasta dist/ para ser enviado junto
+            fs.writeFileSync('dist/marketplace.json', JSON.stringify(catalog, null, 4));
+            console.log('marketplace.json gerado com sucesso:', catalog);
+
+      - name: Anexar ZIPs e marketplace.json à Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/*.zip
+            dist/marketplace.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

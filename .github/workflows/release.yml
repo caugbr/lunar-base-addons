@@ -42,7 +42,7 @@ jobs:
           fi
 
       # -------------------------------------------------------------
-      # PASSO NOVO: Gera o marketplace.json automaticamente!
+      # PASSO ATUALIZADO: Gera o marketplace.json com o Changelog!
       # -------------------------------------------------------------
       - name: Gerar marketplace.json automaticamente
         uses: actions/github-script@v7
@@ -57,6 +57,75 @@ jobs:
 
             const catalog = { plugins: [], themes: [] };
 
+            // Função utilitária para ler e analisar o CHANGELOG.md
+            function parseLatestChangelog(changelogPath) {
+              if (!fs.existsSync(changelogPath)) {
+                return null;
+              }
+
+              try {
+                const content = fs.readFileSync(changelogPath, 'utf8');
+                
+                // Divide o arquivo pelas seções de nível 2 (##)
+                const sections = content.split(/^##\s+/m);
+                
+                let targetSection = null;
+                let version = null;
+                let date = null;
+
+                // Percorre as seções buscando a primeira que possua um cabeçalho de versão válido
+                // Exemplo de formato aceito: [1.12.0] 2026-08-13
+                for (let i = 1; i < sections.length; i++) {
+                  const sec = sections[i];
+                  const match = sec.match(/^\[([0-9.]+)\]\s+([0-9]{4}-[0-9]{2}-[0-9]{2})/);
+                  if (match) {
+                    version = match[1];
+                    date = match[2];
+                    targetSection = sec;
+                    break;
+                  }
+                }
+
+                if (!targetSection) {
+                  return null;
+                }
+
+                // Divide a seção alvo por subseções de nível 3 (###)
+                const subSections = targetSection.split(/^###\s+/m);
+                const changelogObj = {
+                  date: date,
+                  version: version,
+                  added: [],
+                  changed: [],
+                  fixed: []
+                };
+
+                // Mapeia os itens de cada tipo de modificação (Added, Changed, Fixed)
+                for (let j = 1; j < subSections.length; j++) {
+                  const subSec = subSections[j];
+                  const lines = subSec.split(/\r?\n/);
+                  const title = lines[0].trim().toLowerCase(); // Ex: 'added', 'changed', 'fixed'
+
+                  const items = [];
+                  for (let k = 1; k < lines.length; k++) {
+                    const line = lines[k].trim();
+                    if (line.startsWith('-')) {
+                      items.push(line.substring(1).trim());
+                    }
+                  }
+
+                  if (changelogObj.hasOwnProperty(title)) {
+                    changelogObj[title] = items;
+                  }
+                }
+
+                return changelogObj;
+              } catch (err) {
+                console.error(`Erro ao processar o arquivo ${changelogPath}:`, err);
+                return null;
+              }
+            }
+
             // 1. Processa os Plugins
             if (fs.existsSync('plugins')) {
               const folders = fs.readdirSync('plugins');
@@ -65,6 +134,14 @@ jobs:
                 if (fs.existsSync(jsonPath)) {
                   const data = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
                   data.download_url = `${baseUrl}/${folder}.zip`;
+
+                  // Tenta processar o CHANGELOG.md correspondente
+                  const changelogPath = path.join('plugins', folder, 'CHANGELOG.md');
+                  const changelog = parseLatestChangelog(changelogPath);
+                  if (changelog) {
+                    data.changelog = changelog;
+                  }
+
                   catalog.plugins.push(data);
                 }
               });
@@ -78,14 +155,22 @@ jobs:
                 if (fs.existsSync(jsonPath)) {
                   const data = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
                   data.download_url = `${baseUrl}/${folder}.zip`;
+
+                  // Tenta processar o CHANGELOG.md correspondente
+                  const changelogPath = path.join('themes', folder, 'CHANGELOG.md');
+                  const changelog = parseLatestChangelog(changelogPath);
+                  if (changelog) {
+                    data.changelog = changelog;
+                  }
+
                   catalog.themes.push(data);
                 }
               });
             }
 
-            // Salva o marketplace.json na pasta dist/ para ser enviado junto
+            // Salva o marketplace.json final na pasta dist/
             fs.writeFileSync('dist/marketplace.json', JSON.stringify(catalog, null, 4));
-            console.log('marketplace.json gerado com sucesso:', catalog);
+            console.log('marketplace.json gerado com sucesso:', JSON.stringify(catalog, null, 2));
 
       - name: Anexar ZIPs e marketplace.json à Release
         uses: softprops/action-gh-release@v2
