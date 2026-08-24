@@ -61,6 +61,14 @@ class AsaasServiceProvider extends ServiceProvider
         ], 'general');
 
         Settings::add([
+            'key'         => 'asaas_sandbox_webhook_token',
+            'type'        => 'text',
+            'label'       => 'Token do Webhook (Sandbox)',
+            'description' => 'Cole aqui o token de autenticação configurado no painel do Asaas (Sandbox)',
+            'default'     => '',
+        ], 'general');
+
+        Settings::add([
             'key'         => 'asaas_production_api_key',
             'type'        => 'password',
             'label'       => 'API Key (Produção)',
@@ -68,11 +76,21 @@ class AsaasServiceProvider extends ServiceProvider
         ], 'general');
 
         Settings::add([
-            'key'         => 'asaas_webhook_token',
+            'key'         => 'asaas_production_webhook_token',
             'type'        => 'text',
             'label'       => 'Token do Webhook',
-            'description' => 'Cole aqui o token de autenticação configurado no painel do Asaas',
+            'description' => 'Cole aqui o token de autenticação configurado no painel do Asaas (Produção)',
             'default'     => '',
+        ], 'general');
+
+        Settings::add([
+            'key'         => 'asaas_send_notifications',
+            'type'        => 'switch',
+            'label'       => 'Receber notificações?',
+            'description' => 'O Asaas envia notificações a cada transação e cobra por isso. Você pode desabilitar essa funcionalidade aqui.',
+            'active'      => 'Receber',
+            'inactive'      => 'Não receber',
+            'default'     => '1',
         ], 'general');
     }
 }
