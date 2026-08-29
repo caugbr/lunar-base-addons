@@ -1,0 +1,6 @@
+{
+    "name": "Tracker",
+    "description": "Estatísticas de acesso para o Lunar Base",
+    "version": "1.0.0",
+    "provider": "Plugins\\Tracker\\TrackerServiceProvider"
+}

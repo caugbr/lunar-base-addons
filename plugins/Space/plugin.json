@@ -1,0 +1,6 @@
+{
+    "name": "Space",
+    "description": "Ganhe espaço na administração.",
+    "version": "1.0.0",
+    "provider": "Plugins\\Space\\SpaceServiceProvider"
+}
