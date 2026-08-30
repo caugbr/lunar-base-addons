@@ -21,7 +21,7 @@
 </div>
 
 {{-- Área de Gráficos com o Componente --}}
-<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 25px;">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 25px;">
     {{-- Gráfico 1: Visualizações por Dia (Linha/Barra) --}}
     <div class="admin-card" style="padding: 20px;">
         <h3 style="margin-bottom: 15px; font-size: 1.1rem; color: #1e293b;">Visualizações Diárias</h3>
@@ -110,4 +110,14 @@
         </table>
     </div>
 </div>
+<style>
+    canvas#chart-daily-views {
+        width: 100% !important;
+    }
+    canvas#chart-devices {
+        max-width: 280px;
+        max-height: 280px;
+        margin: auto;
+    }
+</style>
 @endsection

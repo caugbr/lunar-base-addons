@@ -1,0 +1,6 @@
+{
+    "name": "Maximize Editor",
+    "description": "Botão para maximizar o editor TinyMCE.",
+    "version": "1.0.1",
+    "provider": "Plugins\\MaximizeEditor\\MaximizeEditorServiceProvider"
+}

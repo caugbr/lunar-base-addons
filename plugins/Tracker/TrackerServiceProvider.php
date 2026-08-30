@@ -21,7 +21,7 @@ class TrackerServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
         $this->loadViewsFrom(__DIR__ . '/resources/views', 'tracker');
 
-        $menuAfterItem = config('pluginSettings.Tracker.menuAfterItem', 'Configurações');
+        $menuAfterItem = config('pluginSettings.Tracker.menuAfterItem', 'Temas');
         $menuSet = config('pluginSettings.Tracker.menuSet', 1);
 
         AdminMenu::add([
