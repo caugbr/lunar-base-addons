@@ -2,5 +2,48 @@
     "name": "Tracker",
     "description": "Estatísticas de acesso para o Lunar Base.",
     "version": "1.0.0",
-    "provider": "Plugins\\Tracker\\TrackerServiceProvider"
+    "provider": "Plugins\\Tracker\\TrackerServiceProvider",
+    "requirements": {
+        "composer": {
+            "stevebauman/location": "^7.0"
+        },
+        "php": ">=8.1"
+    },
+    "configurable": {
+        "menuAfterItem": {
+            "type": "string",
+            "default": "Temas",
+            "description": "Label do item referência para posicionar link no menu da admin"
+        },
+        "menuSet": {
+            "type": "integer",
+            "default": 1,
+            "description": "Índice do set de links para inserir o link no menu da admin"
+        },
+        "dashboardDays": {
+            "type": "integer",
+            "default": 30,
+            "description": "Quantidade padrão de dias retroativos exibidos nos cards e gráficos do Dashboard."
+        },
+        "topPagesLimit": {
+            "type": "integer",
+            "default": 10,
+            "description": "Limite de páginas mais acessadas exibidas no card do Dashboard."
+        },
+        "topReferrersLimit": {
+            "type": "integer",
+            "default": 5,
+            "description": "Limite de origens de tráfego (referrers) exibidas no card do Dashboard."
+        },
+        "topEventsLimit": {
+            "type": "integer",
+            "default": 5,
+            "description": "Limite de eventos e metas de conversão exibidos no card do Dashboard."
+        },
+        "hourlyDays": {
+            "type": "integer",
+            "default": 30,
+            "description": "Período em dias para cálculo do gráfico de picos por horário."
+        }
+    }
 }

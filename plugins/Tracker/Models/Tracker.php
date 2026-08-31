@@ -15,6 +15,10 @@ class Tracker extends Model
         'referrer_host',
         'device',
         'browser',
+        'country_code',
+        'country_name',
+        'region_name',
+        'city_name',
         'visitor_hash',
         'created_at',
     ];

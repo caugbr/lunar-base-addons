@@ -36,4 +36,10 @@
         Para visualizar os relatórios e gráficos, acesse no menu administrativo:
         <strong>Admin → Tracker</strong> (ou através da rota <code>/admin/tracker</code>).
     </p>
+
+    <!-- Exibe as variáveis configuráveis do plugin -->
+    <x-configurable-plugin-values plugin="Tracker" />
+
+    <!-- Exibe as dependências do Composer e PHP necessárias -->
+    <x-plugin-dependencies plugin="Tracker" />
 </div>

@@ -5,6 +5,7 @@ namespace Plugins\Tracker\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Plugins\Tracker\Models\Tracker;
+use Stevebauman\Location\Facades\Location;
 
 class TrackPageViews
 {
@@ -59,17 +60,41 @@ class TrackPageViews
             }
         }
 
-        // Hash Anônimo LGPD (IP + Data do dia) -> Permite contar únicos sem guardar IP
-        $visitorHash = hash('sha256', $request->ip() . today()->toDateString() . config('app.key'));
+        // 1. Resolve Localização pelo IP (com proteção de timeout)
+        $countryCode = null;
+        $countryName = null;
+        $regionName  = null;
+        $cityName    = null;
+
+        $ip = $request->ip();
+
+        if ($ip !== '127.0.0.1' && $ip !== '::1' && class_exists(\Stevebauman\Location\Facades\Location::class)) {
+            try {
+                if ($position = \Stevebauman\Location\Facades\Location::get($ip)) {
+                    $countryCode = $position->countryCode; // ex: BR
+                    $countryName = $position->countryName; // ex: Brazil
+                    $regionName  = $position->regionName;  // ex: São Paulo
+                    $cityName    = $position->cityName;    // ex: Campinas
+                }
+            } catch (\Throwable $e) {
+                // Se a API de GeoIP falhar ou der timeout, continua salvando o resto dos dados
+            }
+        }
+
+        $visitorHash = hash('sha256', $ip . today()->toDateString() . config('app.key'));
 
         try {
             Tracker::create([
-                'path' => '/' . ltrim($request->path(), '/'),
+                'path'          => '/' . ltrim($request->path(), '/'),
                 'referrer_host' => $referrerHost,
-                'device' => $device,
-                'browser' => $browser,
-                'visitor_hash' => $visitorHash,
-                'created_at' => now(),
+                'device'        => $device,
+                'browser'       => $browser,
+                'country_code'  => $countryCode,
+                'country_name'  => $countryName,
+                'region_name'   => $regionName,
+                'city_name'     => $cityName,
+                'visitor_hash'  => $visitorHash,
+                'created_at'    => now(),
             ]);
         } catch (\Throwable $e) {
             // Falha silenciosa para nunca quebrar a navegação do usuário

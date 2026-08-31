@@ -33,5 +33,32 @@ class TrackerServiceProvider extends ServiceProvider
         ], $menuAfterItem, $menuSet);
 
         $this->app['router']->pushMiddlewareToGroup('web', TrackPageViews::class);
+
+        if (!request()->is('admin*') && !request()->ajax()) {
+            $this->registerEventTrackerScript();
+        }
+    }
+
+    private function registerEventTrackerScript(): void
+    {
+        $eventUrl  = route('tracker.api.event');
+        $csrfToken = csrf_token();
+
+        if (function_exists('add_inline_script')) {
+            $inlineConfig = "window.TRACKER_CONFIG = { eventUrl: '{$eventUrl}', csrfToken: '{$csrfToken}' };";
+            add_inline_script($inlineConfig);
+        }
+
+        if (function_exists('add_script')) {
+            // Ajuste o caminho do asset conforme a estrutura pública de plugins do seu sistema
+            add_script(
+                'tracker-events',
+                asset('plugins/tracker/js/eventTracker.js'),
+                [],
+                '1.0.0',
+                true, // inFooter
+                true  // defer
+            );
+        }
     }
 }

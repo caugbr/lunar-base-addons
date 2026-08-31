@@ -7,22 +7,17 @@ use App\Support\HookManager;
 
 class MaximizeEditorServiceProvider extends ServiceProvider
 {
-    public function register(): void
-    {
-        //
-    }
-
     public function boot(): void
     {
         HookManager::register('admin.head', function ($params) {
             if (preg_match("#admin/(posts|pages)/.+#", $params['path'])) {
-                return $this->editorNoDistractions();
+                $this->editorNoDistractions();
             }
             return '';
         });
     }
 
     private function editorNoDistractions() {
-        return '<script src="' . asset('plugins/space/js/editorNoDistractions.js') . '"></script>';
+        add_script('maximize-editor', '/plugins/maximize-editor/js/editorNoDistractions.js');
     }
 }
