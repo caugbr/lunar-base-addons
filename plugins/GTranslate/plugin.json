@@ -1,0 +1,23 @@
+{
+    "name": "GTranslate",
+    "description": "Adiciona tradução instantânea com Google Tradutor para múltiplos idiomas.",
+    "version": "1.0.0",
+    "provider": "Plugins\\GTranslate\\GTranslateServiceProvider",
+    "configurable": {
+        "defaultLanguage": {
+            "type": "string",
+            "default": "pt",
+            "description": "Código do idioma nativo do site (ex: pt, en, es)"
+        },
+        "includedLanguages": {
+            "type": "string",
+            "default": "pt,en,es,fr,de,it",
+            "description": "Idiomas disponíveis para seleção separados por vírgula"
+        },
+        "displayMode": {
+            "type": "string",
+            "default": "dropdown",
+            "description": "Modo visual: 'dropdown', 'flags', ou 'flags_and_dropdown'"
+        }
+    }
+}

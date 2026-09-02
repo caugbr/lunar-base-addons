@@ -41,7 +41,8 @@ class TrackerServiceProvider extends ServiceProvider
 
     private function registerEventTrackerScript(): void
     {
-        $eventUrl  = route('tracker.api.event');
+        // $eventUrl  = route('tracker.api.event');
+        $eventUrl  = url('/tracker/api/event');
         $csrfToken = csrf_token();
 
         if (function_exists('add_inline_script')) {
