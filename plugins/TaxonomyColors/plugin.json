@@ -1,0 +1,6 @@
+{
+    "name": "Taxonomy Colors",
+    "description": "Permite associar cada termo de taxonomia a uma cor",
+    "version": "1.0.0",
+    "provider": "Plugins\\TaxonomyColors\\TaxonomyColorsServiceProvider"
+}
