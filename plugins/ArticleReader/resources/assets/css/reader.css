@@ -1,0 +1,94 @@
+.lunar-article-reader {
+  margin: 1.5rem 0 2rem 0;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 8px 16px;
+  border-radius: 50px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  font-family: system-ui, -apple-system, sans-serif;
+  max-width: 480px;
+}
+
+.lunar-reader-btn-play {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: #2563eb;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+.lunar-reader-btn-play:hover {
+  background: #1d4ed8;
+  transform: scale(1.05);
+}
+
+.lunar-reader-btn-play svg {
+  width: 16px;
+  height: 16px;
+}
+
+.lunar-reader-body {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.lunar-reader-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.lunar-reader-time {
+  font-size: 11px;
+  color: #64748b;
+  font-weight: normal;
+}
+
+.lunar-reader-progress-track {
+  width: 100%;
+  height: 4px;
+  background: #e2e8f0;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.lunar-reader-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: #2563eb;
+  border-radius: 2px;
+  transition: width 0.15s linear;
+}
+
+.lunar-reader-speed-btn {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #475569;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 12px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.lunar-reader-speed-btn:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
