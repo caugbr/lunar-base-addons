@@ -1,0 +1,6 @@
+{
+    "name": "Table Of Contents",
+    "description": "Varre todos os títulos (H1, H2, H3) do texto em tempo real e desenha uma caixa de índice navegável",
+    "version": "1.0.0",
+    "provider": "Plugins\\TableOfContents\\TableOfContentsServiceProvider"
+}

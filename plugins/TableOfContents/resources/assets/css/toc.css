@@ -1,0 +1,71 @@
+/* ==========================================================================
+   LUNAR BASE - TABLE OF CONTENTS (SUMÁRIO AUTOMÁTICO)
+   ========================================================================== */
+
+.lunar-toc-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 18px 22px;
+  margin: 2rem 0;
+  max-width: 480px;
+}
+
+.lunar-toc-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 15px;
+  color: #0f172a;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.lunar-toc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lunar-toc-item {
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.lunar-toc-item a {
+  color: #334155;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.lunar-toc-item a:hover {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+/* Níveis de Indentação por Título (H1, H2, H3) */
+.lunar-toc-item.level-1 {
+  font-weight: 600;
+  padding-left: 0;
+}
+
+.lunar-toc-item.level-2 {
+  padding-left: 14px;
+}
+
+.lunar-toc-item.level-3 {
+  padding-left: 28px;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.lunar-toc-empty {
+  font-size: 13px;
+  color: #94a3b8;
+  font-style: italic;
+}
