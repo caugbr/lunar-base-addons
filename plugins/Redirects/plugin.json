@@ -1,0 +1,16 @@
+{
+    "name": "Redirects",
+    "description": "Gerenciamento de regras de redirecionamento de URLs e monitoramento de erros 404.",
+    "version": "1.0.0",
+    "provider": "Plugins\\Redirects\\RedirectsServiceProvider",
+    "requirements": {
+        "php": ">=8.1"
+    },
+    "configurable": {
+        "log404": {
+            "type": "boolean",
+            "default": true,
+            "description": "Ativa ou desativa a captura automática de erros 404"
+        }
+    }
+}
