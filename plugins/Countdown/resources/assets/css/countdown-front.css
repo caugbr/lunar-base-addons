@@ -1,0 +1,119 @@
+/* ==========================================================================
+   LUNAR BASE - COUNTDOWN STYLES (FRONT-END)
+   ========================================================================== */
+
+.lunar-countdown-box {
+  margin: 2rem auto;
+  padding: 22px 24px;
+  border-radius: 12px;
+  text-align: center;
+  max-width: 520px;
+  font-family: system-ui, -apple-system, sans-serif;
+  transition: all 0.2s ease;
+}
+
+/* ==========================================================================
+   TEMAS VISUAIS
+   ========================================================================== */
+
+/* 1. TEMA CLARO (Clean / Cinza ultra suave) */
+.lunar-countdown-box.theme-light {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  color: #0f172a;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.lunar-countdown-box.theme-light .digit-card {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  color: #0f172a;
+}
+
+.lunar-countdown-box.theme-light .digit-card small {
+  color: #64748b;
+}
+
+/* 2. TEMA ESCURO (Dark / Slate) */
+.lunar-countdown-box.theme-dark {
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  color: #f8fafc;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.lunar-countdown-box.theme-dark .digit-card {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #f8fafc;
+}
+
+.lunar-countdown-box.theme-dark .digit-card small {
+  color: #94a3b8;
+}
+
+/* 3. TEMA AZUL (Vibrante) */
+.lunar-countdown-box.theme-blue {
+  background: #1d4ed8;
+  border: 1px solid #1e40af;
+  color: #ffffff;
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);
+}
+
+.lunar-countdown-box.theme-blue .digit-card {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.lunar-countdown-box.theme-blue .digit-card small {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* ==========================================================================
+   ESTRUTURA E NÚMEROS
+   ========================================================================== */
+
+.lunar-countdown-box .countdown-title {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.lunar-countdown-box .countdown-digits-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.lunar-countdown-box .digit-card {
+  border-radius: 8px;
+  padding: 12px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.lunar-countdown-box .digit-card .num {
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  font-family: monospace;
+}
+
+.lunar-countdown-box .digit-card small {
+  font-size: 9.5px;
+  font-weight: 700;
+  margin-top: 6px;
+  letter-spacing: 0.5px;
+}
+
+.lunar-countdown-box .countdown-expired-msg {
+  font-size: 16px;
+  font-weight: bold;
+  padding: 12px;
+  background: rgba(239, 68, 68, 0.12);
+  color: #dc2626;
+  border-radius: 6px;
+}
