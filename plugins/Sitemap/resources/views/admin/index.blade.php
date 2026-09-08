@@ -16,7 +16,7 @@
 
         <div class="form-group">
             <input type="text" value="{{ $sitemapUrl }}" class="admin-input" readonly style="max-width: 500px;" id="sitemapInput">
-            <button type="button" class="admin-btn admin-btn-secondary" onclick="navigator.clipboard.writeText(document.getElementById('sitemapInput').value); alert('Link copiado para a área de transferência!');" title="Copiar Link">
+            <button type="button" class="admin-btn admin-btn-secondary" onclick="navigator.clipboard.writeText(document.getElementById('sitemapInput').value); showToast('Link copiado para a área de transferência!', 'info');" title="Copiar Link">
                 <x-lucide-copy class="lucid-icon" />
             </button>
         </div>

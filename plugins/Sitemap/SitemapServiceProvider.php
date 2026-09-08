@@ -4,6 +4,7 @@ namespace Plugins\Sitemap;
 
 use Illuminate\Support\ServiceProvider;
 use App\Support\AdminMenu;
+use App\Support\HookManager;
 use App\Support\Settings;
 
 class SitemapServiceProvider extends ServiceProvider
@@ -20,16 +21,29 @@ class SitemapServiceProvider extends ServiceProvider
     {
         $this->loadViewsFrom(__DIR__ . '/resources/views', 'sitemap');
 
-        // 1. Registra o item no menu lateral (em Ferramentas)
-        AdminMenu::add([
-            'label'      => 'Sitemap XML',
+        // Registra o item no menu lateral (em Ferramentas)
+        AdminMenu::addSubItem('Ferramentas', [
+            'label'      => 'Sitemap',
             'icon'       => 'globe',
             'route'      => 'admin.sitemap.index',
-            'active'     => 'admin.sitemap.*',
+            'active'     => 'admin.sitemap.index',
             'role'       => 'admin',
-        ], 'Redirecionamentos', 1);
+        ]);
 
-        // 2. Registra opções em Admin -> Configurações
+        HookManager::register('admin.tools_page', function($params) {
+            if (view()->exists('admin.tools.tool-card')) {
+                return view('admin.tools.tool-card', [
+                    'icon' => 'globe',
+                    'title' => 'Sitemap',
+                    'text' => 'Sitemap para buscadores. Copie a URL ou baixe o arquivo.',
+                    'buttonTarget' => route('admin.sitemap.index'),
+                    'buttonLabel' => 'Sitemap',
+                ])->render();
+            }
+            return '';
+        }, 'Sitemap Plugin');
+
+        // Registra opções em Admin -> Configurações
         $this->registerSettings();
     }
 
