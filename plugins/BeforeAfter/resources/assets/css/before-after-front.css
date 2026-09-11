@@ -51,6 +51,7 @@
   top: 0;
   left: 0;
   max-width: none !important;
+  border-radius: 0 !important;
 }
 
 /* Slider / Range Invisível sobreposto para controle de arraste */
