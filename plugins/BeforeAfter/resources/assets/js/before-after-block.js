@@ -67,8 +67,6 @@
               } else {
                 alert(msg);
               }
-
-              // NÃO limpamos activeNodeUpdater, assim o usuário pode escolher outra imagem no modal aberto
             }
           }
         };
@@ -84,16 +82,6 @@
         newImg.src = mediaUrl;
       };
 
-    //   if (referenceUrl) {
-    //     // Já existe uma imagem no outro slot: precisa validar
-    //     validateAndInsert();
-    //   } else {
-    //     // É a primeira imagem sendo adicionada: aceita sem validação
-    //     activeNodeUpdater({ [side]: mediaUrl });
-    //     window.dispatchEvent(new CustomEvent('modal-close', { detail: { id: 'selectorModal' } }));
-    //     activeNodeUpdater = null;
-    //     activeNodeAttrs = null;
-    //   }
       if (referenceUrl) {
         // Já existe uma imagem no outro slot: valida e insere
         validateAndInsert();
@@ -103,8 +91,8 @@
         firstImg.onload = () => {
           activeNodeUpdater({
             [side]: mediaUrl,
-            imageWidth: firstImg.naturalWidth,   // <--- SALVA LARGURA
-            imageHeight: firstImg.naturalHeight  // <--- SALVA ALTURA
+            imageWidth: firstImg.naturalWidth,
+            imageHeight: firstImg.naturalHeight
           });
           window.dispatchEvent(new CustomEvent('modal-close', { detail: { id: 'selectorModal' } }));
           activeNodeUpdater = null;
@@ -131,13 +119,8 @@
       const openMediaSelector = (slot) => {
         activeNodeUpdater = props.updateAttributes;
         activeNodeAttrs = props.node.attrs;
-        // activeSlotTarget = slot; // 'imageBefore' ou 'imageAfter'
 
         openGridModal('before-after-plugin', true, [], {}, { side: slot });
-
-        // window.dispatchEvent(new CustomEvent('modal-open', {
-        //   detail: { id: 'selectorModal', context: 'before-after-plugin' }
-        // }));
       };
 
       return () => h(NodeViewWrapper, { class: 'lunar-ba-editor-wrapper' }, [
@@ -236,33 +219,16 @@
       }];
     },
 
-    // renderHTML({ HTMLAttributes }) {
-    //   const { imageBefore, imageAfter, labelBefore, labelAfter, imageWidth, imageHeight, aspectRatio } = HTMLAttributes;
-
-    //   return [
-    //     'div',
-    //     mergeAttributes(HTMLAttributes, {
-    //       class: 'lunar-ba-container',
-    //       'data-type': 'before-after',
-    //       'data-img-before': imageBefore || '',
-    //       'data-img-after': imageAfter || '',
-    //       'data-img-width': imageWidth || '',   // <--- NOVO
-    //       'data-img-height': imageHeight || '',
-    //       'data-label-before': labelBefore || 'Antes',
-    //       'data-label-after': labelAfter || 'Depois',
-    //       style: `--ba-aspect-ratio: ${aspectRatio}`
-    //     }),
     renderHTML({ node, HTMLAttributes }) {
-        console.log('ATTRS', node.attrs)
-      // ✅ ACESSA node.attrs DIRETAMENTE
+      // ACESSA node.attrs DIRETAMENTE
       const imageWidth = node.attrs.imageWidth;
       const imageHeight = node.attrs.imageHeight;
 
-      // ✅ CONVERTE PARA NÚMERO E VALIDA
+      // CONVERTE PARA NÚMERO E VALIDA
       const width = parseInt(imageWidth, 10);
       const height = parseInt(imageHeight, 10);
 
-      // ✅ FALLBACK GARANTIDO
+      // FALLBACK GARANTIDO
       const aspectRatio = (width > 0 && height > 0)
         ? `${width} / ${height}`
         : '16 / 9';
