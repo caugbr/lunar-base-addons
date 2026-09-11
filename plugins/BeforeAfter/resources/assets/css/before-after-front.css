@@ -1,0 +1,126 @@
+/* ==========================================================================
+   LUNAR BASE - BEFORE / AFTER FRONT-END STYLES
+   ========================================================================== */
+
+.lunar-ba-container {
+  position: relative;
+  width: 100%;
+  max-width: 700px;
+  /* height: 400px; */
+  aspect-ratio: var(--ba-aspect-ratio, 16 / 9);
+  margin: 2rem auto;
+  overflow: hidden;
+  border-radius: 10px;
+  user-select: none;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.lunar-ba-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.lunar-ba-img, .lunar-ba-img img {
+    margin: 0 !important;
+}
+
+.lunar-ba-after-wrap {
+  z-index: 1;
+}
+
+.lunar-ba-before-wrap {
+  z-index: 2;
+  width: 50%; /* Estado inicial do slider a 50% */
+  overflow: hidden;
+  border-right: 3px solid #ffffff;
+  box-shadow: 5px 0 15px rgba(0,0,0,0.3);
+}
+
+.lunar-ba-before-wrap img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+  object-position: left top;
+  /* Garante que a imagem do 'antes' não mude de escala ao cortar */
+  position: absolute;
+  top: 0;
+  left: 0;
+  max-width: none !important;
+}
+
+/* Slider / Range Invisível sobreposto para controle de arraste */
+.lunar-ba-range {
+  position: absolute;
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  outline: none;
+  margin: 0;
+  z-index: 10;
+  cursor: ew-resize;
+}
+
+.lunar-ba-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 0px; /* O controle visual é feito pelo divisor customizado abaixo */
+  height: 100%;
+}
+
+/* Linha Divisora Central com Alça */
+.lunar-ba-handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 3px;
+  background: #ffffff;
+  z-index: 5;
+  pointer-events: none;
+  transform: translateX(-50%);
+}
+
+.lunar-ba-handle-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 36px;
+  height: 36px;
+  background: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0f172a;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* Rótulos */
+.lunar-ba-badge {
+  position: absolute;
+  bottom: 12px;
+  z-index: 6;
+  background: rgba(15, 23, 42, 0.75);
+  color: #fff;
+  padding: 4px 10px;
+  font-size: 11px;
+  border-radius: 4px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  pointer-events: none;
+  backdrop-filter: blur(4px);
+
+  opacity: 0.5; /* estado inicial (50%) */
+}
+.lunar-ba-badge-before { left: 12px; }
+.lunar-ba-badge-after { right: 12px; }

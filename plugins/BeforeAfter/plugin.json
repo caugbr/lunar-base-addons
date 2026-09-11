@@ -1,0 +1,6 @@
+{
+    "name": "BeforeAfter",
+    "description": "Bloco comparador de imagens Antes / Depois com slider interativo.",
+    "version": "1.0.0",
+    "provider": "Plugins\\BeforeAfter\\BeforeAfterServiceProvider"
+}
