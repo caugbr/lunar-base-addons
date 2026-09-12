@@ -1,6 +1,11 @@
 {
     "name": "Reactions",
-    "description": "Permite adicionar rea\u00e7\u00f5es (like/dislike) em posts de forma din\u00e2mica.",
+    "description": "Permite adicionar reações (like/dislike) em posts de forma dinâmica.",
     "version": "1.0.0",
-    "provider": "Plugins\\Reactions\\ReactionsServiceProvider"
+    "provider": "Plugins\\Reactions\\ReactionsServiceProvider",
+    "tags": [
+        "interaction",
+        "seo",
+        "appearance"
+    ]
 }

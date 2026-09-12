@@ -2,5 +2,9 @@
     "name": "Sitemap",
     "description": "Geração dinâmica de Sitemap XML para otimização de motores de busca (SEO).",
     "version": "1.0.0",
-    "provider": "Plugins\\Sitemap\\SitemapServiceProvider"
+    "provider": "Plugins\\Sitemap\\SitemapServiceProvider",
+    "tags": [
+        "seo",
+        "system"
+    ]
 }

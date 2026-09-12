@@ -1,6 +1,10 @@
 {
     "name": "Maintenance",
-    "description": "Bloqueia o site temporariamente para manuten\u00e7\u00e3o.",
+    "description": "Bloqueia o site temporariamente para manutenção.",
     "version": "1.0.0",
-    "provider": "Plugins\\Maintenance\\MaintenanceServiceProvider"
+    "provider": "Plugins\\Maintenance\\MaintenanceServiceProvider",
+    "tags": [
+        "system",
+        "utils"
+    ]
 }

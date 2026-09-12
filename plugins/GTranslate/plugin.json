@@ -19,5 +19,9 @@
             "default": "dropdown",
             "description": "Modo visual: 'dropdown', 'flags', ou 'flags_and_dropdown'"
         }
-    }
+    },
+    "tags": [
+        "utils",
+        "appearance"
+    ]
 }

@@ -12,5 +12,10 @@
             "default": true,
             "description": "Ativa ou desativa a captura automática de erros 404"
         }
-    }
+    },
+    "tags": [
+        "utils",
+        "appearance",
+        "system"
+    ]
 }

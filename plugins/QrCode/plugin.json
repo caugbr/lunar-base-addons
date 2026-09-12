@@ -1,6 +1,6 @@
 {
     "name": "Qr Code",
-    "description": "Gere QR Codes din\u00e2micos para posts, p\u00e1ginas e conte\u00fados avulsos.",
+    "description": "Gere QR Codes dinâmicos para posts, páginas e conteúdos avulsos.",
     "version": "1.1.1",
     "provider": "Plugins\\QrCode\\QrCodeServiceProvider",
     "configurable": {
@@ -14,5 +14,10 @@
             "default": 1,
             "description": "Índice do set de links para inserir o link no menu da admin"
         }
-    }
+    },
+    "tags": [
+        "utils",
+        "seo",
+        "system"
+    ]
 }

@@ -2,5 +2,9 @@
     "name": "Backup",
     "description": "Gerenciador completo de backups e restauração do sistema",
     "version": "1.1.1",
-    "provider": "Plugins\\Backup\\BackupServiceProvider"
+    "provider": "Plugins\\Backup\\BackupServiceProvider",
+    "tags": [
+        "utils",
+        "system"
+    ]
 }

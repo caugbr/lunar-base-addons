@@ -45,5 +45,9 @@
             "default": 30,
             "description": "Período em dias para cálculo do gráfico de picos por horário."
         }
-    }
+    },
+    "tags": [
+        "seo",
+        "system"
+    ]
 }

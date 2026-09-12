@@ -14,5 +14,9 @@
             "default": 1,
             "description": "Índice do set de links para inserir o link no menu da admin"
         }
-    }
+    },
+    "tags": [
+        "utils",
+        "appearance"
+    ]
 }

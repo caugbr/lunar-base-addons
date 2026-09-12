@@ -2,5 +2,9 @@
     "name": "Countdown",
     "description": "Adiciona um bloco de contador regressivo dinâmico para prazos, promoções e lançamentos de eventos no editor.",
     "version": "1.0.0",
-    "provider": "Plugins\\Countdown\\CountdownServiceProvider"
+    "provider": "Plugins\\Countdown\\CountdownServiceProvider",
+    "tags": [
+        "editor",
+        "utils"
+    ]
 }

@@ -2,5 +2,10 @@
     "name": "Comments",
     "description": "Insere a funcionalidade de comentários nos posts.",
     "version": "1.0.0",
-    "provider": "Plugins\\Comments\\CommentsServiceProvider"
+    "provider": "Plugins\\Comments\\CommentsServiceProvider",
+    "tags": [
+        "interaction",
+        "marketing",
+        "appearance"
+    ]
 }
