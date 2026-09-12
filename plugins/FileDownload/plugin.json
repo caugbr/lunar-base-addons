@@ -1,0 +1,6 @@
+{
+    "name": "File Download",
+    "description": "Bloco para download de arquivos (PDF, documentos, planilhas, ZIP) com card estilizado.",
+    "version": "1.0.0",
+    "provider": "Plugins\\FileDownload\\FileDownloadServiceProvider"
+}

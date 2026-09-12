@@ -11,21 +11,7 @@
 
   let activeNodeUpdater = null;
   let activeNodeAttrs = null;
-//   let activeSlotTarget = null;
 
-  // Escuta globalmente a seleção de mídia do modal nativo do Lunar Base
-//   window.addEventListener('media:inserted', (e) => {
-//     console.log('inserted', e.detail);
-//     if (e.detail.source === 'before-after-plugin' && activeNodeUpdater && e.detail?.side) {
-//       const mediaUrl = e.detail.media.url;
-//       activeNodeUpdater({ [e.detail.side]: mediaUrl });
-
-//       // Fecha o modal de mídia
-//       window.dispatchEvent(new CustomEvent('modal-close', { detail: { id: 'selectorModal' } }));
-//       activeNodeUpdater = null;
-//     //   activeSlotTarget = null;
-//     }
-//   });
   // Escuta globalmente a seleção de mídia do modal nativo do Lunar Base
   window.addEventListener('media:inserted', (e) => {
     if (e.detail.source === 'before-after-plugin' && activeNodeUpdater && e.detail?.side) {
@@ -269,16 +255,14 @@
     }
   });
 
-
-  const iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-columns"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M12 3v18"/></svg>`;
+  const iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-images"><path d="m22 11-1.296-1.296a2.4 2.4 0 0 0-3.408 0L11 16"/><path d="M4 8a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2"/><circle cx="13" cy="7" r="1" fill="currentColor"/><rect x="8" y="2" width="14" height="14" rx="2"/></svg>`;
   // REGISTRA O BLOCO NO MEGA-MENU DO EDITOR
   window.LunarEditor.registerBlock({
     name: 'beforeAfter',
     category: 'Mídia & Conteúdo',
     title: 'Antes / Depois',
     description: 'Comparador de imagens interativo com slider',
-    // icon: iconSvg,
-    icon: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-columns"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M12 3v18"/></svg>',
+    icon: iconSvg,
     extension: BeforeAfterExtension,
     action: (editor) => {
       editor.chain().focus().insertContent({

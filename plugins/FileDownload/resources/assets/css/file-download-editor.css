@@ -1,0 +1,229 @@
+/* ==========================================================================
+   LUNAR BASE - FILE DOWNLOAD EDITOR STYLES
+   ========================================================================== */
+
+.lunar-file-editor-wrapper {
+  margin: 1.75rem 0;
+  user-select: none;
+}
+
+.lunar-file-admin-box {
+  border: 1px dashed rgba(203, 213, 225, 0.6);
+  border-radius: 8px;
+  padding: 10px;
+  background: #ffffff;
+  transition: border-color 0.2s ease;
+}
+
+.lunar-file-admin-box:hover {
+  border-color: #94a3b8;
+}
+
+/* Barra Superior */
+.lunar-file-admin-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+  border-bottom: 1px dashed #e2e8f0;
+  opacity: 0.3;
+  transition: opacity 0.2s ease;
+}
+
+.lunar-file-admin-box:hover .lunar-file-admin-bar {
+  opacity: 1;
+}
+
+.lunar-file-admin-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #64748b;
+}
+
+.lunar-file-admin-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.actions-btn-group {
+  display: flex;
+  gap: 4px;
+}
+
+.lunar-file-btn-sm {
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.lunar-file-btn-sm:hover { background: #e2e8f0; color: #0f172a; }
+
+.lunar-file-delete-btn {
+  background: none;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 2px 6px;
+}
+.lunar-file-delete-btn:hover { color: #ef4444; }
+
+/* ESTADO VAZIO COM 2 BOTÕES */
+.lunar-file-empty-box {
+  border: 2px dashed #cbd5e1;
+  border-radius: 8px;
+  background: #f8fafc;
+  padding: 26px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.lunar-file-empty-box .empty-main-icon {
+  width: 32px;
+  height: 32px;
+  color: #64748b;
+  margin-bottom: 4px;
+}
+
+.lunar-file-empty-box strong {
+  font-size: 13.5px;
+  color: #1e293b;
+}
+
+.lunar-file-empty-box p {
+  font-size: 11.5px;
+  color: #64748b;
+  margin: 4px 0 14px 0;
+}
+
+.lunar-file-choice-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btn-choice {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+/* Botão Selecionar na Biblioteca */
+.btn-choice-library {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+}
+.btn-choice-library:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+  color: #0f172a;
+}
+
+/* Botão Buscar no Computador */
+.btn-choice-upload {
+  background: #2563eb;
+  border: 1px solid #2563eb;
+  color: #ffffff;
+}
+.btn-choice-upload:hover {
+  background: #1d4ed8;
+}
+
+/* Card Preenchido no Editor */
+.lunar-file-card-preview {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+
+.lunar-file-badge {
+  background: #eff6ff;
+  color: #2563eb;
+  font-weight: 800;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  padding: 12px 14px;
+  border-radius: 6px;
+  border: 1px solid #bfdbfe;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+}
+
+.lunar-file-info {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.lunar-file-input-name {
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
+  width: 100%;
+  outline: none;
+  padding: 2px 0;
+}
+
+.lunar-file-input-name:focus {
+  border-bottom: 1px dashed #3b82f6;
+}
+
+.lunar-file-meta {
+  display: flex;
+  gap: 8px;
+  font-size: 11px;
+  color: #64748b;
+}
+
+.lunar-file-cta .cta-button-mock {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #0f172a;
+  color: #ffffff;
+  padding: 6px 12px;
+  border-radius: 6px;
+}
+
+.lunar-file-input-btn {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  outline: none;
+  width: 90px;
+  cursor: text;
+}
