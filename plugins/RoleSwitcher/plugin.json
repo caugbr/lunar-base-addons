@@ -1,0 +1,22 @@
+{
+    "name": "Role Switcher",
+    "description": "Permite alternar dinamicamente entre papéis de usuário (roles) de acordo com uma matriz de permissões.",
+    "version": "1.0.0",
+    "provider": "Plugins\\RoleSwitcher\\RoleSwitcherServiceProvider",
+    "configurable": {
+        "menuAfterItem": {
+            "type": "string",
+            "default": "Configurações",
+            "description": "Label do item referência para posicionar link no menu da admin"
+        },
+        "menuSet": {
+            "type": "integer",
+            "default": 1,
+            "description": "Índice do set de links para inserir o link no menu da admin"
+        }
+    },
+    "tags": [
+        "system",
+        "utils"
+    ]
+}
