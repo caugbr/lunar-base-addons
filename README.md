@@ -32,12 +32,13 @@ Repositório oficial de addons (plugins e temas) para o [Lunar Base](https://git
 | 20 | **Qr Code** | Gera QR Codes dinâmicos para posts, páginas e conteúdos avulsos. |
 | 21 | **Reactions** | Permite adicionar reações (like/dislike) em posts de forma dinâmica. |
 | 22 | **Redirects** | Gerenciamento de regras de redirecionamento de URLs e monitoramento de erros 404. |
-| 23 | **Revisions** | Sistema de versionamento de posts e páginas com comparação visual e restauração segura. |
-| 24 | **Share** | Adiciona botões de compartilhamento social dinâmicos em posts do blog. |
-| 25 | **Sitemap** | Geração dinâmica de Sitemap XML para otimização em motores de busca (SEO). |
-| 26 | **Table Of Contents** | Varre todos os títulos (H1, H2, H3) do texto em tempo real e desenha uma caixa de índice navegável. |
-| 27 | **Taxonomy Colors** | Permite associar cada termo de taxonomia a uma cor. |
-| 28 | **Tracker** | Estatísticas de acesso para o Lunar Base. |
+| 23 | **Role Switcher** | Mude seu papel temporariamente e veja o sistema como outros roles vêem |
+| 24 | **Revisions** | Sistema de versionamento de posts e páginas com comparação visual e restauração segura. |
+| 25 | **Share** | Adiciona botões de compartilhamento social dinâmicos em posts do blog. |
+| 26 | **Sitemap** | Geração dinâmica de Sitemap XML para otimização em motores de busca (SEO). |
+| 27 | **Table Of Contents** | Varre todos os títulos (H1, H2, H3) do texto em tempo real e desenha uma caixa de índice navegável. |
+| 28 | **Taxonomy Colors** | Permite associar cada termo de taxonomia a uma cor. |
+| 29 | **Tracker** | Estatísticas de acesso para o Lunar Base. |
 
 ---
 
