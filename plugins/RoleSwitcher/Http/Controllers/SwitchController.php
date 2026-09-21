@@ -33,13 +33,39 @@ class SwitchController extends Controller
 
         session(['role_switcher_active' => $targetRole]);
 
-        return redirect('/admin/profile')->with('success', "Você agora está operando com o papel: {$targetRole}.");
+        log_admin('RoleSwitch: papel assumido', 'user_roles', ["to_role" => $targetRole]);
+
+        // Obtém a URL personalizada de destino ou usa o perfil da admin como fallback
+        $targetUrl = $this->getRedirectUrlForRole($targetRole);
+
+        return redirect($targetUrl)->with('success', "Você agora está operando com o papel: {$targetRole}.");
     }
 
     public function reset()
     {
+        $user = auth()->user();
+        $realRole = $user->getOriginal('role') ?? $user->role;
+
         session()->forget('role_switcher_active');
 
-        return redirect('/admin/profile')->with('success', 'Você retornou ao seu papel original.');
+        log_admin('RoleSwitch: reset', 'user_roles');
+
+        // Retorna para a URL correspondente ao papel real do usuário
+        $targetUrl = $this->getRedirectUrlForRole($realRole);
+
+        return redirect($targetUrl)->with('success', 'Você retornou ao seu papel original.');
+    }
+
+    /**
+     * Resolve a URL de redirecionamento configurada para o papel
+     */
+    protected function getRedirectUrlForRole(string $role): string
+    {
+        $redirects = getOption('role_switcher_redirects', []);
+        if (is_string($redirects)) {
+            $redirects = json_decode($redirects, true) ?? [];
+        }
+
+        return !empty($redirects[$role]) ? $redirects[$role] : '/admin/profile';
     }
 }

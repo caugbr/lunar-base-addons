@@ -22,8 +22,8 @@ class RoleSwitcherMiddleware
             // 2. Limpa o cache interno do mutator 'permissions' se já tiver sido carregado
             unset($user->permissions);
 
-            \Log::info('RoleSwitcherMiddleware: Role alterada em tempo de execução para: ' . $switchedRole);
-            \Log::info('RoleSwitcherMiddleware: check: ', auth()->user()->permissions);
+            // \Log::info('RoleSwitcherMiddleware: Role alterada em tempo de execução para: ' . $switchedRole);
+            // \Log::info('RoleSwitcherMiddleware: check: ', auth()->user()->permissions);
         }
 
         return $next($request);
