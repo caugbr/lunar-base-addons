@@ -1,0 +1,10 @@
+{
+    "name": "User Switcher",
+    "description": "Permite que administradores assumam a identidade de outros usuários para testes, validações e suporte.",
+    "version": "1.0.0",
+    "provider": "Plugins\\UserSwitcher\\UserSwitcherServiceProvider",
+    "tags": [
+        "system",
+        "utils"
+    ]
+}
