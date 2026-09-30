@@ -32,6 +32,38 @@ class TrackerServiceProvider extends ServiceProvider
             'permission' => 'manage-pages',
         ], $menuAfterItem, $menuSet);
 
+        AdminMenu::addSubItem('Tráfego', [
+            'label'      => 'Mais Visitadas',
+            'icon'       => 'file-text',
+            'route'      => 'admin.tracker.pages',
+            'active'     => 'admin.tracker.pages',
+            'role'       => 'admin',
+        ]);
+
+        AdminMenu::addSubItem('Tráfego', [
+            'label'      => 'Por Horário',
+            'icon'       => 'clock',
+            'route'      => 'admin.tracker.hourly',
+            'active'     => 'admin.tracker.hourly',
+            'role'       => 'admin',
+        ]);
+
+        AdminMenu::addSubItem('Tráfego', [
+            'label'      => 'Origens de Tráfego',
+            'icon'       => 'globe',
+            'route'      => 'admin.tracker.referrers',
+            'active'     => 'admin.tracker.referrers',
+            'role'       => 'admin',
+        ]);
+
+        AdminMenu::addSubItem('Tráfego', [
+            'label'      => 'Eventos',
+            'icon'       => 'mouse-pointer-click',
+            'route'      => 'admin.tracker.events',
+            'active'     => 'admin.tracker.events',
+            'role'       => 'admin',
+        ]);
+
         $this->app['router']->pushMiddlewareToGroup('web', TrackPageViews::class);
 
         if (!request()->is('admin*') && !request()->ajax()) {
