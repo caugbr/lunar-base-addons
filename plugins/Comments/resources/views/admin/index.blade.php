@@ -143,6 +143,25 @@
                 <input type="text" name="search" value="{{ request('search') }}" class="admin-filter-input" placeholder="Buscar por autor ou conteúdo...">
             </div>
             <div class="admin-filter-group">
+                <select name="type" class="admin-filter-select">
+                    @php
+                        $types = setting('comments.show_comments_in', ['post']);
+                        if (is_string($types)) {
+                            $types = array_map('trim', explode(',', $types));
+                        }
+                        if (empty($types)) {
+                            $types = ['post'];
+                        }
+                    @endphp
+                    @foreach($types as $value)
+                        @php
+                            $label = $value === 'post' ? 'Posts' : 'Páginas';
+                        @endphp
+                        <option value="{{ $value }}" {{ request('type') == $value ? 'selected' : '' }}>{{ $label }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="admin-filter-group">
                 <select name="status" class="admin-filter-select">
                     <option value="">Todos os status</option>
                     @foreach($statuses as $value => $label)

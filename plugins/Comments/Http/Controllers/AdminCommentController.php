@@ -16,12 +16,21 @@ class AdminCommentController extends Controller
         $query = Comment::with(['commentable', 'user'])
             ->orderBy('created_at', 'desc');
 
-        // Filtro por status
+        // 1. Filtro dinâmico por tipo usando PublicationTypes
+        $type = $request->query('type');
+        if ($type) {
+            $typeConfig = \App\Support\PublicationTypes::get($type);
+            if ($typeConfig && !empty($typeConfig['model'])) {
+                $query->where('commentable_type', $typeConfig['model']);
+            }
+        }
+
+        // 2. Filtro por status
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
 
-        // Filtro por busca (autor ou conteúdo)
+        // 3. Filtro por busca
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
@@ -34,7 +43,7 @@ class AdminCommentController extends Controller
         $comments = $query->paginate(setting('comments.pagination_items', 20));
         $statuses = ['approved' => 'Aprovado', 'pending' => 'Pendente', 'spam' => 'Spam', 'rejected' => 'Rejeitado'];
 
-        return view('comments::admin.index', compact('comments', 'statuses'));
+        return view('comments::admin.index', compact('comments', 'statuses', 'type'));
     }
 
     /**

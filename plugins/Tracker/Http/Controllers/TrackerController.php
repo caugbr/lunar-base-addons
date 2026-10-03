@@ -225,6 +225,11 @@ class TrackerController extends Controller
 
         $referrers = $query->paginate(25)->withQueryString();
 
+        // Verifica a dependência do pacote
+        if (!class_exists(\Stevebauman\Location\Facades\Location::class)) {
+            session()->now('warning', 'O recurso de geolocalização está inativo. Instale o pacote <code>stevebauman/location</code> para exibir dados de Cidade e País.');
+        }
+
         return view('tracker::referrers', compact('referrers', 'days', 'search'));
     }
 }
