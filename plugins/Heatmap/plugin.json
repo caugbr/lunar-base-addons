@@ -1,0 +1,23 @@
+{
+    "name": "Heatmap",
+    "description": "Mapas de calor de cliques e rolagem totalmente integrados e hospedados localmente.",
+    "version": "1.0.0",
+    "provider": "Plugins\\Heatmap\\HeatmapServiceProvider",
+    "configurable": {
+        "menuAfterItem": {
+            "type": "string",
+            "default": "Configurações",
+            "description": "Label do item referência para posicionar link no menu da admin"
+        },
+        "menuSet": {
+            "type": "integer",
+            "default": 1,
+            "description": "Índice do set de links para inserir o link no menu da admin"
+        }
+    },
+    "tags": [
+        "analytics",
+        "marketing",
+        "optimization"
+    ]
+}
