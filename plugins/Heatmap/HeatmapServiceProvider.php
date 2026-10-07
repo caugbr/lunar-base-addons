@@ -57,28 +57,31 @@ class HeatmapServiceProvider extends ServiceProvider
             'attributes'  => ['min' => 0.5, 'max' => 5, 'step' => 0.1],
         ], 'general');
 
-        // Injeta o rastreador no site público de forma elegante via AssetManager
-        if (!request()->is('admin*') && !request()->is('api*')) {
-            if (!auth()->check()) {
-                $selectors = setting('general.heatmap_tracked_selectors', 'a, button, input, select, textarea, label, summary, [role="button"], [role="tab"], [data-track], [data-action], img');
-                $hoverDelay = (float) setting('general.heatmap_hover_delay', 1.2) * 1000; // Converte para ms
+        // Espera o sistema carregar para usar auth() - antes disso não funciona direito
+        addAction('init', function() {
+            // Injeta o rastreador no site público de forma elegante via AssetManager
+            if (!request()->is('admin*') && !request()->is('api*')) {
+                if (!auth()->check()) {
+                    $selectors = setting('general.heatmap_tracked_selectors', 'a, button, input, select, textarea, label, summary, [role="button"], [role="tab"], [data-track], [data-action], img');
+                    $hoverDelay = (float) setting('general.heatmap_hover_delay', 1.2) * 1000; // Converte para ms
 
-                // Injeta a variável JS com a lista de seletores autorizados
-                addInlineScript(
-                    "window.__heatmapTrackedSelectors = '{$selectors}';\n" .
-                    "window.__heatmapHoverDelay = {$hoverDelay};\n"
-                );
+                    // Injeta a variável JS com a lista de seletores autorizados
+                    addInlineScript(
+                        "window.__heatmapTrackedSelectors = '{$selectors}';\n" .
+                        "window.__heatmapHoverDelay = {$hoverDelay};\n"
+                    );
 
-                // Enfileira o arquivo JS do rastreador com defer e no rodapé
-                addScript(
-                    'heatmap-tracker',
-                    asset('plugins/heatmap/js/tracker.js'),
-                    [],
-                    '1.0.0',
-                    true, // inFooter
-                    true  // defer
-                );
+                    // Enfileira o arquivo JS do rastreador com defer e no rodapé
+                    addScript(
+                        'heatmap-tracker',
+                        asset('plugins/heatmap/js/tracker.js'),
+                        [],
+                        '1.0.0',
+                        true, // inFooter
+                        true  // defer
+                    );
+                }
             }
-        }
+        });
     }
 }
