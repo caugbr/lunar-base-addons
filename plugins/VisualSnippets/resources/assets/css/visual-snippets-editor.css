@@ -1,0 +1,85 @@
+/* ==========================================================================
+   VISUAL SNIPPETS - INSPECTOR MODE
+   ========================================================================== */
+
+/* Efeito de mira nos elementos válidos sob o mouse */
+.lunar-inspecting-mode .tiptap p:hover,
+.lunar-inspecting-mode .tiptap h1:hover,
+.lunar-inspecting-mode .tiptap h2:hover,
+.lunar-inspecting-mode .tiptap h3:hover,
+.lunar-inspecting-mode .tiptap blockquote:hover,
+.lunar-inspecting-mode .tiptap img:hover,
+.lunar-inspecting-mode .tiptap a:hover {
+  outline: 2px dashed #3b82f6 !important;
+  outline-offset: 3px;
+  background-color: rgba(59, 130, 246, 0.08) !important;
+}
+
+/* Selinho flutuante indicando o nome da variável */
+.tiptap [data-var]::before {
+  content: '[' attr(data-var) ']';
+  position: absolute;
+  top: -18px;
+  left: 0;
+  background: #10b981;
+  color: #ffffff;
+  font-family: monospace;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 3px;
+  pointer-events: none;
+  z-index: 10;
+  line-height: 1.2;
+}
+
+
+/* Quando a mira estiver ligada, bloqueia a seleção de texto e foca no clique */
+.lunar-inspecting-mode .tiptap {
+  user-select: none !important;
+  cursor: crosshair !important;
+}
+
+/* Mira no hover */
+.lunar-inspecting-mode .tiptap p:hover,
+.lunar-inspecting-mode .tiptap h1:hover,
+.lunar-inspecting-mode .tiptap h2:hover,
+.lunar-inspecting-mode .tiptap h3:hover,
+.lunar-inspecting-mode .tiptap blockquote:hover,
+.lunar-inspecting-mode .tiptap img:hover,
+.lunar-inspecting-mode .tiptap a:hover {
+  outline: 2px dashed #3b82f6 !important;
+  outline-offset: 3px;
+  background-color: rgba(59, 130, 246, 0.08) !important;
+}
+
+/* Elemento com variável já atribuída: borda verde permanente */
+.tiptap [data-var] {
+  position: relative;
+  outline: 2px solid #10b981 !important;
+  outline-offset: 2px;
+}
+
+.tiptap [data-var]::before {
+  content: '[' attr(data-var) ']';
+  position: absolute;
+  top: -18px;
+  left: 0;
+  background: #10b981;
+  color: #ffffff;
+  font-family: monospace;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 3px;
+  pointer-events: none;
+  z-index: 10;
+  line-height: 1.2;
+}
+
+.lunar-capturing-thumb [data-var] {
+    outline: none !important;
+}
+.lunar-capturing-thumb [data-var]::before {
+    display: none !important; /* Esconde a etiqueta verde [var] no print! */
+}

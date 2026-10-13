@@ -1,0 +1,29 @@
+{
+    "name": "Visual Snippets",
+    "description": "Moldes visuais reutilizáveis e desacoplados para inserção via shortcode no editor.",
+    "version": "1.0.0",
+    "provider": "Plugins\\VisualSnippets\\VisualSnippetsServiceProvider",
+    "configurable": {
+        "menuAfterItem": {
+            "type": "string",
+            "default": "Formulários",
+            "description": "Label do item de referência para posicionar o link no menu da administração."
+        },
+        "menuSet": {
+            "type": "integer",
+            "default": 1,
+            "description": "Índice do set de links para posicionar o item na barra lateral."
+        },
+        "enableShortcodes": {
+            "type": "boolean",
+            "default": true,
+            "description": "Ativa ou desativa a compilação pública das tags [vs-template] e [vs-instance]."
+        }
+    },
+    "tags": [
+        "appearance",
+        "editor",
+        "layout",
+        "utils"
+    ]
+}
