@@ -14,6 +14,6 @@ class FileDownloadServiceProvider extends ServiceProvider
         EditorManager::registerStyle(asset('plugins/file-download/css/file-download-editor.css'));
 
         // Enfileira os estilos para exibição correta no site público (não precisa de JS no front)
-        add_style('file-download-front-css', asset('plugins/file-download/css/file-download-front.css'), [], '1.0.0');
+        addStyle('file-download-front-css', asset('plugins/file-download/css/file-download-front.css'), [], '1.0.0');
     }
 }

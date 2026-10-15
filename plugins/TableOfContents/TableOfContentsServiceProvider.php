@@ -19,6 +19,6 @@ class TableOfContentsServiceProvider extends ServiceProvider
         EditorManager::registerStyle(asset('plugins/table-of-contents/css/toc.css'));
 
         // 2. CSS do Site Público (Usando o helper nativo do Lunar Base!)
-        add_style('lunar-toc-front', asset('plugins/table-of-contents/css/toc-front.css'));
+        addStyle('lunar-toc-front', asset('plugins/table-of-contents/css/toc-front.css'));
     }
 }

@@ -1,7 +1,7 @@
 {
     "name": "GTranslate",
     "description": "Adiciona tradução instantânea com Google Tradutor para múltiplos idiomas.",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "provider": "Plugins\\GTranslate\\GTranslateServiceProvider",
     "configurable": {
         "defaultLanguage": {

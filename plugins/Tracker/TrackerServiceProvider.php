@@ -82,9 +82,9 @@ class TrackerServiceProvider extends ServiceProvider
             add_inline_script($inlineConfig);
         }
 
-        if (function_exists('add_script')) {
+        if (function_exists('addScript')) {
             // Ajuste o caminho do asset conforme a estrutura pública de plugins do seu sistema
-            add_script(
+            addScript(
                 'tracker-events',
                 asset('plugins/tracker/js/eventTracker.js'),
                 [],

@@ -17,7 +17,7 @@ class CountdownServiceProvider extends ServiceProvider
         EditorManager::registerStyle(asset('plugins/countdown/css/countdown-editor.css'));
 
         // 3. Enfileira o CSS e o JS do relógio no site público
-        add_style('countdown-front-css', asset('plugins/countdown/css/countdown-front.css'), [], '1.0.0');
-        add_script('countdown-front-js', asset('plugins/countdown/js/countdown-front.js'), [], '1.0.0', true, true);
+        addStyle('countdown-front-css', asset('plugins/countdown/css/countdown-front.css'), [], '1.0.0');
+        addScript('countdown-front-js', asset('plugins/countdown/js/countdown-front.js'), [], '1.0.0', true, true);
     }
 }

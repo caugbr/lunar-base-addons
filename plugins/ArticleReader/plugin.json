@@ -1,7 +1,7 @@
 {
     "name": "Article Reader",
     "description": "Adiciona um player de narração em áudio (Text-to-Speech) para os visitantes ouvirem o conteúdo da página ou post.",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "provider": "Plugins\\ArticleReader\\ArticleReaderServiceProvider",
     "tags": [
         "interaction",

@@ -33,8 +33,8 @@ class GTranslateServiceProvider extends ServiceProvider
             add_inline_script($initScript);
         }
 
-        if (function_exists('add_script')) {
-            add_script(
+        if (function_exists('addScript')) {
+            addScript(
                 'google-translate-api',
                 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit',
                 [],

@@ -22,8 +22,8 @@ class ArticleReaderServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__ . '/resources/views', 'article-reader');
 
         // Enfileira os assets no front-end público
-        add_style('article-reader-css', asset('plugins/article-reader/css/reader.css'), [], '1.0.0');
-        add_script('article-reader-js', asset('plugins/article-reader/js/reader.js'), [], '1.0.0', true, true);
+        addStyle('article-reader-css', asset('plugins/article-reader/css/reader.css'), [], '1.0.0');
+        addScript('article-reader-js', asset('plugins/article-reader/js/reader.js'), [], '1.0.0', true, true);
 
         Settings::add([
             'type'  => 'subtitle',
