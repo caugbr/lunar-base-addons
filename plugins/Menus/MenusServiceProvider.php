@@ -19,10 +19,10 @@ class MenusServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        // 1. Carrega as views do plugin com namespace "menus"
+        // Carrega as views do plugin com namespace "menus"
         $this->loadViewsFrom(__DIR__ . '/resources/views', 'menus');
 
-        // 2. REGISTRO DINÂMICO DE CALLBACKS BASEADO NO BANCO DE DADOS
+        // REGISTRO DINÂMICO DE CALLBACKS BASEADO NO BANCO DE DADOS
         if (!app()->runningInConsole() && Schema::hasTable('menus')) {
 
             // Busca apenas os menus que possuem associação com ganchos (coluna hook preenchida)

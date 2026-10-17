@@ -69,7 +69,7 @@ class BackupHelper
             throw new Exception("Não foi possível criar o arquivo ZIP de backup.");
         }
 
-        // 1. DUMP DO BANCO DE DADOS
+        // DUMP DO BANCO DE DADOS
         if ($includeDb) {
             $dbDriver = config('database.default');
 
@@ -85,7 +85,7 @@ class BackupHelper
             }
         }
 
-        // 2. PASTA DE MÍDIAS (storage/app/public)
+        // PASTA DE MÍDIAS (storage/app/public)
         if ($includeMedia) {
             $mediaPath = storage_path('app/public');
             if (File::exists($mediaPath)) {
@@ -93,7 +93,7 @@ class BackupHelper
             }
         }
 
-        // 3. PLUGINS (plugins/)
+        // PLUGINS (plugins/)
         if ($includePlugins) {
             $pluginsPath = base_path('plugins');
             if (File::exists($pluginsPath)) {
@@ -101,7 +101,7 @@ class BackupHelper
             }
         }
 
-        // 4. TEMAS (themes/)
+        // TEMAS (themes/)
         if ($includeThemes) {
             $themesPath = base_path('themes');
             if (File::exists($themesPath)) {
@@ -109,7 +109,7 @@ class BackupHelper
             }
         }
 
-        // 5. MANIFESTO
+        // MANIFESTO
         $manifest = [
             'app_version' => config('app.version', '1.2.0'),
             'created_at'  => date('Y-m-d H:i:s'),
@@ -145,7 +145,7 @@ class BackupHelper
             $zip->extractTo($tempPath);
             $zip->close();
 
-            // 1. RESTAURA O BANCO DE DADOS
+            // RESTAURA O BANCO DE DADOS
             if (File::exists($tempPath . '/database/database.sqlite')) {
                 File::copy($tempPath . '/database/database.sqlite', database_path('database.sqlite'));
             } elseif (File::exists($tempPath . '/database/database.sql')) {
@@ -153,22 +153,22 @@ class BackupHelper
                 DB::unprepared($sql);
             }
 
-            // 2. RESTAURA UPLOADS
+            // RESTAURA UPLOADS
             if (File::exists($tempPath . '/uploads')) {
                 File::copyDirectory($tempPath . '/uploads', storage_path('app/public'));
             }
 
-            // 3. RESTAURA PLUGINS
+            // RESTAURA PLUGINS
             if (File::exists($tempPath . '/plugins')) {
                 File::copyDirectory($tempPath . '/plugins', base_path('plugins'));
             }
 
-            // 4. RESTAURA TEMAS
+            // RESTAURA TEMAS
             if (File::exists($tempPath . '/themes')) {
                 File::copyDirectory($tempPath . '/themes', base_path('themes'));
             }
 
-            // 5. ATUALIZA LINKS SIMBÓLICOS E CACHE
+            // ATUALIZA LINKS SIMBÓLICOS E CACHE
             Artisan::call('migrate', ['--force' => true]);
             Artisan::call('storage:link');
             Artisan::call('optimize:clear');

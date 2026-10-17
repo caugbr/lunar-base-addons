@@ -15,11 +15,11 @@ class RoleSwitcherMiddleware
 
             $user = auth()->user();
 
-            // 1. Sobrescreve o atributo 'role' do modelo User em tempo de execução
+            // Sobrescreve o atributo 'role' do modelo User em tempo de execução
             $user->role = $switchedRole;
             $user->setAttribute('role', $switchedRole);
 
-            // 2. Limpa o cache interno do mutator 'permissions' se já tiver sido carregado
+            // Limpa o cache interno do mutator 'permissions' se já tiver sido carregado
             unset($user->permissions);
 
             // \Log::info('RoleSwitcherMiddleware: Role alterada em tempo de execução para: ' . $switchedRole);

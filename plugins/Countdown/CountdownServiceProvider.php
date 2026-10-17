@@ -9,14 +9,14 @@ class CountdownServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
-        // 1. Carrega as views (para a tela de Help)
+        // Carrega as views (para a tela de Help)
         $this->loadViewsFrom(__DIR__ . '/resources/views', 'countdown');
 
-        // 2. Registra os assets no Editor Tiptap (Admin)
+        // Registra os assets no Editor Tiptap (Admin)
         EditorManager::registerScript(asset('plugins/countdown/js/countdown-block.js'));
         EditorManager::registerStyle(asset('plugins/countdown/css/countdown-editor.css'));
 
-        // 3. Enfileira o CSS e o JS do relógio no site público
+        // Enfileira o CSS e o JS do relógio no site público
         addStyle('countdown-front-css', asset('plugins/countdown/css/countdown-front.css'), [], '1.0.0');
         addScript('countdown-front-js', asset('plugins/countdown/js/countdown-front.js'), [], '1.0.0', true, true);
     }

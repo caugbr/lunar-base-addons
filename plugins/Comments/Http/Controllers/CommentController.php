@@ -14,7 +14,7 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
-        // 1. Define as regras básicas para qualquer comentário
+        // Define as regras básicas para qualquer comentário
         $rules = [
             'commentable_id'   => 'required|integer',
             'commentable_type' => 'required|string',
@@ -22,20 +22,20 @@ class CommentController extends Controller
             'content'          => 'required|string|min:3|max:1000',
         ];
 
-        // 2. Se for um visitante (não logado), exige nome e email no formulário
+        // Se for um visitante (não logado), exige nome e email no formulário
         if (!Auth::check()) {
             $rules['author_name'] = 'required|string|max:255';
             $rules['author_email'] = 'required|email|max:255';
         }
 
-        // 3. Executa a validação segura
+        // Executa a validação segura
         $validated = $request->validate($rules);
 
         $userId = Auth::id();
         $authorName = $userId ? Auth::user()->name : $validated['author_name'];
         $authorEmail = $userId ? Auth::user()->email : $validated['author_email'];
 
-        // 4. Define o status inicial
+        // Define o status inicial
         $status = 'approved';
 
         // Moderação obrigatória: tudo entra como pendente

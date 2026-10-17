@@ -18,13 +18,13 @@ class QrCodeServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        // 1. Carrega as views com o namespace "qrcode"
+        // Carrega as views com o namespace "qrcode"
         $this->loadViewsFrom(__DIR__ . '/resources/views', 'qrcode');
 
         $menuAfterItem = config('pluginSettings.QrCode.menuAfterItem', 'Configurações');
         $menuSet = config('pluginSettings.QrCode.menuSet', 1);
 
-        // 2. Injeta o item no menu lateral de Ferramentas / Conteúdo
+        // Injeta o item no menu lateral de Ferramentas / Conteúdo
         AdminMenu::add([
             'label'      => 'Gerador QR Code',
             'icon'       => 'qr-code',
@@ -33,7 +33,7 @@ class QrCodeServiceProvider extends ServiceProvider
             'permission' => 'manage-pages',
         ], $menuAfterItem, $menuSet);
 
-        // 3. Registra os Hooks para Posts e Páginas
+        // Registra os Hooks para Posts e Páginas
         $this->registerHooks();
     }
 

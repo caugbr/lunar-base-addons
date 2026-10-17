@@ -21,7 +21,7 @@ class HeatmapApiController extends Controller
 
         $now = now();
 
-        // 1. Grava Cliques e Hover
+        // Grava Cliques e Hover
         if (!empty($interactions) && is_array($interactions)) {
             $rows = [];
             foreach (array_slice($interactions, 0, 50) as $item) {
@@ -43,7 +43,7 @@ class HeatmapApiController extends Controller
             }
         }
 
-        // 2. Grava a Profundidade de Rolagem (Scroll)
+        // Grava a Profundidade de Rolagem (Scroll)
         if ($scrollPercent !== null && $scrollPercent >= 0 && $scrollPercent <= 100) {
             DB::table('heatmap_scrolls')->insert([
                 'url_path'    => substr($path, 0, 255),

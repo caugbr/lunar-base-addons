@@ -1,8 +1,8 @@
 @php
-    // 1. Remove tags HTML e espaços duplicados
+    // Remove tags HTML e espaços duplicados
     $plainText = trim(preg_replace('/\s+/', ' ', strip_tags($item->content)));
 
-    // 2. Conta palavras e calcula minutos (média de 140 palavras/minuto)
+    // Conta palavras e calcula minutos (média de 140 palavras/minuto)
     $wordCount = count(preg_split('/\s+/u', $plainText, -1, PREG_SPLIT_NO_EMPTY));
     $minutes = max(1, (int) ceil($wordCount / (int) config('reading.words_count', 140)));
 @endphp

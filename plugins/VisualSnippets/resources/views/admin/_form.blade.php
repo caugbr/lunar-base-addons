@@ -240,11 +240,11 @@
                         return;
                     }
 
-                    // 1. Esconde as marcações verdes e a barra da mira
+                    // Esconde as marcações verdes e a barra da mira
                     document.body.classList.add('lunar-capturing-thumb');
 
                     try {
-                        // 2. Fotografa em JPEG de qualidade alta
+                        // Fotografa em JPEG de qualidade alta
                         // const dataUrl = await htmlToImage.toJpeg(targetEl, {
                         //     quality: 0.85,
                         //     backgroundColor: '#ffffff'
@@ -252,11 +252,11 @@
                         const dataUrl = await htmlToImage.toJpeg(targetEl, {
                             quality: 0.85,
                             backgroundColor: '#ffffff',
-                            // 1. Não tenta fazer fetch de CSS externos/relativos que geram 404
+                            // Não tenta fazer fetch de CSS externos/relativos que geram 404
                             skipAutoScale: true,
-                            // 2. Não tenta baixar webfonts remotas (usa as que já estão no DOM)
+                            // Não tenta baixar webfonts remotas (usa as que já estão no DOM)
                             fontEmbedCSS: '',
-                            // 3. Ignora tags <link> com caminhos relativos
+                            // Ignora tags <link> com caminhos relativos
                             filter: (node) => {
                                 // Se por algum motivo encontrar botões da admin bar interna, ignora
                                 if (node.classList && (
@@ -270,14 +270,14 @@
                             }
                         });
 
-                        // 3. Aplica na thumbnail reativa
+                        // Aplica na thumbnail reativa
                         this.thumbnailUrl = dataUrl;
                         window.dispatchEvent(new CustomEvent('editor:dirty'));
                     } catch (error) {
                         console.error('Erro ao capturar miniatura:', error);
                         if (window.Dialog) Dialog.alert('Falha ao fotografar o editor.');
                     } finally {
-                        // 4. Devolve as marcas verdes para a tela
+                        // Devolve as marcas verdes para a tela
                         document.body.classList.remove('lunar-capturing-thumb');
                     }
                 }

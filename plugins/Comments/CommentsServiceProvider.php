@@ -27,11 +27,11 @@ class CommentsServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // 1. Carrega Migrations e Views do plugin
+        // Carrega Migrations e Views do plugin
         $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
         $this->loadViewsFrom(__DIR__ . '/resources/views', 'comments');
 
-        // 2. Registra o grupo de configurações e opções de comentários
+        // Registra o grupo de configurações e opções de comentários
         Settings::addGroup('comments', [
             'tab'         => 'Comentários',
             'title'       => 'Comentários',
@@ -68,7 +68,7 @@ class CommentsServiceProvider extends ServiceProvider
             'options'     => PublicationTypes::labels(),
         ], 'comments');
 
-        // 3. Normaliza a configuração lida (aceita array, string separada por vírgula ou string simples)
+        // Normaliza a configuração lida (aceita array, string separada por vírgula ou string simples)
         $showInRaw = setting('comments.show_comments_in', 'post');
         if (is_array($showInRaw)) {
             $enabledTypes = $showInRaw;
@@ -86,7 +86,7 @@ class CommentsServiceProvider extends ServiceProvider
                 ->orderBy('created_at', 'desc');
         };
 
-        // 4. LOOP DINÂMICO PARA CADA TIPO HABILITADO
+        // LOOP DINÂMICO PARA CADA TIPO HABILITADO
         foreach ($enabledTypes as $typeKey) {
             $typeConfig = PublicationTypes::get($typeKey);
             if (!$typeConfig) {
@@ -156,7 +156,7 @@ class CommentsServiceProvider extends ServiceProvider
             }
         }
 
-        // 5. Switches na Sidebar do Painel (Post e Page)
+        // Switches na Sidebar do Painel (Post e Page)
         $this->registerPropertySwitches($enabledTypes);
     }
 

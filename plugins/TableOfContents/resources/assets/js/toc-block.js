@@ -19,7 +19,7 @@
       .replace(/^-+|-+$/g, '');
   }
 
-  // 1. COMPONENTE VUE DO SUMÁRIO
+  // COMPONENTE VUE DO SUMÁRIO
   const TableOfContentsComponent = {
     props: ['node', 'editor'],
     setup(props) {
@@ -67,7 +67,7 @@
     }
   };
 
-  // 2. EXTENSÃO TIPTAP
+  // EXTENSÃO TIPTAP
   const TableOfContentsExtension = Node.create({
     name: 'tableOfContents',
     group: 'block',
@@ -101,7 +101,7 @@
     }
   });
 
-  // 3. REGISTRA O BLOCO NO LUNAR BASE!
+  // REGISTRA O BLOCO NO LUNAR BASE!
   window.LunarEditor.registerBlock({
     name: 'tableOfContents',
     category: 'Estrutura & Layout', // Entra na primeira coluna do Mega-Menu!

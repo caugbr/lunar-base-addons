@@ -17,10 +17,10 @@ class FAQServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        // 1. Carrega as views do plugin com namespace "faq"
+        // Carrega as views do plugin com namespace "faq"
         $this->loadViewsFrom(__DIR__ . '/resources/views', 'faq');
 
-        // 2. Registra o Shortcode [faq slug="seu-slug"]
+        // Registra o Shortcode [faq slug="seu-slug"]
         ContentHelper::registerShortcode(
             'faq',
             function($attributes, $content) {
@@ -61,7 +61,7 @@ class FAQServiceProvider extends ServiceProvider
         $menuAfterItem = config('pluginSettings.FAQ.menuAfterItem', 'Temas');
         $menuSet = config('pluginSettings.FAQ.menuSet', 1);
 
-        // 3. Injeta a aba FAQ no painel administrativo lateral
+        // Injeta a aba FAQ no painel administrativo lateral
         \App\Support\AdminMenu::add([
             'label' => 'FAQ',
             'icon'  => 'file-question-mark',

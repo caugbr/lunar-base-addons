@@ -22,25 +22,26 @@ Repositório oficial de addons (plugins e temas) para o [Lunar Base](https://git
 | 10 | **FAQ**               | Cria blocos de perguntas e respostas de forma organizada.                                                                |
 | 11 | **File Download**     | Bloco para download de arquivos (PDF, documentos, planilhas, ZIP) com card estilizado.                                   |
 | 12 | **Forms**             | Formulários dinâmicos via shortcode.                                                                                     |
-| 13 | **Galleries**         | Exibe galerias de imagens vinculadas ao post via shortcode `[gallery]`.                                                  |
-| 14 | **GTranslate**        | Adiciona tradução instantânea com Google Tradutor para múltiplos idiomas.                                                |
-| 15 | **Heatmap**           | Mapas de calor de cliques e rolagem totalmente integrados e hospedados localmente.                                       |
-| 16 | **Maintenance**       | Bloqueia o site temporariamente para manutenção.                                                                         |
-| 17 | **Maps**              | Cria mapas OpenStreetMap e permite definir pontos no mapa.                                                               |
-| 18 | **Menus**             | Gerencia e adiciona menus customizados ao site.                                                                          |
-| 19 | **Populator**         | Gera conteúdo de teste: usuários, posts e páginas com imagens placeholder.                                               |
-| 20 | **Prism Highlight**   | Syntax highlight para blocos de código utilizando Prism.js.                                                              |
-| 21 | **Qr Code**           | Gera QR Codes dinâmicos para posts, páginas e conteúdos avulsos.                                                         |
-| 22 | **Reactions**         | Permite adicionar reações (like/dislike) em posts de forma dinâmica.                                                     |
-| 23 | **Redirects**         | Gerenciamento de regras de redirecionamento de URLs e monitoramento de erros 404.                                        |
-| 24 | **Role Switcher**     | Mude seu papel temporariamente e veja o sistema como outros roles vêem                                                   |
-| 25 | **Share**             | Adiciona botões de compartilhamento social dinâmicos em posts do blog.                                                   |
-| 26 | **Sitemap**           | Geração dinâmica de Sitemap XML para otimização em motores de busca (SEO).                                               |
-| 27 | **Table Of Contents** | Varre todos os títulos (H1, H2, H3) do texto em tempo real e desenha uma caixa de índice navegável.                      |
-| 28 | **Taxonomy Colors**   | Permite associar cada termo de taxonomia a uma cor.                                                                      |
-| 29 | **Tracker**           | Estatísticas de acesso para o Lunar Base.                                                                                |
-| 30 | **User Switcher**     | Permite que administradores assumam a identidade de outros usuários para testes, validações e suporte.                   |
-| 31 | **Visual Snippets**   | Moldes visuais reutilizáveis e desacoplados para inserção via shortcode no editor.                                       |
+| 13 | **FrontendLogin**     | Permite fazer login a partor do site público, com suporte a Turnstile e 2FA.                                                                    |
+| 14 | **Galleries**         | Exibe galerias de imagens vinculadas ao post via shortcode `[gallery]`.                                                  |
+| 15 | **GTranslate**        | Adiciona tradução instantânea com Google Tradutor para múltiplos idiomas.                                                |
+| 16 | **Heatmap**           | Mapas de calor de cliques e rolagem totalmente integrados e hospedados localmente.                                       |
+| 17 | **Maintenance**       | Bloqueia o site temporariamente para manutenção.                                                                         |
+| 18 | **Maps**              | Cria mapas OpenStreetMap e permite definir pontos no mapa.                                                               |
+| 19 | **Menus**             | Gerencia e adiciona menus customizados ao site.                                                                          |
+| 20 | **Populator**         | Gera conteúdo de teste: usuários, posts e páginas com imagens placeholder.                                               |
+| 21 | **Prism Highlight**   | Syntax highlight para blocos de código utilizando Prism.js.                                                              |
+| 22 | **Qr Code**           | Gera QR Codes dinâmicos para posts, páginas e conteúdos avulsos.                                                         |
+| 23 | **Reactions**         | Permite adicionar reações (like/dislike) em posts de forma dinâmica.                                                     |
+| 24 | **Redirects**         | Gerenciamento de regras de redirecionamento de URLs e monitoramento de erros 404.                                        |
+| 25 | **Role Switcher**     | Mude seu papel temporariamente e veja o sistema como outros roles vêem                                                   |
+| 26 | **Share**             | Adiciona botões de compartilhamento social dinâmicos em posts do blog.                                                   |
+| 27 | **Sitemap**           | Geração dinâmica de Sitemap XML para otimização em motores de busca (SEO).                                               |
+| 28 | **Table Of Contents** | Varre todos os títulos (H1, H2, H3) do texto em tempo real e desenha uma caixa de índice navegável.                      |
+| 29 | **Taxonomy Colors**   | Permite associar cada termo de taxonomia a uma cor.                                                                      |
+| 30 | **Tracker**           | Estatísticas de acesso para o Lunar Base.                                                                                |
+| 31 | **User Switcher**     | Permite que administradores assumam a identidade de outros usuários para testes, validações e suporte.                   |
+| 32 | **Visual Snippets**   | Moldes visuais reutilizáveis e desacoplados para inserção via shortcode no editor.                                       |
 
 ---
 

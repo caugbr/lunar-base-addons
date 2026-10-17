@@ -14,12 +14,12 @@ class AvatarHelper
     // {
     //     $fileName = "avatars/{$user->id}.webp";
 
-    //     // 1. Checa a existência física do arquivo (Zero Banco de dados)
+    //     // Checa a existência física do arquivo (Zero Banco de dados)
     //     if (Storage::disk('public')->exists($fileName)) {
     //         return Storage::disk('public')->url($fileName);
     //     }
 
-    //     // 2. Fallback: Retorna o Gravatar do e-mail do usuário
+    //     // Fallback: Retorna o Gravatar do e-mail do usuário
     //     $hash = md5(strtolower(trim($user->email)));
     //     return "https://www.gravatar.com/avatar/{$hash}?d=mp&s=150";
     // }

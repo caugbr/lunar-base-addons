@@ -249,7 +249,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let rawData = null;
     let currentHeight = 2000;
 
-    // 1. ALTERNÂNCIA DE DISPOSITIVO (DESKTOP / MOBILE)
+    // ALTERNÂNCIA DE DISPOSITIVO (DESKTOP / MOBILE)
     window.switchDevice = function(newDevice) {
         if (currentDevice === newDevice) return;
         currentDevice = newDevice;
@@ -266,7 +266,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 250);
     };
 
-    // 2. ALTERNÂNCIA DE MODO (CLIQUES / ATENÇÃO / ROLAGEM)
+    // ALTERNÂNCIA DE MODO (CLIQUES / ATENÇÃO / ROLAGEM)
     window.switchMode = function(newMode) {
         if (currentMode === newMode) return;
         currentMode = newMode;
@@ -278,7 +278,7 @@ document.addEventListener('DOMContentLoaded', function () {
         fetchHeatmapData();
     };
 
-    // 3. ALTERAÇÃO DE PERÍODO (DIAS)
+    // ALTERAÇÃO DE PERÍODO (DIAS)
     window.changeDays = function(newDays) {
         days = newDays;
         fetchHeatmapData();
@@ -307,7 +307,7 @@ document.addEventListener('DOMContentLoaded', function () {
         fetchHeatmapData();
     });
 
-    // 4. BUSCA DINÂMICA CONFORME O MODO ATUAL
+    // BUSCA DINÂMICA CONFORME O MODO ATUAL
     function fetchHeatmapData() {
         clickCountText.innerText = 'Carregando...';
 
@@ -332,7 +332,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     }
 
-    // 5. RENDERIZAÇÃO DO MODO ATIVO NO CANVAS
+    // RENDERIZAÇÃO DO MODO ATIVO NO CANVAS
     function renderCurrentMode() {
         if (!rawData) return;
 

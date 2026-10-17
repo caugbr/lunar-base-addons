@@ -18,10 +18,10 @@ class RoleSwitcherServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        // 1. Carrega Views do Plugin
+        // Carrega Views do Plugin
         $this->loadViewsFrom(__DIR__ . '/resources/views', 'role-switcher');
 
-        // 2. Registra o Item de Menu na Sidebar
+        // Registra o Item de Menu na Sidebar
         $menuAfterItem = config('pluginSettings.RoleSwitcher.menuAfterItem', 'Configurações');
         $menuSet = (int) config('pluginSettings.RoleSwitcher.menuSet', 1);
 
@@ -52,7 +52,7 @@ class RoleSwitcherServiceProvider extends ServiceProvider
             return '';
         }, 'RoleSwitcher Header');
 
-        // 4. Injeta o Card de Alternância abaixo do Perfil do Usuário
+        // Injeta o Card de Alternância abaixo do Perfil do Usuário
         HookManager::register('admin.profile_after_card', function ($params = []) {
             $user = $params['user'] ?? auth()->user();
             if (!$user) {

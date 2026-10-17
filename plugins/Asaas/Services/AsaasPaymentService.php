@@ -65,10 +65,10 @@ class AsaasPaymentService
             'novo_status' => $status
         ]);
 
-        // 1. Tenta buscar pelo ID real de transação
+        // Tenta buscar pelo ID real de transação
         $invoice = AsaasInvoice::where('payment_id', $paymentId)->first();
 
-        // 2. Se não achou e temos o ID do Link, busca por ele
+        // Se não achou e temos o ID do Link, busca por ele
         if (!$invoice && $paymentLinkId) {
             Log::info('[ASAAS SERVICE] Fatura não localizada pelo ID real de transação. Buscando pelo ID do Link de Pagamento.', [
                 'paymentLinkId' => $paymentLinkId
@@ -87,7 +87,7 @@ class AsaasPaymentService
             }
         }
 
-        // 3. AUTO-RECUPERAÇÃO: Se a fatura pendente não existe localmente,
+        // AUTO-RECUPERAÇÃO: Se a fatura pendente não existe localmente,
         // reconstrói a fatura com os dados do webhook, incluindo a URL e a data de pagamento corretas!
         if (!$invoice) {
             Log::warning('[ASAAS SERVICE] Fatura não localizada no banco local de produção. Ativando mecanismo de auto-recuperação.', [

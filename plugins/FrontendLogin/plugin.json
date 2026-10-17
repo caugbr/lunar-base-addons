@@ -1,0 +1,9 @@
+{
+    "name": "Frontend Login",
+    "description": "Formulário de login para o site público via shortcode ou função helper.",
+    "version": "1.0.0",
+    "tags": [
+        "utils"
+    ],
+    "provider": "Plugins\\FrontendLogin\\FrontendLoginServiceProvider"
+}

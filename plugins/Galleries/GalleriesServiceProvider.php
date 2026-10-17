@@ -17,14 +17,14 @@ class GalleriesServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        // 1. Views com namespace "galleries"
+        // Views com namespace "galleries"
         $this->loadViewsFrom(__DIR__ . '/resources/views', 'galleries');
 
-        // 2. Registra o shortcode [gallery]
+        // Registra o shortcode [gallery]
         // ContentHelper::registerShortcode('gallery', function ($attributes, $content) {
         //     return $this->renderGallery($attributes);
         // });
-        // 2. Registra o shortcode [gallery] com a documentação e o esquema de atributos completo
+        // Registra o shortcode [gallery] com a documentação e o esquema de atributos completo
         ContentHelper::registerShortcode(
             'gallery',
             function ($attributes, $content) {
@@ -161,11 +161,11 @@ class GalleriesServiceProvider extends ServiceProvider
     {
         $attributes = array_change_key_case($attributes, CASE_LOWER);
 
-        // 1. Descobre o post/página atual
+        // Descobre o post/página atual
         $model = $this->resolveCurrentModel();
         // var_dump($model);
 
-        // 2. Monta a query de imagens
+        // Monta a query de imagens
         $images = $this->resolveImages($attributes, $model);
 
         if ($images->isEmpty()) {
@@ -177,7 +177,7 @@ class GalleriesServiceProvider extends ServiceProvider
             ? $attributes['layout']
             : 'grid';
 
-        // 3. Configurações visuais
+        // Configurações visuais
         $columns   = max(1, min(6, (int) ($attributes['columns'] ?? $attributes['cols'] ?? 3)));
         $size      = in_array($attributes['size'] ?? '', ['thumb', 'medium', 'large', 'original'])
             ? $attributes['size']
@@ -206,7 +206,7 @@ class GalleriesServiceProvider extends ServiceProvider
      */
     protected function resolveCurrentModel()
     {
-        // 1. Verifica TODOS os parâmetros da rota atual
+        // Verifica TODOS os parâmetros da rota atual
         $route = request()->route();
         if ($route) {
             foreach ($route->parameters() as $param) {
@@ -216,7 +216,7 @@ class GalleriesServiceProvider extends ServiceProvider
             }
         }
 
-        // 2. Verifica TODAS as variáveis compartilhadas com a view
+        // Verifica TODAS as variáveis compartilhadas com a view
         $shared = view()->getShared();
         foreach ($shared as $value) {
             if ($value instanceof \App\Models\Post || $value instanceof \App\Models\Page) {

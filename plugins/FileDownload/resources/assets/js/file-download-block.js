@@ -54,7 +54,7 @@
   const FileDownloadComponent = {
     props: ['node', 'updateAttributes', 'deleteNode'],
     setup(props) {
-      // 1. AÇÃO: Abrir Biblioteca de Mídia
+      // AÇÃO: Abrir Biblioteca de Mídia
       const openMediaLibrary = () => {
         activeNodeUpdater = props.updateAttributes;
 
@@ -72,7 +72,7 @@
         }
       };
 
-      // 2. AÇÃO: Upload direto do Computador
+      // AÇÃO: Upload direto do Computador
       const openDirectUpload = () => {
         activeNodeUpdater = props.updateAttributes;
 

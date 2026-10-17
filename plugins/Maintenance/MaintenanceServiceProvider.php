@@ -14,17 +14,17 @@ class MaintenanceServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        // 1. Registra a pasta de views do plugin com namespace "maintenance"
+        // Registra a pasta de views do plugin com namespace "maintenance"
         $this->loadViewsFrom(__DIR__ . '/resources/views', 'maintenance');
 
-        // 2. Injeta um novo grupo de configurações (aba de admin)
+        // Injeta um novo grupo de configurações (aba de admin)
         Settings::addGroup('maintenance', [
             'title'       => 'Manutenção',
             'description' => 'Configurações de bloqueio do site público.',
             'icon'        => 'construction',
         ]);
 
-        // 3. Injeta as chaves funcionais sob o novo grupo
+        // Injeta as chaves funcionais sob o novo grupo
         Settings::add([
             'key' => 'maintenance_enabled',
             'type' => 'switch',
@@ -101,7 +101,7 @@ class MaintenanceServiceProvider extends ServiceProvider
             ],
         ], 'maintenance');
 
-        // 4. Acopla o middleware de bloqueio no final do grupo de rotas 'web' do Laravel
+        // Acopla o middleware de bloqueio no final do grupo de rotas 'web' do Laravel
         $router = $this->app['router'];
         $router->pushMiddlewareToGroup('web', \Plugins\Maintenance\Http\Middleware\CheckMaintenanceMode::class);
     }

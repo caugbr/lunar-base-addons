@@ -26,10 +26,10 @@ class GenericFormController extends Controller
      */
     public function submit(Request $request, string $slug)
     {
-        // 1. Busca o formulário ativo
+        // Busca o formulário ativo
         $form = Form::active()->where('slug', $slug)->firstOrFail();
 
-        // 2. Constrói as regras de validação dinamicamente
+        // Constrói as regras de validação dinamicamente
         $rules = [];
         foreach ($form->fields_schema as $field) {
             $key = $field['key'];
@@ -45,13 +45,13 @@ class GenericFormController extends Controller
             $rules[$validationKey] = $field['rules'] ?? 'nullable';
         }
 
-        // 3. Valida a requisição
+        // Valida a requisição
         $validatedData = $request->validate($rules);
 
-        // 4. Limpeza dos dados (remove tokens do Laravel)
+        // Limpeza dos dados (remove tokens do Laravel)
         $cleanData = collect($validatedData)->except(['_token', '_method'])->toArray();
 
-        // 5. Tratamento futuro de uploads (Future-proof)
+        // Tratamento futuro de uploads (Future-proof)
         // Quando quiser usar o tipo 'image' ou 'file', descomente e ajuste:
         /*
         foreach ($cleanData as $key => $value) {
@@ -61,19 +61,19 @@ class GenericFormController extends Controller
         }
         */
 
-        // 6. Salva a submissão no banco de dados
+        // Salva a submissão no banco de dados
         FormSubmission::create([
             'form_id'    => $form->id,
             'data'       => $cleanData,
             'ip_address' => $request->ip(),
         ]);
 
-        // 7. Envio de E-mail (se configurado)
+        // Envio de E-mail (se configurado)
         if (!empty($form->email_to)) {
             Mail::to($form->email_to)->send(new FormSubmissionMail($form, $cleanData));
         }
 
-        // 8. Redireciona com sucesso
+        // Redireciona com sucesso
         return back()->with('success', $form->submit_message);
     }
 }

@@ -24,7 +24,7 @@ class AsaasServiceProvider extends ServiceProvider
         $menuAfterItem = config('pluginSettings.Asaas.menuAfterItem', 'Usuários');
         $menuSet = config('pluginSettings.Asaas.menuSet', 1);
 
-        // 1. Registra o menu de vendas na sidebar
+        // Registra o menu de vendas na sidebar
         AdminMenu::add([
             'label'      => 'Vendas Asaas',
             'icon'       => 'credit-card',
@@ -33,7 +33,7 @@ class AsaasServiceProvider extends ServiceProvider
             'role'       => 'admin',
         ], $menuAfterItem, $menuSet);
 
-        // 2. Registra as configurações do Asaas em Admin -> Configurações
+        // Registra as configurações do Asaas em Admin -> Configurações
         $this->registerSettings();
     }
 

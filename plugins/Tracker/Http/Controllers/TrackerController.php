@@ -51,18 +51,18 @@ class TrackerController extends Controller
 
         $startDate = now()->subDays($days)->startOfDay();
 
-        // 1. Total de visualizações e visitantes únicos
+        // Total de visualizações e visitantes únicos
         $totalViews = Tracker::where('created_at', '>=', $startDate)->count();
         $uniqueVisitors = Tracker::where('created_at', '>=', $startDate)->distinct('visitor_hash')->count('visitor_hash');
 
-        // 2. Gráfico diário de visualizações
+        // Gráfico diário de visualizações
         $dailyViews = Tracker::where('created_at', '>=', $startDate)
             ->select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as views'))
             ->groupBy('date')
             ->orderBy('date')
             ->pluck('views', 'date');
 
-        // 3. Gráfico de Visitações por Horário (00h às 23h)
+        // Gráfico de Visitações por Horário (00h às 23h)
         $rawHourly = Tracker::where('created_at', '>=', $startDate)
             ->select(DB::raw('HOUR(created_at) as hour'), DB::raw('count(*) as total'))
             ->groupBy('hour')
@@ -75,7 +75,7 @@ class TrackerController extends Controller
             $hourlyViews[$label] = $rawHourly[$i] ?? 0;
         }
 
-        // 4. Top Páginas mais visitadas
+        // Top Páginas mais visitadas
         $topPages = Tracker::where('created_at', '>=', $startDate)
             ->select('path', DB::raw('count(*) as total'))
             ->groupBy('path')
@@ -83,7 +83,7 @@ class TrackerController extends Controller
             ->limit($topPagesLimit)
             ->get();
 
-        // 5. Origens de Tráfego (Referrers)
+        // Origens de Tráfego (Referrers)
         $topReferrers = Tracker::where('created_at', '>=', $startDate)
             ->whereNotNull('referrer_host')
             ->select('referrer_host', DB::raw('count(*) as total'))
@@ -92,13 +92,13 @@ class TrackerController extends Controller
             ->limit($topReferrersLimit)
             ->get();
 
-        // 6. Dispositivos (% Mobile vs Desktop)
+        // Dispositivos (% Mobile vs Desktop)
         $devices = Tracker::where('created_at', '>=', $startDate)
             ->select('device', DB::raw('count(*) as total'))
             ->groupBy('device')
             ->pluck('total', 'device');
 
-        // 7. NOVO: Top Eventos de Conversão / Cliques
+        // NOVO: Top Eventos de Conversão / Cliques
         $topEvents = TrackerEvent::where('created_at', '>=', $startDate)
             ->select('event_name', DB::raw('count(*) as total'), DB::raw('count(distinct visitor_hash) as unique_users'))
             ->groupBy('event_name')

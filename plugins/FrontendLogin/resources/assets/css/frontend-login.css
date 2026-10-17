@@ -1,0 +1,122 @@
+.frontend-login-wrapper {
+    max-width: 400px;
+    margin: 1.5rem 0;
+    font-family: inherit;
+}
+
+.frontend-login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.5rem;
+    border: 1px solid var(--color-border, #e5e7eb);
+    border-radius: 8px;
+    background-color: var(--color-bg-card, #ffffff);
+}
+
+.frontend-login-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.frontend-login-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-text, #374151);
+}
+
+.frontend-login-input {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    font-size: 0.95rem;
+    border: 1px solid var(--color-border, #d1d5db);
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+.frontend-login-input:focus {
+    outline: none;
+    border-color: var(--color-primary, #6366f1);
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+.frontend-login-actions {
+    margin-top: 0.5rem;
+}
+
+.frontend-login-submit-button {
+    width: 100%;
+    padding: 0.65rem 1rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #ffffff;
+    background-color: var(--color-primary, #6366f1);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.frontend-login-submit-button:hover {
+    background-color: var(--color-primary-dark, #4f46e5);
+}
+
+.frontend-login-alert {
+    padding: 0.75rem;
+    font-size: 0.875rem;
+    border-radius: 6px;
+}
+
+.frontend-login-alert-danger {
+    background-color: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+
+.frontend-login-status {
+    padding: 1rem;
+    border: 1px solid var(--color-border, #e5e7eb);
+    border-radius: 6px;
+    background-color: var(--color-bg-card, #f9fafb);
+}
+
+.frontend-login-status-text {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--color-text, #374151);
+}
+
+.frontend-login-link {
+    color: var(--color-primary, #6366f1);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.frontend-login-link:hover {
+    text-decoration: underline;
+}
+
+.frontend-login-separator {
+    margin: 0 0.5rem;
+    color: #9ca3af;
+}
+
+.frontend-login-inline-form {
+    display: inline;
+}
+
+.frontend-login-logout-button {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: inherit;
+    font-family: inherit;
+    color: #ef4444;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.frontend-login-logout-button:hover {
+    color: #dc2626;
+}

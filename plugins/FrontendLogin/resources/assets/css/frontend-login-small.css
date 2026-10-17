@@ -1,0 +1,158 @@
+.frontend-login-wrapper.small {
+    display: inline-flex;
+    align-items: center;
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+    font-family: inherit;
+    vertical-align: middle;
+    line-height: 1;
+}
+
+/* Estado Logado */
+.frontend-login-wrapper.small .frontend-login-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.frontend-login-wrapper.small .frontend-login-link {
+    display: inline-flex;
+    align-items: center;
+    color: #144c97;
+    text-decoration: none;
+    transition: color 0.2s ease;
+    font-size: 1.1rem;
+}
+
+.frontend-login-wrapper.small .frontend-login-link:hover {
+    color: #144c97;
+    text-decoration: underline;
+}
+
+.frontend-login-wrapper.small .frontend-login-separator {
+    color: var(--color-border, #9ca3af);
+    font-size: 0.8rem;
+    user-select: none;
+    margin: 0 0.15rem;
+}
+
+.frontend-login-wrapper.small .frontend-login-inline-form {
+    display: inline-flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+/* Estado Não Logado (Formulário) */
+.frontend-login-wrapper.small .frontend-login-form {
+    position: relative;
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+.frontend-login-wrapper.small .frontend-login-input {
+    width: 140px;
+    height: 32px;
+    padding: 0 0.5rem;
+    font-size: 0.825rem;
+    border: 1px solid var(--color-border, #d1d5db);
+    border-radius: 4px;
+    background-color: var(--color-bg-input, #ffffff);
+    color: var(--color-text, #1f2937);
+    box-sizing: border-box;
+}
+
+.frontend-login-wrapper.small .frontend-login-input:focus {
+    outline: none;
+    border-color: #144c97;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15);
+}
+
+.frontend-login-wrapper.small .frontend-login-submit-button,
+.frontend-login-wrapper.small .frontend-login-dashboard-button,
+.frontend-login-wrapper.small .frontend-login-logout-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: none;
+    border-radius: 4px;
+    background-color: #144c97;
+    color: #ffffff;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background-color 0.2s ease;
+    text-decoration: none;
+}
+
+.frontend-login-wrapper.small .frontend-login-submit-button:hover,
+.frontend-login-wrapper.small .frontend-login-dashboard-button:hover,
+.frontend-login-wrapper.small .frontend-login-logout-button:hover {
+    background-color: #1d6ed8;
+}
+
+.frontend-login-wrapper.small .frontend-login-submit-button .lucid-icon,
+.frontend-login-wrapper.small .frontend-login-dashboard-button .lucid-icon,
+.frontend-login-wrapper.small .frontend-login-logout-button .lucid-icon {
+    width: 16px;
+    height: 16px;
+}
+
+.frontend-login-wrapper.small .frontend-login-alert {
+    width: auto;
+    margin-bottom: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    border-radius: 4px;
+    background-color: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    z-index: 100;
+}
+
+.frontend-login-captcha-popover {
+    display: none;
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    padding: 0.5rem;
+    background-color: var(--color-bg-card, #ffffff);
+    border: 1px solid var(--color-border, #d1d5db);
+    border-radius: 6px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+    z-index: 100;
+}
+
+.frontend-login-captcha-popover.is-visible {
+    display: block;
+}
+
+.frontend-login-wrapper.small .frontend-login-form {
+    position: relative;
+}
+
+.frontend-login-wrapper.small .frontend-login-captcha-group {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    z-index: 100;
+}

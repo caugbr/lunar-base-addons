@@ -45,13 +45,13 @@ class ShareServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        // 1. Carrega as views do plugin com namespace "share"
+        // Carrega as views do plugin com namespace "share"
         $this->loadViewsFrom(__DIR__ . '/resources/views', 'share');
 
-        // 2. Injeta os switches de controle no admin de forma dinâmica
+        // Injeta os switches de controle no admin de forma dinâmica
         $this->registerSettings();
 
-        // 3. Registra o Hook para exibir os botões ao final do conteúdo do post
+        // Registra o Hook para exibir os botões ao final do conteúdo do post
         HookManager::register('post.after_content', function($params) {
             $post = $params['post'] ?? null;
             if (!$post) return '';

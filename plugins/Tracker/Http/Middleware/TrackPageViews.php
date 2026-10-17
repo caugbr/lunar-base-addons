@@ -60,7 +60,7 @@ class TrackPageViews
             }
         }
 
-        // 1. Resolve Localização pelo IP (com proteção de timeout)
+        // Resolve Localização pelo IP (com proteção de timeout)
         $countryCode = null;
         $countryName = null;
         $regionName  = null;

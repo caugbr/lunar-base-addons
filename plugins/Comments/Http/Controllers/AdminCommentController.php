@@ -16,7 +16,7 @@ class AdminCommentController extends Controller
         $query = Comment::with(['commentable', 'user'])
             ->orderBy('created_at', 'desc');
 
-        // 1. Filtro dinâmico por tipo usando PublicationTypes
+        // Filtro dinâmico por tipo usando PublicationTypes
         $type = $request->query('type');
         if ($type) {
             $typeConfig = \App\Support\PublicationTypes::get($type);
@@ -25,12 +25,12 @@ class AdminCommentController extends Controller
             }
         }
 
-        // 2. Filtro por status
+        // Filtro por status
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
 
-        // 3. Filtro por busca
+        // Filtro por busca
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {

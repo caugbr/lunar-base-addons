@@ -15,7 +15,7 @@
         || 'a, button, input, select, textarea, img, label, summary, [role="button"]';
 
     // =========================================================================
-    // 1. RASTREAMENTO DE ROLAGEM / PROFUNDIDADE (SCROLL MAP)
+    // RASTREAMENTO DE ROLAGEM / PROFUNDIDADE (SCROLL MAP)
     // =========================================================================
     function updateScrollDepth() {
         const scrollTop = window.scrollY || document.documentElement.scrollTop;
@@ -44,7 +44,7 @@
     updateScrollDepth(); // Medição inicial da área visível no carregamento
 
     // =========================================================================
-    // 2. GERADOR DE SELETOR SEMÂNTICO
+    // GERADOR DE SELETOR SEMÂNTICO
     // =========================================================================
     function getDomSelector(el) {
         if (!el || el.nodeType !== Node.ELEMENT_NODE) return null;
@@ -94,7 +94,7 @@
     }
 
     // =========================================================================
-    // 3. CLIQUES (CLICK MAP)
+    // CLIQUES (CLICK MAP)
     // =========================================================================
     document.addEventListener('click', function (e) {
         if (e.button !== 0) return;
@@ -114,7 +114,7 @@
     }, { passive: true });
 
     // =========================================================================
-    // 4. ATENÇÃO / HOVER (MOVE MAP)
+    // ATENÇÃO / HOVER (MOVE MAP)
     // =========================================================================
     if (hasMouse) {
         let hoverTimer = null;
@@ -152,7 +152,7 @@
     }
 
     // =========================================================================
-    // 5. DESPACHO EM LOTE (BEACON)
+    // DESPACHO EM LOTE (BEACON)
     // =========================================================================
     function flush() {
         const hasClicks = clickBuffer.length > 0;

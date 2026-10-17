@@ -38,7 +38,7 @@ class ElementHeatmap {
         // Descobre o elemento que mais teve cliques para calcular a escala de calor
         const maxClicks = Math.max(...elementsData.map(e => e.clicks), 1);
 
-        // 1. Passada de densidade em tons de cinza
+        // Passada de densidade em tons de cinza
         elementsData.forEach(item => {
             try {
                 // Procura o elemento HTML correspondente dentro do iframe
@@ -82,7 +82,7 @@ class ElementHeatmap {
             }
         });
 
-        // 2. Coloração térmica via ImageData
+        // Coloração térmica via ImageData
         const imgData = this.ctx.getImageData(0, 0, targetWidth, targetHeight);
         const data = imgData.data;
 
@@ -111,7 +111,7 @@ class ElementHeatmap {
 
         if (!distribution || distribution.length === 0) return;
 
-        // 1. Cria o degradê térmico vertical de cima a baixo
+        // Cria o degradê térmico vertical de cima a baixo
         const gradient = this.ctx.createLinearGradient(0, 0, 0, targetHeight);
 
         // Mapeia a taxa de retenção de cada marco para uma cor térmica
@@ -135,11 +135,11 @@ class ElementHeatmap {
             gradient.addColorStop(stop, color);
         });
 
-        // 2. Pinta o degradê suave sobre a página inteira
+        // Pinta o degradê suave sobre a página inteira
         this.ctx.fillStyle = gradient;
         this.ctx.fillRect(0, 0, targetWidth, targetHeight);
 
-        // 3. Desenha as linhas horizontais de corte e etiquetas de porcentagem
+        // Desenha as linhas horizontais de corte e etiquetas de porcentagem
         distribution.forEach(item => {
             const yPos = (item.percent_mark / 100) * targetHeight;
 

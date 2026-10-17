@@ -12,7 +12,7 @@
   // Ícone Timer do Lucide
   const timerIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-timer"><line x1="10" x2="14" y1="2" y2="2"/><line x1="12" x2="15" y1="14" y2="11"/><circle cx="12" cy="14" r="8"/></svg>`;
 
-  // 1. COMPONENTE VUE INTERATIVO NO ADMIN
+  // COMPONENTE VUE INTERATIVO NO ADMIN
   const CountdownComponent = {
     props: ['node', 'updateAttributes', 'deleteNode'],
     setup(props) {
@@ -90,7 +90,7 @@
     }
   };
 
-  // 2. EXTENSÃO TIPTAP
+  // EXTENSÃO TIPTAP
   const CountdownExtension = Node.create({
     name: 'countdown',
     group: 'block',
@@ -147,7 +147,7 @@
     }
   });
 
-  // 3. REGISTRA O BLOCO NO MEGA-MENU
+  // REGISTRA O BLOCO NO MEGA-MENU
   window.LunarEditor.registerBlock({
     name: 'countdown',
     category: 'Estrutura & Layout',

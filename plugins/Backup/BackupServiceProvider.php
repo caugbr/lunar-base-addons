@@ -19,10 +19,10 @@ class BackupServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        // 1. Carrega as views do plugin
+        // Carrega as views do plugin
         $this->loadViewsFrom(__DIR__ . '/resources/views', 'backup');
 
-        // 2. Adiciona item de menu na sidebar do Admin
+        // Adiciona item de menu na sidebar do Admin
         AdminMenu::addSubItem('Ferramentas', [
             'label'      => 'Backups',
             'icon'       => 'archive',
@@ -44,7 +44,7 @@ class BackupServiceProvider extends ServiceProvider
             return '';
         }, 'Backup Plugin');
 
-        // 3. Registra comando Artisan
+        // Registra comando Artisan
         if ($this->app->runningInConsole()) {
             $this->commands([
                 BackupRunCommand::class,

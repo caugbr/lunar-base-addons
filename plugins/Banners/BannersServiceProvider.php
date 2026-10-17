@@ -20,13 +20,13 @@ class BannersServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        // 1. Carrega views com namespace "banners"
+        // Carrega views com namespace "banners"
         $this->loadViewsFrom(__DIR__ . '/resources/views', 'banners');
 
-        // 2. Carrega migrations
+        // Carrega migrations
         $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
 
-        // 3. REGISTRO DINAMICO DE HOOKS BASEADO NO BANCO
+        // REGISTRO DINAMICO DE HOOKS BASEADO NO BANCO
         if (!app()->runningInConsole() && Schema::hasTable('banners')) {
             $activeBanners = Banner::where('is_active', true)
                 ->whereNotNull('hook')
@@ -44,7 +44,7 @@ class BannersServiceProvider extends ServiceProvider
             }
         }
 
-        // 4. REGISTRO DO SHORTCODE
+        // REGISTRO DO SHORTCODE
         ContentHelper::registerShortcode(
             'banner',
             function($attributes, $content) {
@@ -85,7 +85,7 @@ class BannersServiceProvider extends ServiceProvider
             ]
         );
 
-        // 5. Helper global
+        // Helper global
         if (!function_exists('renderBanner')) {
             function renderBanner(string $slug, ?string $class = null): string
             {
@@ -108,7 +108,7 @@ class BannersServiceProvider extends ServiceProvider
         $menuAfterItem = config('pluginSettings.Banners.menuAfterItem', 'Taxonomias');
         $menuSet = config('pluginSettings.Banners.menuSet', 1);
 
-        // 6. Injeta links no menu lateral administrativo
+        // Injeta links no menu lateral administrativo
         \App\Support\AdminMenu::add([
             'label' => 'Banners',
             'icon'  => 'square',
