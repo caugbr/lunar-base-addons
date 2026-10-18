@@ -1,7 +1,7 @@
 {
     "name": "Archive Vault",
     "description": "Conteúdo excluído: intercepta exclusões definitivas de posts e páginas preservando o conteúdo para auditoria futura.",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "tags": [
         "utils",
         "system"

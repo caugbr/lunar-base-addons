@@ -37,8 +37,8 @@ class ImpersonateController extends Controller
         session(['impersonate_original_admin_id' => $admin->id]);
 
         // Registra nos logs da administração
-        if (function_exists('log_admin')) {
-            log_admin('UserSwitch: assumiu usuário', 'users', [
+        if (function_exists('logAdmin')) {
+            logAdmin('UserSwitch: assumiu usuário', 'users', [
                 'target_user_id'   => $targetUser->id,
                 'target_user_name' => $targetUser->name,
             ]);
@@ -68,8 +68,8 @@ class ImpersonateController extends Controller
         // Retorna para a conta original do Administrador
         Auth::loginUsingId($originalAdminId);
 
-        if (function_exists('log_admin')) {
-            log_admin('UserSwitch: retornou ao admin original', 'users', [
+        if (function_exists('logAdmin')) {
+            logAdmin('UserSwitch: retornou ao admin original', 'users', [
                 'exited_from_id' => $impersonatedUser?->id,
             ]);
         }

@@ -88,7 +88,7 @@ class ArchiveVaultController extends Controller
         // Remove do cofre após restaurar com sucesso
         $record->delete();
 
-        log_admin("Registro ressuscitado do cofre: {$record->title}", "archive-vault");
+        logAdmin("Registro ressuscitado do cofre: {$record->title}", "archive-vault");
 
         return redirect()->route('admin.archive_vault.index')
             ->with('success', "{$record->type_name} restaurada com sucesso como Rascunho!");
@@ -102,7 +102,7 @@ class ArchiveVaultController extends Controller
         $title = $record->title;
         $record->delete();
 
-        log_admin("Registro expurgado do cofre definitivamente: {$title}", "archive-vault");
+        logAdmin("Registro expurgado do cofre definitivamente: {$title}", "archive-vault");
 
         return redirect()->route('admin.archive_vault.index')
             ->with('success', 'Registro expurgado permanentemente do cofre.');

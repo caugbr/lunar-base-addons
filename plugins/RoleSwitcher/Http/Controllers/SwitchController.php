@@ -33,7 +33,7 @@ class SwitchController extends Controller
 
         session(['role_switcher_active' => $targetRole]);
 
-        log_admin('RoleSwitch: papel assumido', 'user_roles', ["to_role" => $targetRole]);
+        logAdmin('RoleSwitch: papel assumido', 'user_roles', ["to_role" => $targetRole]);
 
         // Obtém a URL personalizada de destino ou usa o perfil da admin como fallback
         $targetUrl = $this->getRedirectUrlForRole($targetRole);
@@ -48,7 +48,7 @@ class SwitchController extends Controller
 
         session()->forget('role_switcher_active');
 
-        log_admin('RoleSwitch: reset', 'user_roles');
+        logAdmin('RoleSwitch: reset', 'user_roles');
 
         // Retorna para a URL correspondente ao papel real do usuário
         $targetUrl = $this->getRedirectUrlForRole($realRole);

@@ -18,6 +18,6 @@
     </p>
 
     <blockquote>
-        <strong>Segurança:</strong> Todas as trocas de identidade e retornos são registradas na trilha de auditoria do sistema (<code>log_admin</code>).
+        <strong>Segurança:</strong> Todas as trocas de identidade e retornos são registradas na trilha de auditoria do sistema (<code>logAdmin</code>).
     </blockquote>
 </div>

@@ -96,7 +96,7 @@ class ArchiveVaultServiceProvider extends ServiceProvider
                 'purged_at'           => now(),
             ]);
 
-            log_admin(
+            logAdmin(
                 "Arquivo movido para o cofre permanente: '{$model->title}'",
                 'archive-vault',
                 ['type' => get_class($model), 'original_id' => $model->id]
