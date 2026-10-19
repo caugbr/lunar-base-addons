@@ -1,0 +1,89 @@
+/* Container Flutuante */
+.lb-whatsapp-wrap {
+    position: fixed;
+    z-index: 99990;
+    bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.lb-whatsapp-wrap.pos-bottom-right {
+    right: 24px;
+    flex-direction: row;
+}
+
+.lb-whatsapp-wrap.pos-bottom-left {
+    left: 24px;
+    flex-direction: row-reverse;
+}
+
+/* Balão de Texto (Tooltip) */
+.lb-whatsapp-tooltip {
+    background: #ffffff;
+    color: #1e293b;
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+    white-space: nowrap;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+}
+
+/* Botão e Imagem */
+.lb-whatsapp-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    text-decoration: none;
+    transition: transform 0.25s ease, filter 0.25s ease;
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.2));
+}
+
+.lb-whatsapp-btn .lb-whatsapp-icon {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    pointer-events: none;
+}
+
+.lb-whatsapp-btn:hover {
+    transform: scale(1.08);
+    filter: drop-shadow(0 6px 14px rgba(37, 211, 102, 0.45));
+}
+
+/* Animação de Pulsar */
+.lb-whatsapp-pulse {
+    animation: lb-wa-pulse 2.2s infinite ease-in-out;
+}
+
+@keyframes lb-wa-pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.07);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Estado Desabilitado / Fora de Horário (Deixa a imagem cinza via CSS) */
+.lb-whatsapp-wrap.is-offline .lb-whatsapp-btn {
+    cursor: not-allowed;
+    animation: none !important;
+    filter: grayscale(1) opacity(0.7);
+}
+
+.lb-whatsapp-wrap.is-offline .lb-whatsapp-tooltip {
+    background: #f1f5f9;
+    color: #64748b;
+    border: 1px solid #cbd5e1;
+}

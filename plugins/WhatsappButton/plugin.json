@@ -1,0 +1,22 @@
+{
+    "name": "WhatsApp Button",
+    "description": "Botão flutuante de atendimento via WhatsApp com controle de horários e mensagens dinâmicas.",
+    "version": "1.0.0",
+    "provider": "Plugins\\WhatsAppButton\\WhatsAppButtonServiceProvider",
+    "configurable": {
+        "menuAfterItem": {
+            "type": "string",
+            "default": "Configurações",
+            "description": "Label do item referência para posicionar o link no menu da admin"
+        },
+        "menuSet": {
+            "type": "integer",
+            "default": 1,
+            "description": "Índice do set de links para inserir o link no menu da admin"
+        }
+    },
+    "tags": [
+        "interaction",
+        "marketing"
+    ]
+}
