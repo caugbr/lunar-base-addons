@@ -83,5 +83,22 @@ class RoleSwitcherServiceProvider extends ServiceProvider
                 'realRole'
             ))->render();
         }, 'RoleSwitcher Plugin');
+
+        // TRAVA DE SEGURANÇA: Impede que o 'role' simulado seja gravado no banco de dados
+        \App\Models\User::saving(function ($user) {
+            if (session()->has('role_switcher_active') && session()->has('role_switcher_real_role')) {
+                // Garante que, se o model User for salvo no banco, o 'role' gravado seja SEMPRE o original
+                $user->role = session('role_switcher_real_role');
+            }
+        });
+
+        \App\Models\User::saved(function ($user) {
+            if (session()->has('role_switcher_active')) {
+                // Após a gravação no banco, reaplica o papel simulado em memória para a requisição atual
+                $switchedRole = session('role_switcher_active');
+                $user->setAttribute('role', $switchedRole);
+                $user->syncOriginalAttribute('role'); // Evita que continue 'dirty'
+            }
+        });
     }
 }

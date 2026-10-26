@@ -9,21 +9,18 @@ class RoleSwitcherMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
-        // Se houver usuário autenticado e a sessão de simulação estiver ativa
         if (auth()->check() && session()->has('role_switcher_active')) {
             $switchedRole = session('role_switcher_active');
-
             $user = auth()->user();
 
-            // Sobrescreve o atributo 'role' do modelo User em tempo de execução
-            $user->role = $switchedRole;
+            // Aplica o papel simulado em memória
             $user->setAttribute('role', $switchedRole);
 
-            // Limpa o cache interno do mutator 'permissions' se já tiver sido carregado
-            unset($user->permissions);
+            // Finge que o original em memória é o switchedRole para evitar flags sujas (isDirty)
+            // mas sem afetar o banco graças ao hook User::saving que criamos
+            $user->syncOriginalAttribute('role');
 
-            // \Log::info('RoleSwitcherMiddleware: Role alterada em tempo de execução para: ' . $switchedRole);
-            // \Log::info('RoleSwitcherMiddleware: check: ', auth()->user()->permissions);
+            unset($user->permissions);
         }
 
         return $next($request);
