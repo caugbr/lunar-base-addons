@@ -5,7 +5,7 @@ namespace Plugins\QrCode\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Plugins\QrCode\Helpers\QrCodeHelper;
+// use Plugins\QrCode\Helpers\QrCodeHelper;
 
 class QrCodeController extends Controller
 {
@@ -33,7 +33,8 @@ class QrCodeController extends Controller
         $rawName  = $validated['filename'] ?? 'qrcode';
         $filename = Str::slug($rawName) ?: 'qrcode';
 
-        $svgContent = QrCodeHelper::svg($content, $size);
+        // $svgContent = QrCodeHelper::svg($content, $size);
+        $svgContent = qrCodeSvg($content, $size);
 
         return response($svgContent, 200, [
             'Content-Type'        => 'image/svg+xml',
