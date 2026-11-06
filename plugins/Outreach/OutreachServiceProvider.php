@@ -20,6 +20,10 @@ class OutreachServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
         $this->loadViewsFrom(__DIR__ . '/resources/views', 'outreach');
 
+        // Registra o Item de Menu na Sidebar
+        $menuAfterItem = config('pluginSettings.Outreach.menuAfterItem', 'Usuários');
+        $menuSet = (int) config('pluginSettings.Outreach.menuSet', 1);
+
         // Cria a seção "Prospecção" no menu lateral da administração
         AdminMenu::add([
             'label'  => 'Prospecção',
@@ -27,7 +31,7 @@ class OutreachServiceProvider extends ServiceProvider
             'route'  => 'admin.outreach.clients.index',
             'active' => 'admin.outreach.*',
             'role'   => 'admin',
-        ]);
+        ], $menuAfterItem, $menuSet, -3);
 
         AdminMenu::addSubItem('Prospecção', [
             'label'  => 'Contatos',

@@ -1,7 +1,19 @@
 {
     "name": "Outreach",
     "description": "Mini-CRM para prospecção, histórico de contatos e envio de e-mails personalizados em lote.",
-    "version": "0.2.0",
+    "version": "0.3.0",
+    "configurable": {
+        "menuAfterItem": {
+            "type": "string",
+            "default": "Usuários",
+            "description": "Label do item referência para posicionar link no menu da admin"
+        },
+        "menuSet": {
+            "type": "integer",
+            "default": 1,
+            "description": "Índice do set de links para inserir o link no menu da admin"
+        }
+    },
     "tags": [
         "marketing",
         "interaction"
