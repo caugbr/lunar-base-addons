@@ -1,7 +1,7 @@
 {
     "name": "Outreach",
     "description": "Mini-CRM para prospecção, histórico de contatos e envio de e-mails personalizados em lote.",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "tags": [
         "marketing",
         "interaction"

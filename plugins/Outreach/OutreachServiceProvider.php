@@ -33,7 +33,15 @@ class OutreachServiceProvider extends ServiceProvider
             'label'  => 'Contatos',
             'icon'   => 'users',
             'route'  => 'admin.outreach.clients.index',
-            'active' => 'admin.outreach.clients.*',
+            'active' => 'admin.outreach.clients.index',
+            'role'   => 'admin',
+        ]);
+
+        AdminMenu::addSubItem('Prospecção', [
+            'label'  => 'Criar contato',
+            'icon'   => 'user-plus',
+            'route'  => 'admin.outreach.clients.create',
+            'active' => 'admin.outreach.clients.create',
             'role'   => 'admin',
         ]);
 
@@ -41,7 +49,15 @@ class OutreachServiceProvider extends ServiceProvider
             'label'  => 'Modelos de E-mail',
             'icon'   => 'files',
             'route'  => 'admin.outreach.templates.index',
-            'active' => 'admin.outreach.templates.*',
+            'active' => 'admin.outreach.templates.index',
+            'role'   => 'admin',
+        ]);
+
+        AdminMenu::addSubItem('Prospecção', [
+            'label'  => 'Nome modelo',
+            'icon'   => 'file-plus-corner',
+            'route'  => 'admin.outreach.templates.create',
+            'active' => 'admin.outreach.templates.create',
             'role'   => 'admin',
         ]);
     }
