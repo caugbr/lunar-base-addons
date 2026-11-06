@@ -1,0 +1,10 @@
+{
+    "name": "Outreach",
+    "description": "Mini-CRM para prospecção, histórico de contatos e envio de e-mails personalizados em lote.",
+    "version": "0.1.0",
+    "tags": [
+        "marketing",
+        "interaction"
+    ],
+    "provider": "Plugins\\Outreach\\OutreachServiceProvider"
+}
