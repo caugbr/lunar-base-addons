@@ -1,5 +1,8 @@
 # Changelog
 
+## [0.3.1] 2026-11-06
+- Ajustes
+
 ## [0.3.0] 2026-11-06
 - Confirurar posição do link em pluginSettings
 

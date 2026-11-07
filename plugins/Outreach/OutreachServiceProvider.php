@@ -42,7 +42,7 @@ class OutreachServiceProvider extends ServiceProvider
         ]);
 
         AdminMenu::addSubItem('Prospecção', [
-            'label'  => 'Criar contato',
+            'label'  => 'Novo contato',
             'icon'   => 'user-plus',
             'route'  => 'admin.outreach.clients.create',
             'active' => 'admin.outreach.clients.create',
@@ -58,7 +58,7 @@ class OutreachServiceProvider extends ServiceProvider
         ]);
 
         AdminMenu::addSubItem('Prospecção', [
-            'label'  => 'Nome modelo',
+            'label'  => 'Novo modelo',
             'icon'   => 'file-plus-corner',
             'route'  => 'admin.outreach.templates.create',
             'active' => 'admin.outreach.templates.create',
