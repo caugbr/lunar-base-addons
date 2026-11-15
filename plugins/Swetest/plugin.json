@@ -1,0 +1,31 @@
+{
+    "name": "Swetest",
+    "description": "Motor astronômico local baseado na Swiss Ephemeris (swetest) para cálculo de efemérides, casas e retorno solar.",
+    "version": "1.0.0",
+    "provider": "Plugins\\Swetest\\SwetestServiceProvider",
+    "configurable": {
+        "exposeApiEndpoint": {
+            "type": "boolean",
+            "default": false,
+            "description": "Habilita o endpoint HTTP POST /api/swetest/calculate neste servidor"
+        },
+        "tokens": {
+            "type": "array",
+            "default": "[['client' => 'meudominio.com', 'token' => '...', 'active' => true]]",
+            "description": "Lista de tokens autorizados para consumo HTTP por cliente"
+        },
+        "swetestPath": {
+            "type": "string",
+            "default": "",
+            "description": "Caminho absoluto customizado do binário swetest (opcional)"
+        },
+        "ephePath": {
+            "type": "string",
+            "default": "",
+            "description": "Caminho absoluto customizado da pasta ephe (opcional)"
+        }
+    },
+    "tags": [
+        "utils"
+    ]
+}

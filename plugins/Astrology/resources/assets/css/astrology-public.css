@@ -1,0 +1,166 @@
+/* --- Estilos Públicos para o Shortcode de Mapa Astral --- */
+.natal-chart-embed-wrapper {
+    max-width: 600px;
+    margin: 2rem auto;
+    text-align: center;
+}
+
+.natal-chart-embed-title {
+    margin-bottom: 0.5rem;
+}
+
+.natal-chart-embed-date {
+    color: var(--color-text-muted, #64748b);
+    font-size: 0.9rem;
+    margin-top: 0;
+}
+
+.natal-chart-viewport {
+    width: 100%;
+    min-height: 350px;
+}
+
+
+.natal-chart-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.natal-chart-empty-state {
+    min-height: 200px;
+}
+
+
+
+/* Tabela e grade triangular de aspectos */
+.aspect-grid-container {
+    margin-top: 1.5rem;
+    overflow-x: auto;
+}
+
+.aspect-grid-table {
+    border-collapse: collapse;
+    background: var(--color-bg-dark, #12152b);
+    border: 1px solid var(--color-border, rgba(200, 182, 255, 0.12));
+    margin: 0 auto;
+}
+
+.aspect-grid-summary {
+    padding: 4px 8px;
+    border-right: 2px solid var(--color-border, rgba(200, 182, 255, 0.25));
+    border-bottom: 1px solid var(--color-border, rgba(200, 182, 255, 0.08));
+    white-space: nowrap;
+}
+
+.aspect-point-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+}
+
+.aspect-point-img {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.aspect-point-name {
+    font-weight: 600;
+    color: var(--color-text, #e8e6f0);
+    min-width: 65px;
+}
+
+.aspect-point-pos code {
+    font-size: 0.75rem;
+    color: var(--color-text-muted, #94a3b8);
+}
+
+.aspect-point-retro {
+    color: #ef4444;
+    font-weight: bold;
+    font-size: 0.7rem;
+}
+
+.aspect-point-house {
+    font-size: 0.7rem;
+    color: var(--color-text-muted, #64748b);
+}
+
+.aspect-grid-cell {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    min-height: 32px;
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid var(--color-border, rgba(200, 182, 255, 0.08));
+    padding: 2px;
+}
+
+.aspect-grid-cell-diagonal {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--color-border, rgba(200, 182, 255, 0.2));
+}
+
+.aspect-glyph-text {
+    font-weight: bold;
+    font-size: 0.9rem;
+    color: var(--color-text, #e8e6f0);
+}
+
+.aspect-grid-cell-empty {
+    background: transparent;
+}
+
+.aspect-grid-cell-active {
+    background: rgba(255, 255, 255, 0.02);
+    cursor: default;
+    transition: background 0.15s ease;
+}
+
+.aspect-grid-cell-active:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.aspect-cell-symbol {
+    font-size: 0.95rem;
+    line-height: 1;
+}
+
+.aspect-cell-orb {
+    font-size: 0.6rem;
+    color: var(--color-text-muted, #94a3b8);
+    line-height: 1;
+    margin-top: 1px;
+}
+
+.aspect-cell-state {
+    font-weight: bold;
+    margin-left: 1px;
+    color: #64748b;
+}
+
+/* Cores padronizadas por aspecto */
+.aspect-type-trine .aspect-cell-symbol,
+.aspect-type-sextile .aspect-cell-symbol {
+    color: #10b981;
+}
+
+.aspect-type-square .aspect-cell-symbol,
+.aspect-type-opposition .aspect-cell-symbol {
+    color: #ef4444;
+}
+
+.aspect-type-conjunction .aspect-cell-symbol {
+    color: #38bdf8;
+}
+
+.aspect-type-quincunx .aspect-cell-symbol,
+.aspect-type-semisquare .aspect-cell-symbol,
+.aspect-type-sesquiquadrate .aspect-cell-symbol,
+.aspect-type-semisextile .aspect-cell-symbol {
+    color: #a855f7;
+}

@@ -1,0 +1,124 @@
+{
+  "name": "Clássico",
+  "slug": "classic",
+  "version": "2.0",
+  "author": "Lunar Base",
+  "description": "Tema padrão do sistema.",
+
+  "canvas": {
+    "viewBoxWidth": 1000,
+    "viewBoxHeight": 1414,
+    "backgroundColor": "#ffffff"
+  },
+
+  "modules": {
+    "chartInfo": true,
+    "logo": true,
+    "footerText": false
+  },
+
+  "layout": {
+    "wheel": {
+      "centerX": 500,
+      "centerY": 500,
+      "scale": 0.85
+    },
+    "aspectGrid": {
+      "x": 50,
+      "y": 940,
+      "cellSize": 34
+    },
+    "elementsQualities": {
+      "x": 620,
+      "y": 940
+    },
+    "footer": {
+      "text": "Mapa calculado via Lunar Base Astrology — Todos os direitos reservados."
+    }
+  },
+
+  "assets": {
+    "base": "base.svg",
+    "background": null,
+    "logo": "logo.jpg",
+    "planetsDir": "planets/",
+    "signsDir": "signs/",
+    "extension": "svg"
+  },
+
+  "bands": [
+    {
+      "name": "sign_segments",
+      "innerRadius": 366,
+      "outerRadius": 448,
+      "opacity": 0.25,
+      "eclipticOffset": 0,
+      "colors": [
+        "#f87171", "#fb923c", "#38bdf8", "#4ade80",
+        "#f87171", "#fb923c", "#38bdf8", "#4ade80",
+        "#f87171", "#fb923c", "#38bdf8", "#4ade80"
+      ]
+    },
+    {
+      "name": "planets_bg",
+      "innerRadius": 142,
+      "outerRadius": 346,
+      "opacity": 0.15,
+      "eclipticOffset": 0,
+      "colors": [
+        "#cbd5e1"
+      ]
+    }
+  ],
+
+  "radii": {
+    "signsDistance": 405,
+    "ticksDistance": 345,
+    "ticksLength": 8,
+    "planetsDistance": 310,
+    "housesInnerRadius": 145,
+    "housesOuterRadius": 360,
+    "aspectsInnerRadius": 144
+  },
+
+  "houses": {
+    "showLines": true,
+    "strokeWidth": 1.0,
+    "axisStrokeWidth": 2.0,
+    "color": "#475569",
+    "axisColor": "#38bdf8",
+    "showNumbers": true,
+    "numberColor": "#64748b"
+  },
+
+  "dimensions": {
+    "signWidth": 48,
+    "signHeight": 48,
+    "planetWidth": 38,
+    "planetHeight": 38,
+    "planetDegreeFontSize": 18,
+    "planetDegreeOffset": 35,
+    "retrogradeFontSize": 12,
+    "retrogradeRightGap": 10,
+    "retrogradeTopGap": -12,
+    "degreeMinuteSpace": 5
+  },
+
+  "aspects": {
+    "showLines": true,
+    "showAngleLines": false,
+    "showNodeLines": false,
+    "strokeWidth": 1.5,
+    "colors": {
+      "conjunction": "#38bdf8",
+      "opposition": "#ef4444",
+      "trine": "#10b981",
+      "square": "#f87171",
+      "sextile": "#60a5fa",
+      "quincunx": "#a855f7",
+      "semisquare": "#fb923c",
+      "sesquiquadrate": "#fb923c",
+      "semisextile": "#94a3b8"
+    }
+  }
+}

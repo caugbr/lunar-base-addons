@@ -1,0 +1,31 @@
+{
+    "name": "Astrology",
+    "description": "Gerenciamento e renderização de mapas astrológicos (mapas simples e sobreposição de mapas), com suporte a temas personalizados.",
+    "version": "1.0.0",
+    "provider": "Plugins\\Astrology\\AstrologyServiceProvider",
+    "configurable": {
+        "menuAfterItem": {
+            "type": "string",
+            "default": "Taxonomias",
+            "description": "Label do item referência para posicionar o link no menu da admin"
+        },
+        "menuSet": {
+            "type": "integer",
+            "default": 1,
+            "description": "Índice do set de links para inserir no menu admin"
+        },
+        "apiEndpoint": {
+            "type": "string",
+            "default": "",
+            "description": "URL completa do serviço remoto index.php (deixe vazio se rodar localmente)"
+        },
+        "apiToken": {
+            "type": "string",
+            "default": "",
+            "description": "Token Bearer para autenticação com o microserviço remoto"
+        }
+    },
+    "tags": [
+        "utils"
+    ]
+}

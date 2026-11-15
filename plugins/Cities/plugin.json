@@ -1,0 +1,9 @@
+{
+    "name": "Cities",
+    "description": "Base mundial de cidades com importador em streaming, API de busca normalizada e componente Blade de autocomplete.",
+    "version": "1.0.0",
+    "tags": [
+        "utils"
+    ],
+    "provider": "Plugins\\Cities\\CitiesServiceProvider"
+}

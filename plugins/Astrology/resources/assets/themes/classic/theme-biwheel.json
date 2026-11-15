@@ -1,0 +1,146 @@
+{
+  "name": "Clássico Bi-Wheel",
+  "slug": "classic",
+  "version": "1.0",
+  "description": "Tema bi-wheel para sobreposição de dois mapas.",
+
+  "canvas": {
+    "viewBoxWidth": 1000,
+    "viewBoxHeight": 1414,
+    "backgroundColor": "#ffffff"
+  },
+
+  "modules": {
+    "chartInfo": true,
+    "logo": true,
+    "footerText": false
+  },
+
+  "layout": {
+    "wheel": {
+      "centerX": 500,
+      "centerY": 475,
+      "scale": 0.80
+    },
+    "header": {
+      "innerX": 50,
+      "outerX": 430,
+      "y": 40
+    },
+    "crossAspectGrid": {
+      "x": 50,
+      "y": 885,
+      "cellSize": 28,
+      "summaryWidth": 165
+    },
+    "footer": {
+      "text": "Mapa calculado via Lunar Base Astrology — Todos os direitos reservados."
+    }
+  },
+
+  "assets": {
+    "base": "base-biwheel.svg",
+    "background": null
+  },
+
+  "bands": [
+    {
+      "name": "sign_segments",
+      "innerRadius": 296.25,
+      "outerRadius": 375,
+      "opacity": 0.25,
+      "eclipticOffset": 0,
+      "colors": [
+        "#f87171", "#fb923c", "#facc15", "#4ade80",
+        "#2dd4bf", "#38bdf8", "#818cf8", "#c084fc",
+        "#f472b6", "#94a3b8", "#a3e635", "#fb7185"
+      ]
+    },
+    {
+      "name": "inner_planets_bg",
+      "innerRadius": 145,
+      "outerRadius": 276.25,
+      "opacity": 0.14,
+      "eclipticOffset": 0,
+      "colors": [
+        "#cbd5e1"
+      ]
+    },
+    {
+      "name": "outer_planets_bg",
+      "innerRadius": 400,
+      "outerRadius": 470,
+      "opacity": 0.10,
+      "eclipticOffset": 0,
+      "colors": [
+        "#cbd5e1"
+      ]
+    }
+  ],
+
+  "radii": {
+    "signsDistance": 335.6,
+    "housesInnerRadius": 145,
+    "housesOuterRadius": 276.25,
+    "aspectsInnerRadius": 144
+  },
+
+  "rings": {
+    "inner": {
+      "planetsDistance": 240,
+      "ticksInnerRadius": 268,
+      "ticksOuterRadius": 276,
+      "guideAnchorOffset": 14,
+      "planetWidth": 30,
+      "planetHeight": 30,
+      "degreeFontSize": 13,
+      "degreeOffset": 26,
+      "degreeMinuteSpace": 3,
+      "retrogradeFontSize": 10,
+      "retrogradeRightGap": 8,
+      "retrogradeTopGap": -10,
+      "labelDirection": "inward",
+      "minSeparationDeg": 9.0
+    },
+    "outer": {
+      "planetsDistance": 447,
+      "ticksInnerRadius": 376,
+      "ticksOuterRadius": 384,
+      "guideAnchorOffset": -14,
+      "planetWidth": 28,
+      "planetHeight": 28,
+      "degreeFontSize": 11,
+      "degreeOffset": 24,
+      "degreeMinuteSpace": 3,
+      "retrogradeFontSize": 9.5,
+      "retrogradeRightGap": 8,
+      "retrogradeTopGap": -9,
+      "labelDirection": "inward",
+      "minSeparationDeg": 5.5,
+      "showAngleMarkers": true,
+      "showHouseTicks": false
+    }
+  },
+
+  "dimensions": {
+    "signWidth": 42,
+    "signHeight": 42
+  },
+
+  "houses": {
+    "showLines": true,
+    "strokeWidth": 1.0,
+    "axisStrokeWidth": 2.0,
+    "color": "#475569",
+    "axisColor": "#38bdf8",
+    "showNumbers": true,
+    "numberColor": "#64748b"
+  },
+
+  "aspects": {
+    "showLines": true,
+    "showAngleLines": false,
+    "showNodeLines": false,
+    "strokeWidth": 1.4
+  }
+}
