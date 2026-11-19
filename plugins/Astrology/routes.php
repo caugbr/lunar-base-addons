@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Plugins\Astrology\Http\Controllers\NatalChartController;
 use Plugins\Astrology\Http\Controllers\BiwheelChartController;
+use Plugins\Astrology\Http\Controllers\PublicChartController;
 
 // Rotas Administrativas
 Route::middleware(['web', 'auth', 'role:admin,editor'])
@@ -38,6 +39,17 @@ Route::middleware(['web'])
     ->prefix('astrology')
     ->name('astrology.')
     ->group(function () {
+        // Calculadora pública simplificada
+        Route::get('calculadora', [PublicChartController::class, 'index'])
+            ->name('calculator.index');
+
+        Route::post('calculadora', [PublicChartController::class, 'calculate'])
+            ->middleware('throttle:20,1')
+            ->name('calculator.calculate');
+
+        Route::get('calculadora/download-svg/{token}', [PublicChartController::class, 'downloadSvg'])
+            ->name('calculator.download-svg');
+
         // Exibição pública de um mapa via slug
         Route::get('chart/{slug}', [NatalChartController::class, 'publicShow'])
             ->name('public.show');

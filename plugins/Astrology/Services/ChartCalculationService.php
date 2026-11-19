@@ -42,10 +42,17 @@ class ChartCalculationService
         $includeMinors = (bool) ($overrides['include_minors'] ?? $natalChart->include_minors);
         $orbGeneral = (float) ($overrides['orb_general'] ?? $natalChart->orb_general ?? 6.0);
         $orbLuminaries = (float) ($overrides['orb_luminaries'] ?? $natalChart->orb_luminaries ?? 10.0);
+        $natalIdentity = $natalChart->id
+            ? (string) $natalChart->id
+            : md5(
+                $natalChart->birth_date->format('Y-m-d')
+                . '_'
+                . number_format((float) $natalChart->planets['Sun']['longitude'], 6, '.', '')
+            );
 
         $cacheKey = sprintf(
-            'astrology_sr_%d_%d_%.5F_%.5F_%s_%s_%d',
-            $natalChart->id,
+            'astrology_sr_%s_%d_%.5F_%.5F_%s_%s_%d',
+            $natalIdentity,
             $targetYear,
             $lat,
             $lon,
@@ -53,6 +60,16 @@ class ChartCalculationService
             $houseSystem,
             $includeMinors ? 1 : 0
         );
+        // $cacheKey = sprintf(
+        //     'astrology_sr_%d_%d_%.5F_%.5F_%s_%s_%d',
+        //     $natalChart->id,
+        //     $targetYear,
+        //     $lat,
+        //     $lon,
+        //     md5($tz),
+        //     $houseSystem,
+        //     $includeMinors ? 1 : 0
+        // );
 
         return Cache::remember($cacheKey, now()->addHours(6), function () use (
             $natalChart,

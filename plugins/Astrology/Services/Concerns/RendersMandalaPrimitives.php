@@ -28,7 +28,7 @@ trait RendersMandalaPrimitives
         ];
     }
 
-    protected function resolveAngularCollisions(array $items, float $minSeparation, int $iterations = 12): array
+    protected function resolveAngularCollisions(array $items, float $minSeparation, int $iterations = 40): array
     {
         usort($items, fn (array $a, array $b) => $a['exactAngle'] <=> $b['exactAngle']);
 
@@ -37,16 +37,28 @@ trait RendersMandalaPrimitives
             return $items;
         }
 
+        // Evita travamento caso haja muitos astros e separação grande demais
+        $effectiveMinSep = min($minSeparation, (360.0 / $count) - 0.5);
+
         for ($iter = 0; $iter < $iterations; $iter++) {
+            $moved = false;
+
             for ($i = 0; $i < $count; $i++) {
                 $nextIdx = ($i === $count - 1) ? 0 : ($i + 1);
-                $diff = fmod($items[$nextIdx]['renderAngle'] - $items[$i]['renderAngle'] + 360.0, 360.0);
 
-                if ($diff < $minSeparation) {
-                    $overlap = ($minSeparation - $diff) / 2.0;
+                // Diferença angular com sinal no intervalo [-180, +180)
+                $diff = fmod($items[$nextIdx]['renderAngle'] - $items[$i]['renderAngle'] + 540.0, 360.0) - 180.0;
+
+                if ($diff < $effectiveMinSep) {
+                    $overlap = ($effectiveMinSep - $diff) / 2.0;
                     $items[$i]['renderAngle'] = fmod($items[$i]['renderAngle'] - $overlap + 360.0, 360.0);
                     $items[$nextIdx]['renderAngle'] = fmod($items[$nextIdx]['renderAngle'] + $overlap + 360.0, 360.0);
+                    $moved = true;
                 }
+            }
+
+            if (!$moved) {
+                break;
             }
         }
 

@@ -23,6 +23,18 @@
             "type": "string",
             "default": "",
             "description": "Token Bearer para autenticação com o microserviço remoto"
+        },
+        "publicLayout": {
+            "type": "string",
+            "default": "",
+            "description": "View de layout Blade do tema público (ex: layouts.app). Deixe vazio para usar o layout próprio da página."
+        }
+    },
+    "dependencies": {
+        "plugins": {
+            "Cities": {
+                "reason": "O plugin Astrology usa o Cities para autocomplete de cidades."
+            }
         }
     },
     "tags": [

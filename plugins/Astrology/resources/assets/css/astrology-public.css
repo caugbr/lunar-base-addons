@@ -10,7 +10,7 @@
 }
 
 .natal-chart-embed-date {
-    color: var(--color-text-muted, #64748b);
+    color: var(--color-text-muted, #8A87A8);
     font-size: 0.9rem;
     margin-top: 0;
 }
@@ -19,7 +19,6 @@
     width: 100%;
     min-height: 350px;
 }
-
 
 .natal-chart-svg {
     width: 100%;
@@ -31,8 +30,6 @@
     min-height: 200px;
 }
 
-
-
 /* Tabela e grade triangular de aspectos */
 .aspect-grid-container {
     margin-top: 1.5rem;
@@ -41,15 +38,15 @@
 
 .aspect-grid-table {
     border-collapse: collapse;
-    background: var(--color-bg-dark, #12152b);
+    background: var(--color-bg-dark, #12152B);
     border: 1px solid var(--color-border, rgba(200, 182, 255, 0.12));
     margin: 0 auto;
 }
 
 .aspect-grid-summary {
     padding: 4px 8px;
-    border-right: 2px solid var(--color-border, rgba(200, 182, 255, 0.25));
-    border-bottom: 1px solid var(--color-border, rgba(200, 182, 255, 0.08));
+    border-right: 2px solid var(--color-border-hover, rgba(200, 182, 255, 0.25));
+    border-bottom: 1px solid var(--color-border-light, rgba(200, 182, 255, 0.08));
     white-space: nowrap;
 }
 
@@ -69,13 +66,13 @@
 
 .aspect-point-name {
     font-weight: 600;
-    color: var(--color-text, #e8e6f0);
+    color: var(--color-text, #E8E6F0);
     min-width: 65px;
 }
 
 .aspect-point-pos code {
     font-size: 0.75rem;
-    color: var(--color-text-muted, #94a3b8);
+    color: var(--color-text-muted, #8A87A8);
 }
 
 .aspect-point-retro {
@@ -86,7 +83,7 @@
 
 .aspect-point-house {
     font-size: 0.7rem;
-    color: var(--color-text-muted, #64748b);
+    color: var(--color-text-muted, #8A87A8);
 }
 
 .aspect-grid-cell {
@@ -96,19 +93,23 @@
     min-height: 32px;
     text-align: center;
     vertical-align: middle;
-    border: 1px solid var(--color-border, rgba(200, 182, 255, 0.08));
+    border: 1px solid var(--color-border-light, rgba(200, 182, 255, 0.08));
     padding: 2px;
 }
 
 .aspect-grid-cell-diagonal {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid var(--color-border, rgba(200, 182, 255, 0.2));
+    background: rgba(200, 182, 255, 0.06);
+    border: 1px solid var(--color-border-hover, rgba(200, 182, 255, 0.2));
+}
+
+[data-theme="light"] .aspect-grid-cell-diagonal {
+    background: rgba(123, 95, 199, 0.08);
 }
 
 .aspect-glyph-text {
     font-weight: bold;
     font-size: 0.9rem;
-    color: var(--color-text, #e8e6f0);
+    color: var(--color-text, #E8E6F0);
 }
 
 .aspect-grid-cell-empty {
@@ -116,13 +117,13 @@
 }
 
 .aspect-grid-cell-active {
-    background: rgba(255, 255, 255, 0.02);
+    background: rgba(200, 182, 255, 0.02);
     cursor: default;
-    transition: background 0.15s ease;
+    transition: background var(--transition-fast, 0.2s ease);
 }
 
 .aspect-grid-cell-active:hover {
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(200, 182, 255, 0.09);
 }
 
 .aspect-cell-symbol {
@@ -132,7 +133,7 @@
 
 .aspect-cell-orb {
     font-size: 0.6rem;
-    color: var(--color-text-muted, #94a3b8);
+    color: var(--color-text-muted, #8A87A8);
     line-height: 1;
     margin-top: 1px;
 }
@@ -140,7 +141,7 @@
 .aspect-cell-state {
     font-weight: bold;
     margin-left: 1px;
-    color: #64748b;
+    color: var(--color-text-dim, #5A5780);
 }
 
 /* Cores padronizadas por aspecto */
@@ -163,4 +164,644 @@
 .aspect-type-sesquiquadrate .aspect-cell-symbol,
 .aspect-type-semisextile .aspect-cell-symbol {
     color: #a855f7;
+}
+
+/* ============================================
+   Calculadora Pública Simplificada (Lunar Base)
+   ============================================ */
+.astro-calc-standalone-body {
+    margin: 0;
+    padding: 0;
+    background: var(--color-bg-deep, #0B0D17);
+    color: var(--color-text, #E8E6F0);
+    font-family: var(--font-body, system-ui, sans-serif);
+    line-height: 1.5;
+}
+
+.astro-calc-standalone-main {
+    padding: var(--space-lg, 1.5rem) var(--space-md, 1rem) var(--space-2xl, 3rem);
+}
+
+.astro-calc {
+    color-scheme: dark;
+    max-width: var(--max-width-container, 1200px);
+    margin: 0 auto;
+    padding: var(--space-lg, 1.5rem) var(--space-md, 1rem) var(--space-2xl, 3rem);
+    color: var(--color-text, #E8E6F0);
+    font-family: var(--font-body, system-ui, sans-serif);
+    box-sizing: border-box;
+}
+
+[data-theme="light"] .astro-calc {
+    color-scheme: light;
+}
+
+.astro-calc *,
+.astro-calc *::before,
+.astro-calc *::after {
+    box-sizing: border-box;
+}
+
+/* Reset defensivo contra estilos globais de <section> no tema */
+.astro-calc section,
+.astro-calc section.astro-calc-section,
+.astro-calc section.astro-calc-result {
+    display: block;
+    min-height: 0;
+    width: 100%;
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.astro-calc-header {
+    text-align: center;
+    margin-bottom: var(--space-xl, 2rem);
+}
+
+.astro-calc-title {
+    margin: 0 0 var(--space-xs, 0.5rem);
+    font-family: var(--font-heading, Georgia, serif);
+    font-size: var(--font-size-6xl, 2.5rem);
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--color-text, #E8E6F0);
+}
+
+.astro-calc-subtitle {
+    margin: 0 auto;
+    max-width: var(--max-width-text, 50ch);
+    color: var(--color-text-muted, #8A87A8);
+    font-size: var(--font-size-md, 0.95rem);
+}
+
+.astro-calc-card {
+    background: var(--color-bg-card, #1A1E3A);
+    border: 1px solid var(--color-border, rgba(200, 182, 255, 0.12));
+    border-radius: var(--radius-lg, 12px);
+    padding: var(--space-lg, 1.5rem);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
+}
+
+[data-theme="light"] .astro-calc-card {
+    box-shadow: 0 4px 18px rgba(123, 95, 199, 0.07);
+}
+
+/* Alertas */
+.astro-calc-alert {
+    padding: var(--space-sm, 0.75rem) var(--space-md, 1rem);
+    border-radius: var(--radius-sm, 8px);
+    margin-bottom: var(--space-md, 1rem);
+    font-size: var(--font-size-base, 0.9rem);
+}
+
+.astro-calc-alert ul {
+    margin: var(--space-xxs, 0.3rem) 0 0;
+    padding-left: 1.25rem;
+}
+
+.astro-calc-alert-error {
+    background: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.35);
+    color: #fca5a5;
+}
+
+[data-theme="light"] .astro-calc-alert-error {
+    background: #fef2f2;
+    border-color: #fecaca;
+    color: #991b1b;
+}
+
+.astro-calc-alert-info {
+    background: var(--color-hero-badge-bg, rgba(200, 182, 255, 0.08));
+    border: 1px solid var(--color-border-hover, rgba(200, 182, 255, 0.2));
+    color: var(--color-text, #E8E6F0);
+}
+
+/* Abas de seleção */
+.astro-calc-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs, 0.5rem);
+    border-bottom: 1px solid var(--color-border, rgba(200, 182, 255, 0.12));
+    padding-bottom: var(--space-md, 1rem);
+    margin-bottom: var(--space-lg, 1.5rem);
+}
+
+.astro-calc-tab {
+    appearance: none;
+    background: var(--color-bg-dark, #12152B);
+    border: 1px solid var(--color-border, rgba(200, 182, 255, 0.12));
+    color: var(--color-text-muted, #8A87A8);
+    padding: 0.55rem 1rem;
+    border-radius: var(--radius-sm, 8px);
+    font-family: var(--font-body, system-ui, sans-serif);
+    font-size: var(--font-size-base, 0.9rem);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background var(--transition-fast, 0.2s ease),
+                border-color var(--transition-fast, 0.2s ease),
+                color var(--transition-fast, 0.2s ease),
+                box-shadow var(--transition-fast, 0.2s ease);
+}
+
+.astro-calc-tab:hover {
+    background: var(--color-bg-card-hover, #22274A);
+    border-color: var(--color-border-hover, rgba(200, 182, 255, 0.2));
+    color: var(--color-text, #E8E6F0);
+}
+
+.astro-calc-tab.is-active {
+    background: var(--color-primary-dark, #9D7CFF);
+    border-color: var(--color-primary-dark, #9D7CFF);
+    color: #ffffff;
+    box-shadow: 0 4px 14px var(--color-btn-primary-shadow, rgba(157, 124, 255, 0.25));
+}
+
+/* Seções internas do formulário */
+.astro-calc section.astro-calc-section {
+    margin: 0 0 var(--space-lg, 1.5rem) 0;
+    padding: 0 0 var(--space-md, 1rem) 0;
+    border-bottom: 1px solid var(--color-border-light, rgba(200, 182, 255, 0.08));
+}
+
+.astro-calc section.astro-calc-section:last-of-type {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: var(--space-md, 1rem);
+}
+
+.astro-calc-section-title {
+    margin: 0 0 var(--space-sm, 0.75rem);
+    font-family: var(--font-heading, Georgia, serif);
+    font-size: var(--font-size-3xl, 1.3rem);
+    font-weight: 600;
+    color: var(--color-primary, #C8B6FF);
+}
+
+/* Grid de campos */
+.astro-calc-grid {
+    display: grid;
+    gap: var(--space-md, 1rem);
+    margin-bottom: var(--space-sm, 0.75rem);
+}
+
+.astro-calc-grid-1 { grid-template-columns: 1fr; }
+.astro-calc-grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.astro-calc-grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+.astro-calc-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xxs, 0.3rem);
+}
+
+.astro-calc-field label {
+    font-size: var(--font-size-sm, 0.85rem);
+    font-weight: 600;
+    color: var(--color-text, #E8E6F0);
+}
+
+.astro-calc-opt {
+    font-weight: 400;
+    color: var(--color-text-muted, #8A87A8);
+}
+
+.astro-calc-input,
+.astro-calc .astro-calc-field input[type="text"],
+.astro-calc .astro-calc-field input[type="date"],
+.astro-calc .astro-calc-field input[type="time"],
+.astro-calc .astro-calc-field input[type="number"],
+.astro-calc .astro-calc-field select {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--color-border, rgba(200, 182, 255, 0.12));
+    border-radius: var(--radius-sm, 8px);
+    font-family: var(--font-body, system-ui, sans-serif);
+    font-size: var(--font-size-md, 0.95rem);
+    background: var(--color-bg-dark, #12152B);
+    color: var(--color-text, #E8E6F0);
+    transition: border-color var(--transition-fast, 0.2s ease), box-shadow var(--transition-fast, 0.2s ease);
+}
+
+.astro-calc-input:focus,
+.astro-calc .astro-calc-field input:focus,
+.astro-calc .astro-calc-field select:focus {
+    outline: none;
+    border-color: var(--color-primary, #C8B6FF);
+    box-shadow: 0 0 0 3px var(--color-glow, rgba(157, 124, 255, 0.15));
+}
+
+.astro-calc-input:disabled,
+.astro-calc .astro-calc-field input:disabled {
+    background: var(--color-bg-deep, #0B0D17);
+    color: var(--color-text-dim, #5A5780);
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.astro-calc-checkbox {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-top: 0.25rem;
+    font-size: var(--font-size-xs, 0.8rem) !important;
+    font-weight: 400 !important;
+    color: var(--color-text-muted, #8A87A8) !important;
+    cursor: pointer;
+}
+
+.astro-calc-checkbox input[type="checkbox"] {
+    accent-color: var(--color-primary-dark, #9D7CFF);
+}
+
+.astro-calc-hint {
+    color: var(--color-text-muted, #8A87A8);
+    font-size: var(--font-size-xxs, 0.75rem);
+}
+
+.astro-calc-details {
+    margin-top: var(--space-xs, 0.5rem);
+    background: var(--color-bg-dark, #12152B);
+    border: 1px solid var(--color-border-light, rgba(200, 182, 255, 0.08));
+    border-radius: var(--radius-sm, 8px);
+    padding: 0.65rem 0.9rem;
+}
+
+.astro-calc-details summary {
+    cursor: pointer;
+    font-size: var(--font-size-sm, 0.85rem);
+    font-weight: 600;
+    color: var(--color-text-muted, #8A87A8);
+}
+
+.astro-calc-details[open] summary {
+    margin-bottom: var(--space-sm, 0.75rem);
+    color: var(--color-text, #E8E6F0);
+}
+
+/* Botões */
+.astro-calc-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: var(--space-xs, 0.5rem);
+}
+
+.astro-calc-btn-primary {
+    appearance: none;
+    background: var(--color-primary-dark, #9D7CFF);
+    color: #ffffff;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm, 8px);
+    padding: 0.7rem 1.5rem;
+    font-family: var(--font-body, system-ui, sans-serif);
+    font-size: var(--font-size-md, 0.95rem);
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 16px var(--color-btn-primary-shadow, rgba(157, 124, 255, 0.25));
+    transition: background var(--transition-fast, 0.2s ease),
+                box-shadow var(--transition-fast, 0.2s ease),
+                transform var(--transition-fast, 0.2s ease);
+}
+
+.astro-calc-btn-primary:hover {
+    background: var(--color-primary, #C8B6FF);
+    color: var(--color-bg-deep, #0B0D17);
+    box-shadow: 0 6px 20px var(--color-btn-primary-shadow-hover, rgba(157, 124, 255, 0.4));
+    transform: translateY(-1px);
+}
+
+[data-theme="light"] .astro-calc-btn-primary:hover {
+    color: #ffffff;
+}
+
+.astro-calc-btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--color-bg-card, #1A1E3A);
+    color: var(--color-text, #E8E6F0);
+    border: 1px solid var(--color-border-hover, rgba(200, 182, 255, 0.2));
+    border-radius: var(--radius-sm, 8px);
+    padding: 0.5rem 1rem;
+    font-size: var(--font-size-sm, 0.85rem);
+    font-weight: 600;
+    text-decoration: none;
+    transition: background var(--transition-fast, 0.2s ease), border-color var(--transition-fast, 0.2s ease);
+}
+
+.astro-calc-btn-secondary:hover {
+    background: var(--color-btn-outline-hover, rgba(200, 182, 255, 0.1));
+    border-color: var(--color-primary, #C8B6FF);
+}
+
+/* Resultados */
+.astro-calc section.astro-calc-result {
+    margin: var(--space-xl, 2rem) 0 0 0;
+    padding: 0;
+}
+
+.astro-calc-result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--space-sm, 0.75rem);
+    flex-wrap: wrap;
+    margin-bottom: var(--space-md, 1rem);
+}
+
+.astro-calc-result-title {
+    margin: 0;
+    font-family: var(--font-heading, Georgia, serif);
+    font-size: var(--font-size-5xl, 1.8rem);
+    color: var(--color-text, #E8E6F0);
+}
+
+.astro-calc-result-subtitle {
+    margin: 0.25rem 0 0;
+    color: var(--color-text-muted, #8A87A8);
+    font-size: var(--font-size-base, 0.9rem);
+}
+
+.astro-calc-meta-pill {
+    background: var(--color-bg-card, #1A1E3A);
+    border: 1px solid var(--color-border, rgba(200, 182, 255, 0.12));
+    border-radius: var(--radius-sm, 8px);
+    padding: 0.65rem 0.95rem;
+    font-size: var(--font-size-base, 0.9rem);
+    margin-bottom: var(--space-md, 1rem);
+    color: var(--color-text, #E8E6F0);
+}
+
+.astro-calc-big3 {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-sm, 0.75rem);
+    margin-bottom: var(--space-lg, 1.5rem);
+}
+
+.astro-calc-big3-card {
+    background: var(--color-bg-card, #1A1E3A);
+    border: 1px solid var(--color-border, rgba(200, 182, 255, 0.12));
+    border-radius: var(--radius-md, 10px);
+    padding: var(--space-sm, 0.75rem) var(--space-md, 1rem);
+}
+
+.astro-calc-big3-label {
+    display: block;
+    font-size: var(--font-size-xxs, 0.75rem);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-muted, #8A87A8);
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.astro-calc-big3-val {
+    font-size: var(--font-size-md, 0.95rem);
+    font-weight: 600;
+    color: var(--color-text, #E8E6F0);
+}
+
+.astro-calc-biwheel-legend {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-sm, 0.75rem);
+    margin-bottom: var(--space-md, 1rem);
+}
+
+.astro-calc-legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    background: var(--color-bg-card, #1A1E3A);
+    border: 1px solid var(--color-border, rgba(200, 182, 255, 0.12));
+    border-radius: var(--radius-md, 10px);
+    padding: var(--space-sm, 0.75rem);
+    font-size: var(--font-size-base, 0.9rem);
+    color: var(--color-text, #E8E6F0);
+}
+
+.astro-calc-legend-sub {
+    color: var(--color-text-muted, #8A87A8);
+    font-size: var(--font-size-xs, 0.8rem);
+    margin-top: 2px;
+}
+
+.astro-calc-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: var(--radius-pill, 100px);
+    margin-top: 6px;
+    flex-shrink: 0;
+}
+
+.astro-calc-dot-inner { background: var(--color-secondary, #A0C4FF); }
+.astro-calc-dot-outer { background: var(--color-accent, #FFD6A5); }
+
+/* Mandala SVG (prancha clara por padrão do tema SVG) */
+.astro-calc-mandala-box {
+    background: #ffffff;
+    border: 1px solid var(--color-border, rgba(200, 182, 255, 0.12));
+    border-radius: var(--radius-lg, 12px);
+    padding: var(--space-sm, 0.75rem);
+    margin: 0 auto var(--space-lg, 1.5rem);
+    max-width: 780px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.22);
+}
+
+[data-theme="light"] .astro-calc-mandala-box {
+    box-shadow: 0 6px 24px rgba(123, 95, 199, 0.1);
+}
+
+.astro-calc-tables-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-lg, 1.5rem);
+}
+
+.astro-calc-table-title {
+    margin: 0 0 var(--space-sm, 0.75rem);
+    font-family: var(--font-heading, Georgia, serif);
+    font-size: var(--font-size-3xl, 1.3rem);
+    color: var(--color-primary, #C8B6FF);
+}
+
+.astro-calc-table-wrap {
+    overflow-x: auto;
+}
+
+.astro-calc-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-base, 0.9rem);
+    color: var(--color-text, #E8E6F0);
+}
+
+.astro-calc-table th,
+.astro-calc-table td {
+    text-align: left;
+    padding: 0.55rem 0.65rem;
+    border-bottom: 1px solid var(--color-border-light, rgba(200, 182, 255, 0.08));
+}
+
+.astro-calc-table th {
+    font-size: var(--font-size-xxs, 0.75rem);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-text-muted, #8A87A8);
+    font-weight: 600;
+}
+
+span.astrology-position-inline {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+span.astrology-position-inline img {
+    width: 20px;
+    display: block;
+}
+
+.astro-calc-retro {
+    display: inline-block;
+    background: #ef4444;
+    color: #ffffff;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 4px;
+    margin-left: 4px;
+}
+
+.astro-calc-asp-symbol {
+    font-size: 1rem;
+    margin-right: 4px;
+    color: var(--color-primary, #C8B6FF);
+}
+
+.astro-calc-empty {
+    color: var(--color-text-muted, #8A87A8);
+    font-size: var(--font-size-base, 0.9rem);
+    margin: 0;
+}
+
+/* Garante legibilidade dos componentes Blade de signo e posição em ambos os temas */
+.astro-calc .astrology-sign-unicode,
+.astro-calc .astrology-pos-unicode {
+    color: var(--color-text, #E8E6F0);
+}
+
+.astro-calc .astrology-pos-deg,
+.astro-calc .astrology-pos-min {
+    color: var(--color-text-muted, #8A87A8);
+}
+
+/* Em tema escuro, dá contraste sutil atrás dos ícones SVG escuros dos signos/planetas fora da mandala */
+.astro-calc .astrology-sign-img,
+.astro-calc .astrology-pos-icon,
+.astro-calc .aspect-point-img {
+    background: rgba(255, 255, 255, 0.88);
+    border-radius: 4px;
+    padding: 1px;
+}
+
+[data-theme="light"] .astro-calc .astrology-sign-img,
+[data-theme="light"] .astro-calc .astrology-pos-icon,
+[data-theme="light"] .astro-calc .aspect-point-img {
+    background: transparent;
+    padding: 0;
+}
+
+@media (max-width: 768px) {
+    .astro-calc {
+        padding: var(--space-md, 1rem) var(--space-sm, 0.75rem) var(--space-xl, 2rem);
+    }
+
+    .astro-calc-title {
+        font-size: var(--font-size-5xl, 1.8rem);
+    }
+
+    .astro-calc-grid-2,
+    .astro-calc-grid-3,
+    .astro-calc-big3,
+    .astro-calc-biwheel-legend,
+    .astro-calc-tables-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .astro-calc-actions .astro-calc-btn-primary {
+        width: 100%;
+    }
+}
+
+
+
+
+
+.aspect-grid-corner {
+    padding: 5px 8px;
+    border-right: 2px solid var(--color-border-hover, rgba(200, 182, 255, 0.25));
+    border-bottom: 2px solid var(--color-border-hover, rgba(200, 182, 255, 0.25));
+    font-size: 0.7rem;
+    font-weight: 600;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.aspect-corner-outer {
+    display: block;
+    text-align: right;
+    color: var(--color-accent, #ec4899);
+}
+
+.aspect-corner-inner {
+    display: block;
+    text-align: left;
+    color: var(--color-secondary, #38bdf8);
+    margin-top: 2px;
+}
+
+[data-theme="light"] .aspect-corner-outer {
+    color: #b45309;
+}
+
+[data-theme="light"] .aspect-corner-inner {
+    color: #2563eb;
+}
+
+.aspect-grid-col-header {
+    width: 34px;
+    min-width: 34px;
+    padding: 5px 2px;
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid var(--color-border-light, rgba(200, 182, 255, 0.08));
+    border-bottom: 2px solid var(--color-border-hover, rgba(200, 182, 255, 0.25));
+    background: rgba(200, 182, 255, 0.04);
+    font-weight: 600;
+}
+
+[data-theme="light"] .aspect-grid-col-header {
+    background: rgba(123, 95, 199, 0.06);
+}
+
+.aspect-col-house {
+    display: block;
+    font-size: 0.62rem;
+    font-weight: 500;
+    color: var(--color-text-muted, #8A87A8);
+    margin-top: 2px;
+    line-height: 1;
+}
+
+
+
+
+.astro-calc-result-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-xs, 0.5rem);
 }

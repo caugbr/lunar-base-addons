@@ -24,76 +24,27 @@
     <div class="admin-card-header">
         <h2><x-lucide-compass class="lucid-icon" /> {{ $displayChart->name }}</h2>
         <div class="top-buttons">
-            @if($isSolarReturn)
-                <a href="{{ route('admin.astrology.charts.show', $chart->id) }}"
-                   class="admin-btn admin-btn-secondary">
-                    <x-lucide-arrow-left class="lucid-icon" /> <span>Mapa Natal</span>
-                </a>
+            <a href="{{ route('admin.astrology.charts.edit', $chart->id) }}" class="admin-btn admin-btn-primary">
+                <x-lucide-pencil class="lucid-icon" /> <span>Editar</span>
+            </a>
 
-                <a href="{{ route('admin.astrology.biwheel.index', [
-                        'inner_id'        => $chart->id,
-                        'outer_type'      => 'solar_return',
-                        'sr_year'         => $srYear,
-                        'sr_city'         => $srCity,
-                        'sr_latitude'     => $srLatitude,
-                        'sr_longitude'    => $srLongitude,
-                        'sr_timezone'     => $srTimezone,
-                        'sr_house_system' => $srHouseSystem,
-                    ]) }}"
-                   class="admin-btn admin-btn-primary">
-                    <x-lucide-layers class="lucid-icon" /> <span>Revolução + Natal</span>
-                </a>
+        @if($isSolarReturn)
+            <a href="{{ route('admin.astrology.charts.solar-return.download-svg', [$chart->id] + request()->query()) }}"
+                class="admin-btn admin-btn-secondary"
+                title="Baixar SVG da Revolução Solar">
+                <x-lucide-download class="lucid-icon" /> <span>Baixar SVG</span>
+            </a>
+        @else
+            <a href="{{ route('admin.astrology.charts.download-svg', [$chart->id, 'theme' => $currentThemeSlug]) }}"
+                class="admin-btn admin-btn-secondary"
+                title="Baixar imagem SVG única">
+                <x-lucide-download class="lucid-icon" /> <span>Baixar SVG</span>
+            </a>
+        @endif
 
-                <a href="{{ route('admin.astrology.charts.solar-return.download-svg', [$chart->id] + request()->query()) }}"
-                   class="admin-btn admin-btn-secondary"
-                   title="Baixar SVG da Revolução Solar">
-                    <x-lucide-download class="lucid-icon" /> <span>Baixar SVG</span>
-                </a>
-            @else
-                <a href="{{ route('admin.astrology.biwheel.index', ['inner_id' => $chart->id, 'outer_type' => 'transit']) }}"
-                   class="admin-btn admin-btn-secondary"
-                   title="Ver trânsitos do momento atual sobre este mapa">
-                    <x-lucide-clock class="lucid-icon" /> <span>Trânsitos</span>
-                </a>
-
-                <a href="{{ route('admin.astrology.charts.solar-return', $chart->id) }}"
-                   class="admin-btn admin-btn-secondary"
-                   title="Ver Revolução Solar isolada com casas e tabelas">
-                    <x-lucide-sun class="lucid-icon" /> <span>Revolução solar</span>
-                </a>
-
-                <a href="{{ route('admin.astrology.biwheel.index', ['inner_id' => $chart->id, 'outer_type' => 'solar_return']) }}"
-                   class="admin-btn admin-btn-secondary"
-                   title="Sobrepor Revolução Solar ao Mapa Natal">
-                    <x-lucide-layers class="lucid-icon" /> <span>Revolução + Natal</span>
-                </a>
-
-                <a href="{{ route('admin.astrology.biwheel.index', ['inner_id' => $chart->id, 'outer_type' => 'chart']) }}"
-                   class="admin-btn admin-btn-secondary"
-                   title="Comparar este mapa com outro cadastrado">
-                    <x-lucide-orbit class="lucid-icon" /> <span>Sinastria</span>
-                </a>
-
-                <form method="POST" action="{{ route('admin.astrology.charts.recalculate', $chart->id) }}" class="inline-form">
-                    @csrf
-                    <button type="submit" class="admin-btn admin-btn-secondary" title="Recalcular dados astronômicos">
-                        <x-lucide-refresh-cw class="lucid-icon" /> <span>Recalcular</span>
-                    </button>
-                </form>
-
-                <a href="{{ route('admin.astrology.charts.download-svg', [$chart->id, 'theme' => $currentThemeSlug]) }}"
-                   class="admin-btn admin-btn-secondary"
-                   title="Baixar imagem SVG única">
-                    <x-lucide-download class="lucid-icon" /> <span>Baixar SVG</span>
-                </a>
-
-                <a href="{{ route('admin.astrology.charts.edit', $chart->id) }}" class="admin-btn admin-btn-primary">
-                    <x-lucide-pencil class="lucid-icon" /> <span>Editar</span>
-                </a>
-                <a href="{{ route('admin.astrology.charts.index') }}" class="admin-btn admin-btn-secondary">
-                    <x-lucide-arrow-left class="lucid-icon" /> <span>Voltar</span>
-                </a>
-            @endif
+            <a href="{{ route('admin.astrology.charts.index') }}" class="admin-btn admin-btn-secondary">
+                <x-lucide-arrow-left class="lucid-icon" /> <span>Voltar</span>
+            </a>
         </div>
     </div>
 
@@ -236,11 +187,66 @@
 
         {{-- Ângulos e Cúspides ao lado da Mandala --}}
         <div>
+            <div class="action-buttons">
+            @if($isSolarReturn)
+                <a href="{{ route('admin.astrology.charts.show', $chart->id) }}"
+                   class="admin-btn admin-btn-secondary">
+                    <x-lucide-arrow-left class="lucid-icon" /> <span>Mapa Natal</span>
+                </a>
+
+                <a href="{{ route('admin.astrology.biwheel.index', [
+                        'inner_id'        => $chart->id,
+                        'outer_type'      => 'solar_return',
+                        'sr_year'         => $srYear,
+                        'sr_city'         => $srCity,
+                        'sr_latitude'     => $srLatitude,
+                        'sr_longitude'    => $srLongitude,
+                        'sr_timezone'     => $srTimezone,
+                        'sr_house_system' => $srHouseSystem,
+                    ]) }}"
+                   class="admin-btn admin-btn-primary">
+                    <x-lucide-layers class="lucid-icon" /> <span>Revolução + Natal</span>
+                </a>
+
+            @else
+                <a href="{{ route('admin.astrology.biwheel.index', ['inner_id' => $chart->id, 'outer_type' => 'transit']) }}"
+                   class="admin-btn admin-btn-secondary"
+                   title="Ver trânsitos do momento atual sobre este mapa">
+                    <x-lucide-clock class="lucid-icon" /> <span>Trânsitos</span>
+                </a>
+
+                <a href="{{ route('admin.astrology.charts.solar-return', $chart->id) }}"
+                   class="admin-btn admin-btn-secondary"
+                   title="Ver Revolução Solar isolada com casas e tabelas">
+                    <x-lucide-sun class="lucid-icon" /> <span>Revolução solar</span>
+                </a>
+
+                <a href="{{ route('admin.astrology.biwheel.index', ['inner_id' => $chart->id, 'outer_type' => 'solar_return']) }}"
+                   class="admin-btn admin-btn-secondary"
+                   title="Sobrepor Revolução Solar ao Mapa Natal">
+                    <x-lucide-layers class="lucid-icon" /> <span>Revolução + Natal</span>
+                </a>
+
+                <a href="{{ route('admin.astrology.biwheel.index', ['inner_id' => $chart->id, 'outer_type' => 'chart']) }}"
+                   class="admin-btn admin-btn-secondary"
+                   title="Comparar este mapa com outro cadastrado">
+                    <x-lucide-orbit class="lucid-icon" /> <span>Sinastria</span>
+                </a>
+
+                <form method="POST" action="{{ route('admin.astrology.charts.recalculate', $chart->id) }}" class="inline-form">
+                    @csrf
+                    <button type="submit" class="admin-btn admin-btn-secondary" title="Recalcular dados astronômicos">
+                        <x-lucide-refresh-cw class="lucid-icon" /> <span>Recalcular</span>
+                    </button>
+                </form>
+
+                @endif
+            </div>
             <h3>
                 <x-lucide-compass class="lucid-icon" /> Cúspides das 12 Casas
             </h3>
             <div class="table-wrap">
-                <table class="admin-table">
+                <table class="admin-table" style="min-width: 300px">
                     <thead>
                         <tr>
                             <th>Casa / Ângulo</th>
