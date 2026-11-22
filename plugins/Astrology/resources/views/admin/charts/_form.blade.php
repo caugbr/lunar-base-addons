@@ -49,15 +49,34 @@
             <div class="admin-form-row">
                 <div class="form-group">
                     <label class="field-label" for="birth_date">Data de Nascimento *</label>
-                    <input type="date" name="birth_date" id="birth_date" class="form-input"
-                        value="{{ old('birth_date', isset($chart) ? $chart->birth_date->format('Y-m-d') : '') }}" required>
-                    @error('birth_date') <small class="error">{{ $message }}</small> @enderror
+                    <x-roller-picker
+                        type="date"
+                        id="birth_date"
+                        name="birth_date"
+                        class="astro-calc-input"
+                        modal-title="Data de nascimento"
+                        :value="old('birth_date', isset($chart) ? $chart->birth_date->format('Y-m-d') : '')"
+                        :min-year="1900"
+                        breakpoint="768"
+                        required
+                    />
+                    @error('birth_date')
+                    <small class="error">{{ $message }}</small>
+                    @enderror
                 </div>
 
                 <div class="form-group">
                     <label class="field-label" for="birth_time">Hora Exata (HH:MM) *</label>
-                    <input type="time" name="birth_time" id="birth_time" class="form-input"
-                        value="{{ old('birth_time', isset($chart) ? substr($chart->birth_time, 0, 5) : '12:00') }}" required>
+                    <x-roller-picker
+                        type="time"
+                        id="birth_time"
+                        name="birth_time"
+                        class="astro-calc-input"
+                        modal-title="Hora Exata (HH:MM)"
+                        :value="old('birth_time', isset($chart) ? substr($chart->birth_time, 0, 5) : '12:00')"
+                        breakpoint="768"
+                        required
+                    />
                     @error('birth_time') <small class="error">{{ $message }}</small> @enderror
                 </div>
             </div>

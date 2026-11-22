@@ -60,16 +60,6 @@ class ChartCalculationService
             $houseSystem,
             $includeMinors ? 1 : 0
         );
-        // $cacheKey = sprintf(
-        //     'astrology_sr_%d_%d_%.5F_%.5F_%s_%s_%d',
-        //     $natalChart->id,
-        //     $targetYear,
-        //     $lat,
-        //     $lon,
-        //     md5($tz),
-        //     $houseSystem,
-        //     $includeMinors ? 1 : 0
-        // );
 
         return Cache::remember($cacheKey, now()->addHours(6), function () use (
             $natalChart,

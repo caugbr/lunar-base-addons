@@ -37,6 +37,31 @@
     }
   },
 
+  "axes": {
+    "showMarkers": true,
+    "distance": 468,
+    "mode": "auto",
+    "fontSize": 13,
+    "fontWeight": "bold",
+    "color": "#38bdf8",
+    "showTicks": true,
+    "ticksInnerRadius": 448,
+    "ticksOuterRadius": 456,
+    "tickStrokeWidth": 2.0,
+    "labels": {
+      "asc": "ASC",
+      "dsc": "DSC",
+      "mc": "MC",
+      "ic": "FC"
+    },
+    "images": {
+      "asc": null,
+      "dsc": null,
+      "mc": null,
+      "ic": null
+    }
+  },
+
   "assets": {
     "base": "base.svg",
     "background": null,
@@ -44,6 +69,18 @@
     "planetsDir": "planets/",
     "signsDir": "signs/",
     "extension": "svg"
+  },
+
+  "planets": {
+    "showDegrees": true,
+    "showRetrograde": true
+  },
+
+  "typography": {
+    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@400;600&display=swap",
+    "fontFamily": "'Inter', sans-serif",
+    "headingFontFamily": "'Cormorant Garamond', Georgia, serif",
+    "monoFontFamily": "monospace"
   },
 
   "bands": [

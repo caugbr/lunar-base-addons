@@ -42,6 +42,7 @@ class AspectGridSvgBuilder
         $planets = $chart->planets;
         $angles = $chart->angles;
         $aspects = $chart->aspects;
+        $fonts = ChartSvgBuilder::resolveFonts($theme);
 
         // Cache em memoria de icones de signos para evitar leituras repetidas
         $signIconUris = [];
@@ -161,17 +162,17 @@ class AspectGridSvgBuilder
             } else {
                 $escapedGlyph = htmlspecialchars($rowPt['glyph'], ENT_QUOTES | ENT_XML1, 'UTF-8');
                 $svg .= "    <text x=\"13\" y=\"{$cellMidY}\" font-size=\"10\" font-weight=\"bold\" "
-                     . "font-family=\"sans-serif\" fill=\"{$textColor}\" text-anchor=\"middle\" dominant-baseline=\"central\">{$escapedGlyph}</text>\n";
+                     . "font-family=\"{$fonts['body']}\" fill=\"{$textColor}\" text-anchor=\"middle\" dominant-baseline=\"central\">{$escapedGlyph}</text>\n";
             }
 
             // Nome do Planeta
             $labelEscaped = htmlspecialchars($rowPt['label'], ENT_QUOTES | ENT_XML1, 'UTF-8');
             $svg .= "    <text x=\"24\" y=\"{$cellMidY}\" font-size=\"9.5\" font-weight=\"600\" "
-                 . "font-family=\"sans-serif\" fill=\"{$textColor}\" text-anchor=\"start\" dominant-baseline=\"central\">{$labelEscaped}</text>\n";
+                 . "font-family=\"{$fonts['body']}\" fill=\"{$textColor}\" text-anchor=\"start\" dominant-baseline=\"central\">{$labelEscaped}</text>\n";
 
             // Grau do Signo
             $degEscaped = htmlspecialchars($rowPt['deg'], ENT_QUOTES | ENT_XML1, 'UTF-8');
-            $svg .= "    <text x=\"82\" y=\"{$cellMidY}\" font-size=\"8.5\" font-family=\"monospace\" "
+            $svg .= "    <text x=\"82\" y=\"{$cellMidY}\" font-size=\"8.5\" font-family=\"{$fonts['mono']}\" "
                  . "fill=\"{$mutedTextColor}\" text-anchor=\"start\" dominant-baseline=\"central\">{$degEscaped}</text>\n";
 
             // Imagem do Signo (ou unicode fallback)
@@ -186,25 +187,25 @@ class AspectGridSvgBuilder
                 $svg .= "    </g>\n";
             } else {
                 $escapedSignUnicode = htmlspecialchars($rowPt['signUnicode'], ENT_QUOTES | ENT_XML1, 'UTF-8');
-                $svg .= "    <text x=\"105\" y=\"{$cellMidY}\" font-size=\"9\" font-family=\"sans-serif\" "
+                $svg .= "    <text x=\"105\" y=\"{$cellMidY}\" font-size=\"9\" font-family=\"{$fonts['body']}\" "
                      . "fill=\"{$textColor}\" text-anchor=\"middle\" dominant-baseline=\"central\">{$escapedSignUnicode}</text>\n";
             }
 
             // Minutos
             $minEscaped = htmlspecialchars($rowPt['min'], ENT_QUOTES | ENT_XML1, 'UTF-8');
-            $svg .= "    <text x=\"115\" y=\"{$cellMidY}\" font-size=\"8.5\" font-family=\"monospace\" "
+            $svg .= "    <text x=\"115\" y=\"{$cellMidY}\" font-size=\"8.5\" font-family=\"{$fonts['mono']}\" "
                  . "fill=\"{$mutedTextColor}\" text-anchor=\"start\" dominant-baseline=\"central\">{$minEscaped}</text>\n";
 
             // Indicador de Retrogradacao
             if ($rowPt['retrograde']) {
                 $svg .= "    <text x=\"142\" y=\"{$cellMidY}\" font-size=\"7.5\" font-weight=\"bold\" "
-                     . "font-family=\"sans-serif\" fill=\"#ef4444\" text-anchor=\"middle\" dominant-baseline=\"central\">R</text>\n";
+                     . "font-family=\"{$fonts['body']}\" fill=\"#ef4444\" text-anchor=\"middle\" dominant-baseline=\"central\">R</text>\n";
             }
 
             // Casa Astrologica
             if ($rowPt['house']) {
                 $houseText = htmlspecialchars("C{$rowPt['house']}", ENT_QUOTES | ENT_XML1, 'UTF-8');
-                $svg .= "    <text x=\"158\" y=\"{$cellMidY}\" font-size=\"8\" font-family=\"sans-serif\" "
+                $svg .= "    <text x=\"158\" y=\"{$cellMidY}\" font-size=\"8\" font-family=\"{$fonts['body']}\" "
                      . "fill=\"{$mutedTextColor}\" text-anchor=\"middle\" dominant-baseline=\"central\">{$houseText}</text>\n";
             }
 
@@ -226,7 +227,7 @@ class AspectGridSvgBuilder
                     } else {
                         $escapedGlyph = htmlspecialchars($rowPt['glyph'], ENT_QUOTES | ENT_XML1, 'UTF-8');
                         $svg .= "      <text x=\"" . ($planetIconSize / 2.0) . "\" y=\"" . ($planetIconSize / 2.0) . "\" font-size=\"10\" font-weight=\"bold\" "
-                             . "font-family=\"sans-serif\" fill=\"{$textColor}\" text-anchor=\"middle\" dominant-baseline=\"central\">{$escapedGlyph}</text>\n";
+                             . "font-family=\"{$fonts['body']}\" fill=\"{$textColor}\" text-anchor=\"middle\" dominant-baseline=\"central\">{$escapedGlyph}</text>\n";
                     }
                     $svg .= "    </g>\n";
                     continue;
@@ -242,8 +243,8 @@ class AspectGridSvgBuilder
                     $svg .= "    <g>\n";
                     $svg .= "      <title>{$aspTitle}</title>\n";
                     $svg .= "      <text x=\"{$cellMidX}\" y=\"" . ($rowY + 9.5) . "\" font-size=\"10\" font-weight=\"bold\" "
-                         . "font-family=\"sans-serif\" fill=\"{$asp['color']}\" text-anchor=\"middle\" dominant-baseline=\"central\">{$aspSymbol}</text>\n";
-                    $svg .= "      <text x=\"{$cellMidX}\" y=\"" . ($rowY + 18.5) . "\" font-size=\"6.5\" font-family=\"monospace\" "
+                         . "font-family=\"{$fonts['body']}\" fill=\"{$asp['color']}\" text-anchor=\"middle\" dominant-baseline=\"central\">{$aspSymbol}</text>\n";
+                    $svg .= "      <text x=\"{$cellMidX}\" y=\"" . ($rowY + 18.5) . "\" font-size=\"6.5\" font-family=\"{$fonts['mono']}\" "
                          . "fill=\"{$mutedTextColor}\" text-anchor=\"middle\" dominant-baseline=\"central\">{$aspOrb}</text>\n";
                     $svg .= "    </g>\n";
                 }

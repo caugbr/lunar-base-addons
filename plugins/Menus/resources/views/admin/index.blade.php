@@ -26,7 +26,7 @@
             {{-- 💡 Inserção do seletor dinâmico de Hooks descobertos no Core --}}
             <div class="form-group" style="flex: 3;">
                 <label for="hook">Ponto de Exibição no Tema (Hook opcional)</label>
-                {!! render_hooks_select([
+                {!! renderHooksSelect([
                     'name'        => 'hook',
                     'id'          => 'hook',
                     'placeholder' => '-- Nenhum (Apenas chamada manual ou Helper) --'

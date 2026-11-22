@@ -137,10 +137,12 @@ trait RendersMandalaPrimitives
 
     protected function renderSigns(float $ascLon, array $theme, string $themeDir, float $cx, float $cy): string
     {
+        $fonts = ChartSvgBuilder::resolveFonts($theme);
         $radius = (float) ($theme['radii']['signsDistance'] ?? 390);
         $sWidth = (float) ($theme['dimensions']['signWidth'] ?? 48);
         $sHeight = (float) ($theme['dimensions']['signHeight'] ?? 48);
         $ext = $theme['assets']['extension'] ?? 'svg';
+        $alignToCenter = !empty($theme['signs']['alignToCenter']);
 
         $signs = [
             'Aries', 'Taurus', 'Gemini', 'Cancer',
@@ -155,19 +157,25 @@ trait RendersMandalaPrimitives
             $displayAngle = $this->toDisplayAngle($signCenterLon, $ascLon);
             $pos = $this->polarToCartesian($displayAngle, $radius, $cx, $cy);
 
+            $transform = "translate({$pos['x']}, {$pos['y']})";
+            if ($alignToCenter) {
+                $rotation = round(90.0 - $displayAngle, 2);
+                $transform .= " rotate({$rotation})";
+            }
+
             $cleanName = strtolower($signName);
             $iconFile = $themeDir . '/' . ($theme['assets']['signsDir'] ?? 'signs/') . $cleanName . '.' . $ext;
             $iconDataUri = ChartSvgBuilder::fileToDataUri($iconFile);
             $translatedSign = AstrologyTranslator::translate($signName);
             $escapedSignName = htmlspecialchars($translatedSign, ENT_QUOTES | ENT_XML1, 'UTF-8');
 
-            $output .= "    <g class=\"chart-sign-glyph\" transform=\"translate({$pos['x']}, {$pos['y']})\">\n";
+            $output .= "    <g class=\"chart-sign-glyph\" transform=\"{$transform}\">\n";
             $output .= "      <title>{$escapedSignName}</title>\n";
             if ($iconDataUri) {
                 $output .= "      <image href=\"{$iconDataUri}\" x=\"-" . ($sWidth / 2) . "\" y=\"-" . ($sHeight / 2) . "\" width=\"{$sWidth}\" height=\"{$sHeight}\" />\n";
             } else {
                 $symbol = $unicodes[$index] ?? '';
-                $output .= "      <text x=\"0\" y=\"0\" font-size=\"20\" fill=\"#475569\" font-family=\"sans-serif\" text-anchor=\"middle\" dominant-baseline=\"central\">{$symbol}</text>\n";
+                $output .= "      <text x=\"0\" y=\"0\" font-size=\"20\" fill=\"#475569\" font-family=\"{$fonts['body']}\" text-anchor=\"middle\" dominant-baseline=\"central\">{$symbol}</text>\n";
             }
             $output .= "    </g>\n";
         }
@@ -192,6 +200,8 @@ trait RendersMandalaPrimitives
         $cuspWidth = $theme['houses']['strokeWidth'] ?? 1.0;
         $showNumbers = !empty($theme['houses']['showNumbers']);
         $numberColor = $theme['houses']['numberColor'] ?? '#64748b';
+        $numberSize = (float) ($theme['houses']['numberSize'] ?? 10.5);
+        $degSize = (float) ($theme['houses']['degSize'] ?? 8.5);
 
         $output = '';
 
@@ -219,10 +229,11 @@ trait RendersMandalaPrimitives
             $output .= "      <title>{$escapedTitle}</title>\n";
             $output .= "    </line>\n";
 
+            $fonts = ChartSvgBuilder::resolveFonts($theme);
             $cuspDeg = (int) floor(fmod($cuspLon, 30.0));
             $degPos = $this->polarToCartesian($displayAngle + 2.0, $degreeR, $cx, $cy);
             $output .= "    <text x=\"{$degPos['x']}\" y=\"{$degPos['y']}\" "
-                    . "font-size=\"8.5\" font-weight=\"600\" fill=\"#64748b\" font-family=\"sans-serif\" text-anchor=\"middle\" dominant-baseline=\"central\">\n";
+                    . "font-size=\"{$degSize}\" font-weight=\"600\" fill=\"#64748b\" font-family=\"{$fonts['body']}\" text-anchor=\"middle\" dominant-baseline=\"central\">\n";
             $output .= "      {$cuspDeg}°\n";
             $output .= "    </text>\n";
 
@@ -232,12 +243,13 @@ trait RendersMandalaPrimitives
                     $nextLon = (float) $houses[$next]['longitude'];
                     $nextAngle = $this->toDisplayAngle($nextLon, $ascLon);
 
+                    $fonts = ChartSvgBuilder::resolveFonts($theme);
                     $diff = fmod($nextAngle - $displayAngle + 360.0, 360.0);
                     $midAngle = fmod($displayAngle + ($diff / 2.0), 360.0);
                     $numPos = $this->polarToCartesian($midAngle, $numberR, $cx, $cy);
 
                     $output .= "    <text x=\"{$numPos['x']}\" y=\"{$numPos['y']}\" "
-                            . "font-size=\"10.5\" font-weight=\"600\" fill=\"{$numberColor}\" font-family=\"sans-serif\" text-anchor=\"middle\" dominant-baseline=\"central\">\n";
+                            . "font-size=\"{$numberSize}\" font-weight=\"600\" fill=\"{$numberColor}\" font-family=\"{$fonts['body']}\" text-anchor=\"middle\" dominant-baseline=\"central\">\n";
                     $output .= "      {$i}\n";
                     $output .= "    </text>\n";
                 }
@@ -255,12 +267,16 @@ trait RendersMandalaPrimitives
 
         $footerText = $theme['layout']['footer']['text'] ?? 'Lunar Base Astrology';
         $escapedText = htmlspecialchars($footerText, ENT_QUOTES | ENT_XML1, 'UTF-8');
-        $textY = $vbHeight - 52;
+        $fontSize = htmlspecialchars($theme['layout']['footer']['fontSize'] ?? 12, ENT_QUOTES | ENT_XML1, 'UTF-8');
+        $color = htmlspecialchars($theme['layout']['footer']['color'] ?? '#94a3b8', ENT_QUOTES | ENT_XML1, 'UTF-8');
+        $bottomDistance = htmlspecialchars($theme['layout']['footer']['bottomDistance'] ?? 52, ENT_QUOTES | ENT_XML1, 'UTF-8');
+        $textY = $vbHeight - $bottomDistance;
         $centerX = $vbWidth / 2.0;
+        $fonts = ChartSvgBuilder::resolveFonts($theme);
 
         return "  <!-- Rodape -->\n"
-             . "  <text x=\"{$centerX}\" y=\"{$textY}\" font-size=\"12\" font-family=\"sans-serif\" "
-             . "fill=\"#94a3b8\" text-anchor=\"middle\" dominant-baseline=\"central\">{$escapedText}</text>\n";
+             . "  <text x=\"{$centerX}\" y=\"{$textY}\" font-size=\"{$fontSize}\" font-family=\"{$fonts['body']}\" "
+             . "fill=\"{$color}\" text-anchor=\"middle\" dominant-baseline=\"central\">{$escapedText}</text>\n";
     }
 
     protected function getDefaultPlanetGlyphs(): array
@@ -283,5 +299,147 @@ trait RendersMandalaPrimitives
             'Ascendant'  => ['symbol' => 'AC', 'color' => '#0284c7'],
             'MC'         => ['symbol' => 'MC', 'color' => '#0284c7'],
         ];
+    }
+
+    protected function resolveAxesPoints(array $angles, array $houses): array
+    {
+        $ascLon = $angles['Ascendant']['longitude'] ?? $houses[1]['longitude'] ?? null;
+        $mcLon = $angles['MC']['longitude'] ?? $houses[10]['longitude'] ?? null;
+        $dscLon = $angles['Descendant']['longitude']
+            ?? ($ascLon !== null ? fmod((float) $ascLon + 180.0, 360.0) : null);
+        $icLon = $angles['Imum Coeli']['longitude']
+            ?? ($mcLon !== null ? fmod((float) $mcLon + 180.0, 360.0) : null);
+
+        $points = [];
+
+        if ($ascLon !== null) {
+            $points['asc'] = [
+                'name'      => 'Ascendente',
+                'longitude' => (float) $ascLon,
+                'formatted' => $angles['Ascendant']['formatted'] ?? $houses[1]['formatted'] ?? '',
+            ];
+        }
+
+        if ($dscLon !== null) {
+            $points['dsc'] = [
+                'name'      => 'Descendente',
+                'longitude' => (float) $dscLon,
+                'formatted' => $angles['Descendant']['formatted'] ?? $houses[7]['formatted'] ?? '',
+            ];
+        }
+
+        if ($mcLon !== null) {
+            $points['mc'] = [
+                'name'      => 'Meio do Céu',
+                'longitude' => (float) $mcLon,
+                'formatted' => $angles['MC']['formatted'] ?? $houses[10]['formatted'] ?? '',
+            ];
+        }
+
+        if ($icLon !== null) {
+            $points['ic'] = [
+                'name'      => 'Fundo do Céu',
+                'longitude' => (float) $icLon,
+                'formatted' => $angles['Imum Coeli']['formatted'] ?? $houses[4]['formatted'] ?? '',
+            ];
+        }
+
+        return $points;
+    }
+
+    protected function renderAxisMarkers(
+        array $angles,
+        array $houses,
+        float $chartAscLon,
+        array $theme,
+        string $themeDir,
+        float $cx,
+        float $cy,
+        ?array $axesOverride = null,
+        string $titlePrefix = ''
+    ): string {
+        $cfg = $axesOverride ?? ($theme['axes'] ?? []);
+        if (empty($cfg['showMarkers'])) {
+            return '';
+        }
+
+        $axes = $this->resolveAxesPoints($angles, $houses);
+        if (empty($axes)) {
+            return '';
+        }
+
+        $fonts = ChartSvgBuilder::resolveFonts($theme);
+        $mode = $cfg['mode'] ?? 'auto'; // 'auto' | 'image' | 'text'
+        $distance = (float) ($cfg['distance'] ?? 468);
+        $imgW = (float) ($cfg['imageWidth'] ?? 28);
+        $imgH = (float) ($cfg['imageHeight'] ?? 28);
+        $fontSize = (float) ($cfg['fontSize'] ?? 11);
+        $fontWeight = htmlspecialchars((string) ($cfg['fontWeight'] ?? 'bold'), ENT_QUOTES | ENT_XML1, 'UTF-8');
+        $color = htmlspecialchars((string) ($cfg['color'] ?? ($theme['houses']['axisColor'] ?? '#0284c7')), ENT_QUOTES | ENT_XML1, 'UTF-8');
+
+        $showTicks = !empty($cfg['showTicks']);
+        $tickInnerR = (float) ($cfg['ticksInnerRadius'] ?? ($distance - 20));
+        $tickOuterR = (float) ($cfg['ticksOuterRadius'] ?? ($distance - 12));
+        $tickColor = htmlspecialchars((string) ($cfg['tickColor'] ?? $color), ENT_QUOTES | ENT_XML1, 'UTF-8');
+        $tickWidth = (float) ($cfg['tickStrokeWidth'] ?? 2.0);
+
+        $defaultLabels = [
+            'asc' => 'ASC',
+            'dsc' => 'DSC',
+            'mc'  => 'MC',
+            'ic'  => 'FC',
+        ];
+        $labelsCfg = $cfg['labels'] ?? [];
+        $imagesCfg = $cfg['images'] ?? [];
+
+        $output = '';
+
+        foreach ($axes as $axisKey => $axis) {
+            $hasCustomLabel = array_key_exists($axisKey, $labelsCfg);
+            $labelText = $hasCustomLabel ? (string) ($labelsCfg[$axisKey] ?? '') : $defaultLabels[$axisKey];
+            $imageRel = $imagesCfg[$axisKey] ?? null;
+
+            $imageUri = '';
+            if (!empty($imageRel) && $mode !== 'text') {
+                $imageUri = ChartSvgBuilder::fileToDataUri($themeDir . '/' . ltrim($imageRel, '/'));
+            }
+
+            // Se a imagem foi desabilitada/não encontrada e o label foi explicitamente zerado (null/''), pula este eixo
+            if ($imageUri === '' && ($mode === 'image' || $labelText === '')) {
+                continue;
+            }
+
+            $ang = $this->toDisplayAngle($axis['longitude'], $chartAscLon);
+            $pos = $this->polarToCartesian($ang, $distance, $cx, $cy);
+
+            $formatted = $axis['formatted'] !== ''
+                ? ': ' . AstrologyTranslator::translateFormatted($axis['formatted'])
+                : '';
+            $prefix = $titlePrefix !== '' ? "{$titlePrefix} " : '';
+            $escapedTitle = htmlspecialchars("{$prefix}{$axis['name']}{$formatted}", ENT_QUOTES | ENT_XML1, 'UTF-8');
+
+            $output .= "    <g class=\"chart-axis-marker chart-axis-{$axisKey}\">\n";
+            $output .= "      <title>{$escapedTitle}</title>\n";
+
+            if ($showTicks) {
+                $p1 = $this->polarToCartesian($ang, $tickInnerR, $cx, $cy);
+                $p2 = $this->polarToCartesian($ang, $tickOuterR, $cx, $cy);
+                $output .= "      <line x1=\"{$p1['x']}\" y1=\"{$p1['y']}\" x2=\"{$p2['x']}\" y2=\"{$p2['y']}\" stroke=\"{$tickColor}\" stroke-width=\"{$tickWidth}\" />\n";
+            }
+
+            if ($imageUri !== '') {
+                $x = round($pos['x'] - ($imgW / 2.0), 2);
+                $y = round($pos['y'] - ($imgH / 2.0), 2);
+                $output .= "      <image href=\"{$imageUri}\" x=\"{$x}\" y=\"{$y}\" width=\"{$imgW}\" height=\"{$imgH}\" />\n";
+            } else {
+                $escapedLabel = htmlspecialchars($labelText, ENT_QUOTES | ENT_XML1, 'UTF-8');
+                $output .= "      <text x=\"{$pos['x']}\" y=\"{$pos['y']}\" font-size=\"{$fontSize}\" font-weight=\"{$fontWeight}\" "
+                        . "font-family=\"{$fonts['heading']}\" fill=\"{$color}\" text-anchor=\"middle\" dominant-baseline=\"central\">{$escapedLabel}</text>\n";
+            }
+
+            $output .= "    </g>\n";
+        }
+
+        return $output;
     }
 }

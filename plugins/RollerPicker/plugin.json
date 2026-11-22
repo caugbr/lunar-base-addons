@@ -1,0 +1,23 @@
+{
+    "name": "Roller Picker",
+    "description": "Componente Blade responsivo que exibe input nativo no desktop e abre um seletor modal de roletas 3D (data, hora e data/hora) no mobile.",
+    "version": "1.0.0",
+    "provider": "Plugins\\RollerPicker\\RollerPickerServiceProvider",
+    "configurable": {
+        "defaultBreakpoint": {
+            "type": "integer",
+            "default": 768,
+            "description": "Largura máxima da tela (em px) em que o campo passa a usar o picker de roletas 3D."
+        },
+        "defaultMinYear": {
+            "type": "integer",
+            "default": 1930,
+            "description": "Ano mínimo padrão exibido na roleta de anos."
+        }
+    },
+    "tags": [
+        "utils",
+        "interaction",
+        "appearance"
+    ]
+}

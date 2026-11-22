@@ -38,6 +38,37 @@ class ChartSvgBuilder
         return self::$dataUriCache[$filePath] = "data:{$mime};base64,{$base64}";
     }
 
+    public static function resolveFonts(array $theme): array
+    {
+        $typography = $theme['typography'] ?? [];
+
+        $body = trim((string) ($typography['fontFamily'] ?? 'sans-serif')) ?: 'sans-serif';
+        $heading = trim((string) ($typography['headingFontFamily'] ?? $body)) ?: $body;
+        $mono = trim((string) ($typography['monoFontFamily'] ?? 'monospace')) ?: 'monospace';
+
+        return [
+            'body'    => htmlspecialchars($body, ENT_QUOTES | ENT_XML1, 'UTF-8'),
+            'heading' => htmlspecialchars($heading, ENT_QUOTES | ENT_XML1, 'UTF-8'),
+            'mono'    => htmlspecialchars($mono, ENT_QUOTES | ENT_XML1, 'UTF-8'),
+        ];
+    }
+
+    public static function renderFontStyleBlock(array $theme): string
+    {
+        $googleFontsUrl = trim((string) ($theme['typography']['googleFontsUrl'] ?? ''));
+        if ($googleFontsUrl === '') {
+            return '';
+        }
+
+        // Escapa '&' para '&amp;' evitando erro de parser XML ao baixar o SVG
+        $safeUrl = htmlspecialchars($googleFontsUrl, ENT_NOQUOTES | ENT_XML1, 'UTF-8');
+        $safeUrl = str_replace("'", '%27', $safeUrl);
+
+        return "    <style type=\"text/css\">\n"
+             . "      @import url('{$safeUrl}');\n"
+             . "    </style>\n";
+    }
+
     public function build(NatalChart $chart, ?string $themeSlug = 'classic'): string
     {
         if (!$chart->isCompleted() || empty($chart->chart_data)) {
@@ -67,6 +98,7 @@ class ChartSvgBuilder
 
         $svg = "<svg viewBox=\"0 0 {$vbWidth} {$vbHeight}\" xmlns=\"http://www.w3.org/2000/svg\" class=\"natal-chart-svg\">\n";
         $svg .= "  <defs>\n";
+        $svg .= self::renderFontStyleBlock($theme);
         $svg .= "    <filter id=\"shadow\" x=\"-20%\" y=\"-20%\" width=\"140%\" height=\"140%\">\n";
         $svg .= "      <feDropShadow dx=\"0\" dy=\"1\" stdDeviation=\"2\" flood-color=\"#000000\" flood-opacity=\"0.4\"/>\n";
         $svg .= "    </filter>\n";
@@ -109,6 +141,12 @@ class ChartSvgBuilder
         $svg .= $this->renderHouseLines($houses, $ascendantLon, $theme, 500, 500);
         $svg .= "    </g>\n";
 
+        if (!empty($theme['axes']['showMarkers'])) {
+            $svg .= "    <g class=\"chart-axes\">\n";
+            $svg .= $this->renderAxisMarkers($angles, $houses, $ascendantLon, $theme, $themeDir, 500, 500);
+            $svg .= "    </g>\n";
+        }
+
         $svg .= "    <g class=\"chart-aspects\">\n";
         $svg .= $this->renderAspectLines($aspects, $planets, $angles, $ascendantLon, $theme, 500, 500);
         $svg .= "    </g>\n";
@@ -120,19 +158,23 @@ class ChartSvgBuilder
         $svg .= "  </g>\n";
 
         $gridConfig = $theme['layout']['aspectGrid'] ?? [];
-        $gridX = (float) ($gridConfig['x'] ?? 50);
-        $gridY = (float) ($gridConfig['y'] ?? 990);
-        $gridCellSize = (float) ($gridConfig['cellSize'] ?? 24);
+        if ($gridConfig) {
+            $gridX = (float) ($gridConfig['x'] ?? 50);
+            $gridY = (float) ($gridConfig['y'] ?? 990);
+            $gridCellSize = (float) ($gridConfig['cellSize'] ?? 24);
 
-        $aspectGridBuilder = app(AspectGridSvgBuilder::class);
-        $svg .= $aspectGridBuilder->build($chart, $theme, $gridX, $gridY, $gridCellSize);
+            $aspectGridBuilder = app(AspectGridSvgBuilder::class);
+            $svg .= $aspectGridBuilder->build($chart, $theme, $gridX, $gridY, $gridCellSize);
+        }
 
         $eqConfig = $theme['layout']['elementsQualities'] ?? [];
-        $eqX = (float) ($eqConfig['x'] ?? 620);
-        $eqY = (float) ($eqConfig['y'] ?? 990);
+        if ($eqConfig) {
+            $eqX = (float) ($eqConfig['x'] ?? 620);
+            $eqY = (float) ($eqConfig['y'] ?? 990);
 
-        $eqBuilder = app(ElementsQualitiesSvgBuilder::class);
-        $svg .= $eqBuilder->build($chart, $theme, $eqX, $eqY);
+            $eqBuilder = app(ElementsQualitiesSvgBuilder::class);
+            $svg .= $eqBuilder->build($chart, $theme, $eqX, $eqY);
+        }
 
         $svg .= $this->renderFooter($theme, $vbWidth, $vbHeight);
 
@@ -150,26 +192,90 @@ class ChartSvgBuilder
             return '';
         }
 
+        $fonts = self::resolveFonts($theme);
+
         $svg = "  <!-- Cabecalho da Prancha -->\n";
         $svg .= "  <g class=\"chart-header\">\n";
-
         if ($showInfo) {
             $name = htmlspecialchars($chart->name, ENT_QUOTES | ENT_XML1, 'UTF-8');
             $date = htmlspecialchars($chart->formatted_date_time, ENT_QUOTES | ENT_XML1, 'UTF-8');
+            $timezone = htmlspecialchars((string) $chart->timezone, ENT_QUOTES | ENT_XML1, 'UTF-8');
             $location = htmlspecialchars($chart->city ?: "{$chart->latitude}, {$chart->longitude}", ENT_QUOTES | ENT_XML1, 'UTF-8');
             $houseSystem = htmlspecialchars(AstrologyTranslator::translate($chart->house_system), ENT_QUOTES | ENT_XML1, 'UTF-8');
 
+            $chartInfo = $theme['layout']['chartInfo'] ?? [];
 
-            $svg .= "    <text x=\"50\" y=\"45\" font-size=\"16\" font-weight=\"bold\" font-family=\"sans-serif\" fill=\"#1e293b\">{$name}</text>\n";
-            $svg .= "    <text x=\"50\" y=\"65\" font-size=\"10.5\" font-family=\"sans-serif\" fill=\"#64748b\">{$date} ({$chart->timezone})</text>\n";
-            $svg .= "    <text x=\"50\" y=\"82\" font-size=\"10.5\" font-family=\"sans-serif\" fill=\"#64748b\">{$location} | Casas: {$houseSystem}</text>\n";
+            $infoX = htmlspecialchars((string) ($chartInfo['x'] ?? $theme['layout']['infoX'] ?? 50), ENT_QUOTES | ENT_XML1, 'UTF-8');
+            $infoY = htmlspecialchars((string) ($chartInfo['y'] ?? $theme['layout']['infoY'] ?? 45), ENT_QUOTES | ENT_XML1, 'UTF-8');
+            $align = $chartInfo['align'] ?? $theme['layout']['infoAlign'] ?? 'left';
+            $fontSize = (float) ($chartInfo['fontSize'] ?? 16);
+            $subFontSize = round($fontSize * 0.65, 2);
+            $color = htmlspecialchars((string) ($chartInfo['color'] ?? '#1e293b'), ENT_QUOTES | ENT_XML1, 'UTF-8');
+
+            $textAnchor = match ($align) {
+                'center', 'middle' => 'middle',
+                'right', 'end'     => 'end',
+                default            => 'start',
+            };
+
+            $svg .= "    <text x=\"{$infoX}\" y=\"{$infoY}\" font-size=\"{$fontSize}\" font-family=\"{$fonts['body']}\" fill=\"{$color}\" text-anchor=\"{$textAnchor}\">\n";
+            $svg .= "        <tspan x=\"{$infoX}\" dy=\"0\" font-weight=\"bold\" font-family=\"{$fonts['heading']}\">{$name}</tspan>\n";
+            $svg .= "        <tspan x=\"{$infoX}\" dy=\"1.7em\" font-size=\"{$subFontSize}\" fill-opacity=\"0.8\">{$date} ({$timezone})</tspan>\n";
+            $svg .= "        <tspan x=\"{$infoX}\" dy=\"1.4em\" font-size=\"{$subFontSize}\" fill-opacity=\"0.8\">{$location} | Casas: {$houseSystem}</tspan>\n";
+            $svg .= "    </text>\n";
         }
 
         if ($showLogo && !empty($theme['assets']['logo'])) {
             $logoPath = $themeDir . '/' . $theme['assets']['logo'];
             $logoUri = self::fileToDataUri($logoPath);
+
             if ($logoUri) {
-                $svg .= "    <image href=\"{$logoUri}\" x=\"770\" y=\"35\" width=\"180\" height=\"75\" preserveAspectRatio=\"xMaxYMin meet\" />\n";
+                $vbWidth = (float) ($theme['canvas']['viewBoxWidth'] ?? 1000);
+                $vbHeight = (float) ($theme['canvas']['viewBoxHeight'] ?? 1414);
+                $logoCfg = $theme['layout']['logo'] ?? [];
+
+                $width = (float) ($logoCfg['width'] ?? 180);
+                $height = (float) ($logoCfg['height'] ?? 75);
+                $logoYFrom = (string) ($logoCfg['yFrom'] ?? 'top');
+                $align = (string) ($logoCfg['align'] ?? 'default');
+
+                // Resolve X (aceita número, "center" ou porcentagem ex: "50%")
+                $rawX = trim((string) ($logoCfg['x'] ?? 770));
+                if ($rawX === 'center') {
+                    $baseX = $vbWidth / 2.0;
+                } elseif (str_ends_with($rawX, '%')) {
+                    $baseX = ($vbWidth * (float) rtrim($rawX, '%')) / 100.0;
+                } else {
+                    $baseX = (float) $rawX;
+                }
+
+                // Resolve Y (aceita número ou porcentagem)
+                $rawY = trim((string) ($logoCfg['y'] ?? 35));
+                $baseY = str_ends_with($rawY, '%')
+                    ? ($vbHeight * (float) rtrim($rawY, '%')) / 100.0
+                    : (float) $rawY;
+
+                // Deslocamento horizontal pelo alinhamento
+                $logoX = match ($align) {
+                    'center', 'middle' => $baseX - ($width / 2.0),
+                    'right', 'end'     => $baseX - $width,
+                    default            => $baseX,
+                };
+
+                // Se vier de baixo, subtrai também a altura (como CSS bottom)
+                $logoY = ($logoYFrom === 'bottom')
+                    ? ($vbHeight - $baseY - $height)
+                    : $baseY;
+
+                // Mantém o conteúdo interno alinhado junto com a caixa
+                $xRatio = match ($align) {
+                    'center', 'middle' => 'xMid',
+                    'left', 'start'    => 'xMin',
+                    default            => 'xMax',
+                };
+                $yRatio = ($logoYFrom === 'bottom') ? 'YMax' : 'YMin';
+
+                $svg .= "    <image data-logo href=\"{$logoUri}\" x=\"{$logoX}\" y=\"{$logoY}\" width=\"{$width}\" height=\"{$height}\" preserveAspectRatio=\"{$xRatio}{$yRatio} meet\" />\n";
             }
         }
 
@@ -265,6 +371,10 @@ class ChartSvgBuilder
             return '';
         }
 
+        $fonts = self::resolveFonts($theme);
+        $showDegrees = (bool) ($theme['planets']['showDegrees'] ?? true);
+        $showRetrograde = (bool) ($theme['planets']['showRetrograde'] ?? true);
+
         $baseRadius = (float) ($theme['radii']['planetsDistance'] ?? 290);
         $pWidth = (float) ($theme['dimensions']['planetWidth'] ?? 38);
         $pHeight = (float) ($theme['dimensions']['planetHeight'] ?? 38);
@@ -296,6 +406,10 @@ class ChartSvgBuilder
             $degInSign = fmod((float) $p['longitude'], 30.0);
             $d = (int) floor($degInSign);
             $m = (int) round(($degInSign - $d) * 60);
+            if ($m >= 60) {
+                $d++;
+                $m = 0;
+            }
 
             $items[] = [
                 'name'        => $name,
@@ -338,8 +452,6 @@ class ChartSvgBuilder
             }
 
             $pos = $this->polarToCartesian($renderAngle, $baseRadius, $cx, $cy);
-            $degPos = $this->polarToCartesian($renderAngle, $degRadius, $cx, $cy);
-            $minPos = $this->polarToCartesian($renderAngle, $minRadius, $cx, $cy);
 
             $cleanName = strtolower(str_replace(' ', '_', $name));
             $iconFile = $themeDir . '/' . ($theme['assets']['planetsDir'] ?? 'planets/') . $cleanName . '.' . $ext;
@@ -363,26 +475,31 @@ class ChartSvgBuilder
                 $color = $planetGlyphs[$name]['color'] ?? '#38bdf8';
                 $escapedGlyph = htmlspecialchars($glyph, ENT_QUOTES | ENT_XML1, 'UTF-8');
                 $output .= "      <circle cx=\"0\" cy=\"0\" r=\"12\" fill=\"#ffffff\" stroke=\"{$color}\" stroke-width=\"1.5\" />\n";
-                $output .= "      <text x=\"0\" y=\"1\" font-size=\"13\" font-family=\"sans-serif\" font-weight=\"bold\" fill=\"{$color}\" text-anchor=\"middle\" dominant-baseline=\"central\">{$escapedGlyph}</text>\n";
+                $output .= "      <text x=\"0\" y=\"1\" font-size=\"13\" font-family=\"{$fonts['body']}\" font-weight=\"bold\" fill=\"{$color}\" text-anchor=\"middle\" dominant-baseline=\"central\">{$escapedGlyph}</text>\n";
             }
 
-            if (!empty($p['is_retrograde'])) {
-                $output .= "      <text x=\"{$rxRight}\" y=\"{$rxTop}\" font-size=\"{$rxFontSize}\" font-family=\"sans-serif\" font-weight=\"bold\" fill=\"#ef4444\">R</text>\n";
+            if ($showRetrograde && !empty($p['is_retrograde'])) {
+                $output .= "      <text x=\"{$rxRight}\" y=\"{$rxTop}\" font-size=\"{$rxFontSize}\" font-family=\"{$fonts['body']}\" font-weight=\"bold\" fill=\"#ef4444\">R</text>\n";
             }
             $output .= "    </g>\n";
 
-            $escapedDegOnly = htmlspecialchars($item['degOnly'], ENT_QUOTES | ENT_XML1, 'UTF-8');
-            $escapedMinOnly = htmlspecialchars($item['minOnly'], ENT_QUOTES | ENT_XML1, 'UTF-8');
+            if ($showDegrees) {
+                $degPos = $this->polarToCartesian($renderAngle, $degRadius, $cx, $cy);
+                $minPos = $this->polarToCartesian($renderAngle, $minRadius, $cx, $cy);
 
-            $output .= "    <text x=\"{$degPos['x']}\" y=\"{$degPos['y']}\" "
-                    . "font-size=\"{$degFontSize}\" font-family=\"sans-serif\" font-weight=\"600\" fill=\"#334155\" text-anchor=\"middle\" dominant-baseline=\"central\">\n";
-            $output .= "      {$escapedDegOnly}\n";
-            $output .= "    </text>\n";
+                $escapedDegOnly = htmlspecialchars($item['degOnly'], ENT_QUOTES | ENT_XML1, 'UTF-8');
+                $escapedMinOnly = htmlspecialchars($item['minOnly'], ENT_QUOTES | ENT_XML1, 'UTF-8');
 
-            $output .= "    <text x=\"{$minPos['x']}\" y=\"{$minPos['y']}\" "
-                    . "font-size=\"{$minFontSize}\" font-family=\"sans-serif\" font-weight=\"500\" fill=\"#64748b\" text-anchor=\"middle\" dominant-baseline=\"central\">\n";
-            $output .= "      {$escapedMinOnly}\n";
-            $output .= "    </text>\n";
+                $output .= "    <text x=\"{$degPos['x']}\" y=\"{$degPos['y']}\" "
+                        . "font-size=\"{$degFontSize}\" font-family=\"{$fonts['body']}\" font-weight=\"600\" fill=\"#334155\" text-anchor=\"middle\" dominant-baseline=\"central\">\n";
+                $output .= "      {$escapedDegOnly}\n";
+                $output .= "    </text>\n";
+
+                $output .= "    <text x=\"{$minPos['x']}\" y=\"{$minPos['y']}\" "
+                        . "font-size=\"{$minFontSize}\" font-family=\"{$fonts['body']}\" font-weight=\"500\" fill=\"#64748b\" text-anchor=\"middle\" dominant-baseline=\"central\">\n";
+                $output .= "      {$escapedMinOnly}\n";
+                $output .= "    </text>\n";
+            }
         }
 
         return $output;

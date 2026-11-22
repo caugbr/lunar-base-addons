@@ -30,7 +30,7 @@
 
             <div class="form-group" style="flex: 3;">
                 <label for="menu_hook">Ponto de Exibição no Tema (Hook opcional)</label>
-                {!! render_hooks_select([
+                {!! renderHooksSelect([
                     'name'        => 'hook',
                     'id'          => 'menu_hook',
                     'selected'    => old('hook', $menu->hook),

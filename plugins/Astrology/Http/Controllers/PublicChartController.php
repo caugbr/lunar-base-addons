@@ -26,6 +26,7 @@ class PublicChartController extends Controller
         $now = Carbon::now('America/Sao_Paulo');
         $availableThemes = ThemeManager::getThemes();
         $publicLayout = $this->resolvePublicLayout();
+        $defaultTheme = $this->resolvePublicTheme($availableThemes);
 
         $defaults = [
             'mode'              => in_array($request->query('mode'), ['natal', 'transit', 'solar_return', 'synastry'], true)
@@ -40,7 +41,7 @@ class PublicChartController extends Controller
             'longitude'         => '',
             'timezone'          => 'America/Sao_Paulo',
             'house_system'      => 'placidus',
-            'theme'             => 'classic',
+            'theme'             => $defaultTheme,
 
             // Trânsitos
             'transit_date'      => $now->format('Y-m-d'),
@@ -213,8 +214,9 @@ class PublicChartController extends Controller
 
         $themeSlug = (string) ($validated['theme'] ?? 'classic');
         $availableThemes = ThemeManager::getThemes();
+        $defaultTheme = $this->resolvePublicTheme($availableThemes);
         if (!isset($availableThemes[$themeSlug])) {
-            $themeSlug = 'classic';
+            $themeSlug = $defaultTheme;
         }
 
         $houseSystem = (string) ($validated['house_system'] ?? 'placidus');
@@ -814,5 +816,20 @@ class PublicChartController extends Controller
         }
 
         return null;
+    }
+
+    protected function resolvePublicTheme(array $availableThemes): string
+    {
+        $configured = trim((string) config('pluginSettings.Astrology.publicTheme', 'classic'));
+
+        if ($configured !== '' && isset($availableThemes[$configured])) {
+            return $configured;
+        }
+
+        if (isset($availableThemes['classic'])) {
+            return 'classic';
+        }
+
+        return (string) (array_key_first($availableThemes) ?? 'classic');
     }
 }

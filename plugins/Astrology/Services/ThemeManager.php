@@ -180,7 +180,7 @@ class ThemeManager
             }
         }
 
-        foreach (['canvas', 'modules', 'assets', 'radii', 'houses', 'dimensions', 'aspects', 'rings'] as $assocKey) {
+        foreach (['canvas', 'modules', 'assets', 'radii', 'houses', 'dimensions', 'aspects', 'rings', 'planets', 'typography', 'axes', 'signs'] as $assocKey) {
             if (isset($biwheelManifest[$assocKey]) && is_array($biwheelManifest[$assocKey])) {
                 $baseSection = $merged[$assocKey] ?? [];
                 $merged[$assocKey] = array_replace_recursive($baseSection, $biwheelManifest[$assocKey]);
@@ -217,6 +217,45 @@ class ThemeManager
                 'planetsDir' => 'planets/',
                 'signsDir' => 'signs/',
                 'extension' => 'svg',
+            ],
+            'axes' => [
+                'showMarkers'      => false,
+                'distance'         => 468,
+                'mode'             => 'auto',
+                'imageWidth'       => 28,
+                'imageHeight'      => 28,
+                'fontSize'         => 11,
+                'fontWeight'       => 'bold',
+                'color'            => '#0284c7',
+                'showTicks'        => true,
+                'ticksInnerRadius' => 448,
+                'ticksOuterRadius' => 456,
+                'tickStrokeWidth'  => 2.0,
+                'labels'           => [
+                    'asc' => 'ASC',
+                    'dsc' => 'DSC',
+                    'mc'  => 'MC',
+                    'ic'  => 'FC',
+                ],
+                'images'           => [
+                    'asc' => null,
+                    'dsc' => null,
+                    'mc'  => null,
+                    'ic'  => null,
+                ],
+            ],
+            'signs' => [
+                'alignToCenter' => false,
+            ],
+            'planets' => [
+                'showDegrees'    => true,
+                'showRetrograde' => true,
+            ],
+            'typography' => [
+                'googleFontsUrl'    => null,
+                'fontFamily'        => 'sans-serif',
+                'headingFontFamily' => 'sans-serif',
+                'monoFontFamily'    => 'monospace',
             ],
             'bands' => [],
             'radii' => [

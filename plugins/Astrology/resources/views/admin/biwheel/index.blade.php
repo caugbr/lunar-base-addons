@@ -88,11 +88,29 @@
                 <div class="admin-form-row">
                     <div class="form-group">
                         <label class="field-label" for="transit_date">Data do trânsito</label>
-                        <input type="date" name="transit_date" id="transit_date" class="form-input" value="{{ $transitDate }}">
+                        {{-- <input type="date" name="transit_date" id="transit_date" class="form-input" value="{{ $transitDate }}"> --}}
+                        <x-roller-picker
+                            type="date"
+                            id="transit_date"
+                            name="transit_date"
+                            class="astro-calc-input"
+                            modal-title="Data do trânsito"
+                            :value="$transitDate"
+                            breakpoint="768"
+                        />
                     </div>
                     <div class="form-group">
                         <label class="field-label" for="transit_time">Hora</label>
-                        <input type="time" name="transit_time" id="transit_time" class="form-input" value="{{ substr($transitTime, 0, 5) }}">
+                        {{-- <input type="time" name="transit_time" id="transit_time" class="form-input" value="{{ substr($transitTime, 0, 5) }}"> --}}
+                        <x-roller-picker
+                            type="time"
+                            id="transit_time"
+                            name="transit_time"
+                            class="astro-calc-input"
+                            modal-title="Hora"
+                            :value="substr($transitTime, 0, 5)"
+                            breakpoint="768"
+                        />
                     </div>
                     <div class="form-group">
                         <label class="field-label" for="transit_timezone">Fuso horário</label>
@@ -127,13 +145,6 @@
                         <label class="field-label" for="sr_year">Ano da Revolução Solar</label>
                         <input type="number" min="1900" max="2150" name="sr_year" id="sr_year" class="form-input" value="{{ $srYear }}">
                     </div>
-                    {{-- <div class="form-group">
-                        <label class="field-label" for="sr_display">Modo de exibição</label>
-                        <select name="sr_display" id="sr_display" class="form-input">
-                            <option value="biwheel" {{ $srDisplay === 'biwheel' ? 'selected' : '' }}>Sobreposto ao Mapa Natal (Bi-Wheel)</option>
-                            <option value="single" {{ $srDisplay === 'single' ? 'selected' : '' }}>Mapa Isolado da Revolução Solar</option>
-                        </select>
-                    </div> --}}
                     <div class="form-group">
                         <label class="field-label" for="sr_house_system">Sistema de casas da RS</label>
                         <select name="sr_house_system" id="sr_house_system" class="form-input">

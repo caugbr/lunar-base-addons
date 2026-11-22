@@ -1,0 +1,101 @@
+{
+  "name": "Old Bi-Wheel",
+  "slug": "old",
+  "version": "1.0",
+  "description": "Versão bi-wheel do tema antigo com sobreposição externa.",
+
+  "layout": {
+    "wheel": {
+      "centerX": 500,
+      "centerY": 630,
+      "scale": 0.66
+    },
+    "crossAspectGrid": false,
+    "header": {
+      "innerX": "50%",
+      "innerY": 45,
+      "outerX": "50%",
+      "outerY": 130,
+      "align": "center"
+    }
+  },
+
+  "assets": {
+    "base": "base.svg"
+  },
+
+  "bands": [
+    {
+      "name": "aspect_line",
+      "innerRadius": 198,
+      "outerRadius": 200,
+      "opacity": 0.5,
+      "eclipticOffset": 0,
+      "colors": ["#333333"]
+    }
+  ],
+
+  "radii": {
+    "signsDistance": 410,
+    "housesInnerRadius": 200,
+    "housesOuterRadius": 520,
+    "aspectsInnerRadius": 200
+  },
+
+  "axes": {
+    "showMarkers": false,
+    "ticksOuterRadius": 460
+  },
+
+  "rings": {
+    "inner": {
+      "planetsDistance": 288,
+      "ticksInnerRadius": 322,
+      "ticksOuterRadius": 338,
+      "tickColor": "#4a3110",
+      "guideAnchorOffset": 15,
+      "planetWidth": 32,
+      "planetHeight": 32,
+      "degreeFontSize": 18,
+      "degreeOffset": 25,
+      "degreeMinuteSpace": 2,
+      "retrogradeFontSize": 12,
+      "retrogradeRightGap": 11,
+      "retrogradeTopGap": -13,
+      "labelDirection": "inward",
+      "minSeparationDeg": 9.5
+    },
+    "outer": {
+      "planetsDistance": 555,
+      "ticksInnerRadius": 492,
+      "ticksOuterRadius": 500,
+      "tickColor": "#7c2d12",
+      "guideAnchorOffset": -15,
+      "planetWidth": 32,
+      "planetHeight": 32,
+      "degreeFontSize": 18,
+      "degreeOffset": 22,
+      "degreeMinuteSpace": 2,
+      "retrogradeFontSize": 12,
+      "retrogradeRightGap": 11,
+      "retrogradeTopGap": -13,
+      "labelDirection": "inward",
+      "minSeparationDeg": 6.0,
+      "showAngleMarkers": true,
+      "showHouseTicks": false,
+      "angleMarkers": {
+        "distance": 604,
+        "fontSize": 16,
+        "color": "#4a3110",
+        "ticksInnerRadius": 580,
+        "ticksOuterRadius": 594,
+        "labels": {
+          "asc": "ASC",
+          "dsc": "DSC",
+          "mc": "MC",
+          "ic": "FC"
+        }
+      }
+    }
+  }
+}

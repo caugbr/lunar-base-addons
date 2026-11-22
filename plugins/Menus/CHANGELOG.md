@@ -1,6 +1,11 @@
 
 # Changelog
 
+## [1.6.0] 2026-11-19
+
+### Fixed
+- Helper function renomeadas para casar com mudanças no core
+
 ## [1.5.1] 2026-08-11
 
 ### Fixed

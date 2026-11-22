@@ -1,7 +1,7 @@
 {
     "name": "Astrology",
     "description": "Gerenciamento e renderização de mapas astrológicos (mapas simples e sobreposição de mapas), com suporte a temas personalizados.",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "provider": "Plugins\\Astrology\\AstrologyServiceProvider",
     "configurable": {
         "menuAfterItem": {
@@ -28,12 +28,20 @@
             "type": "string",
             "default": "",
             "description": "View de layout Blade do tema público (ex: layouts.app). Deixe vazio para usar o layout próprio da página."
+        },
+        "publicTheme": {
+            "type": "string",
+            "default": "classic",
+            "description": "Slug do tema visual padrão usado na calculadora pública (ex: classic, old)."
         }
     },
     "dependencies": {
         "plugins": {
             "Cities": {
                 "reason": "O plugin Astrology usa o Cities para autocomplete de cidades."
+            },
+            "RollerPicker": {
+                "reason": "O Roller Picker torna os campos de data e hora mais amigáveis em celulares."
             }
         }
     },

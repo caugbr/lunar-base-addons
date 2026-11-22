@@ -705,6 +705,9 @@ span.astrology-position-inline img {
     background: rgba(255, 255, 255, 0.88);
     border-radius: 4px;
     padding: 1px;
+    width: 30px;
+    vertical-align: middle;
+    margin-right: 0.5rem;
 }
 
 [data-theme="light"] .astro-calc .astrology-sign-img,
