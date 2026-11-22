@@ -1,7 +1,7 @@
 {
     "name": "Roller Picker",
     "description": "Componente Blade responsivo que exibe input nativo no desktop e abre um seletor modal de roletas 3D (data, hora e data/hora) no mobile.",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "provider": "Plugins\\RollerPicker\\RollerPickerServiceProvider",
     "configurable": {
         "defaultBreakpoint": {
