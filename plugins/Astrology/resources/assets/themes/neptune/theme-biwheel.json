@@ -1,0 +1,144 @@
+{
+  "name": "Neptune Bi-Wheel",
+  "slug": "neptune",
+  "version": "1.0",
+  "description": "Versão bi-wheel do tema de Netuno com sobreposição externa.",
+
+  "layout": {
+    "wheel": {
+      "centerX": 500,
+      "centerY": 505,
+      "width": 680,
+      "height": 680
+    },
+    "aspectGrid": false,
+    "elementsQualities": false,
+    "crossAspectGrid": {
+      "x": 50,
+      "y": 935,
+      "cellSize": 26,
+      "summaryWidth": 165
+    },
+    "header": {
+      "innerX": 50,
+      "outerX": 410,
+      "y": 32,
+      "fontSize": 14,
+      "color": "#063160"
+    },
+    "logo": {
+      "x": 780,
+      "y": 25,
+      "width": 170,
+      "height": 115
+    },
+    "footer": {
+        "bottomDistance": 20
+    }
+  },
+
+  "assets": {
+    "base": "chart.svg"
+  },
+
+  "bands": [
+    {
+      "name": "aspect_line",
+      "innerRadius": 158,
+      "outerRadius": 159,
+      "opacity": 0.5,
+      "eclipticOffset": 0,
+      "colors": ["#333333"]
+    }
+  ],
+
+  "radii": {
+    "signsDistance": 303,
+    "housesInnerRadius": 158,
+    "housesOuterRadius": 355,
+    "aspectsInnerRadius": 156
+  },
+
+  "axes": {
+    "showMarkers": false
+  },
+
+  "dimensions": {
+    "signWidth": 40,
+    "signHeight": 40
+  },
+
+  "houses": {
+    "numberSize": 14,
+    "degSize": 13
+  },
+
+  "rings": {
+    "inner": {
+      "planetsDistance": 230,
+      "ticksInnerRadius": 248,
+      "ticksOuterRadius": 254,
+      "tickColor": "#063160",
+      "guideAnchorOffset": 10,
+      "planetWidth": 28,
+      "planetHeight": 28,
+      "degreeFontSize": 12,
+      "degreeOffset": 22,
+      "degreeMinuteSpace": 2,
+      "retrogradeFontSize": 9.5,
+      "retrogradeRightGap": 10,
+      "retrogradeTopGap": -10,
+      "labelDirection": "inward",
+      "minSeparationDeg": 9.5
+    },
+    "outer": {
+      "planetsDistance": 392,
+      "ticksInnerRadius": 330,
+      "ticksOuterRadius": 342,
+      "tickColor": "#0284c7",
+      "guideAnchorOffset": -10,
+      "planetWidth": 26,
+      "planetHeight": 26,
+      "degreeFontSize": 11,
+      "degreeOffset": 20,
+      "degreeMinuteSpace": 2,
+      "retrogradeFontSize": 9.5,
+      "retrogradeRightGap": 9,
+      "retrogradeTopGap": -9,
+      "labelDirection": "inward",
+      "minSeparationDeg": 6.0,
+      "showAngleMarkers": true,
+      "showHouseTicks": false,
+      "angleMarkers": {
+        "distance": 365,
+        "fontSize": 13,
+        "color": "#063160",
+        "ticksInnerRadius": 330,
+        "ticksOuterRadius": 348,
+        "labels": {
+          "asc": "ASC",
+          "dsc": "DSC",
+          "mc": "MC",
+          "ic": "FC"
+        }
+      }
+    }
+  },
+
+  "crossAspectGrid": {
+    "x": 50,
+    "y": 935,
+    "cellSize": 26,
+    "summaryWidth": 165,
+    "backgroundColor": "rgba(255,255,255,0.65)",
+    "cornerBackgroundColor": "#f0f9ff",
+    "headerBackgroundColor": "#e0f2fe",
+    "headerTextColor": "#063160",
+    "headerMutedColor": "#0284c7",
+    "innerLabelColor": "#063160",
+    "outerLabelColor": "#0284c7",
+    "panelHeaderBackgroundColor": "#e0f2fe",
+    "panelHeaderTextColor": "#063160",
+    "borderColor": "#063160"
+  }
+}

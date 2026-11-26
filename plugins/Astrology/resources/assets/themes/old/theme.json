@@ -21,7 +21,8 @@
     "wheel": {
       "centerX": 500,
       "centerY": 640,
-      "scale": 0.72
+      "width": 720,
+      "height": 720
     },
     "aspectGrid": false,
     "elementsQualities": false,
@@ -50,15 +51,15 @@
 
   "axes": {
     "showMarkers": true,
-    "distance": 538,
+    "distance": 394,
     "mode": "auto",
-    "fontSize": 22,
+    "fontSize": 18,
     "fontWeight": "bold",
     "color": "#4a3110",
     "showTicks": false,
-    "ticksInnerRadius": 448,
-    "ticksOuterRadius": 456,
-    "tickStrokeWidth": 2.0,
+    "ticksInnerRadius": 323,
+    "ticksOuterRadius": 328,
+    "tickStrokeWidth": 1.6,
     "labels": {
       "asc": "ASC",
       "dsc": "DSC",
@@ -101,8 +102,8 @@
   "bands": [
     {
       "name": "aspect_line",
-      "innerRadius": 198,
-      "outerRadius": 200,
+      "innerRadius": 143,
+      "outerRadius": 144,
       "opacity": 0.5,
       "eclipticOffset": 0,
       "colors": ["#333333"]
@@ -110,45 +111,45 @@
   ],
 
   "radii": {
-    "signsDistance": 410,
-    "ticksDistance": 338,
-    "ticksLength": 8,
-    "planetsDistance": 300,
-    "housesInnerRadius": 200,
-    "housesOuterRadius": 520,
-    "aspectsInnerRadius": 200
+    "signsDistance": 295,
+    "ticksDistance": 243,
+    "ticksLength": 6,
+    "planetsDistance": 216,
+    "housesInnerRadius": 144,
+    "housesOuterRadius": 378,
+    "aspectsInnerRadius": 144
   },
 
   "houses": {
     "showLines": true,
     "strokeWidth": 1.0,
-    "axisStrokeWidth": 2.0,
+    "axisStrokeWidth": 1.8,
     "color": "#4a3110",
     "axisColor": "#4a3110",
     "showNumbers": true,
     "numberColor": "#64748b",
-    "numberSize": 22,
-    "degSize": 18
+    "numberSize": 14,
+    "degSize": 13
   },
 
   "dimensions": {
-    "signWidth": 52,
-    "signHeight": 52,
-    "planetWidth": 38,
-    "planetHeight": 38,
-    "planetDegreeFontSize": 20,
-    "planetDegreeOffset": 34,
-    "retrogradeFontSize": 12,
-    "retrogradeRightGap": 12,
-    "retrogradeTopGap": -14,
-    "degreeMinuteSpace": 4
+    "signWidth": 40,
+    "signHeight": 40,
+    "planetWidth": 30,
+    "planetHeight": 30,
+    "planetDegreeFontSize": 13,
+    "planetDegreeOffset": 23,
+    "retrogradeFontSize": 10,
+    "retrogradeRightGap": 10,
+    "retrogradeTopGap": -10,
+    "degreeMinuteSpace": 2
   },
 
   "aspects": {
     "showLines": true,
     "showAngleLines": false,
     "showNodeLines": false,
-    "strokeWidth": 1.5,
+    "strokeWidth": 1.2,
     "colors": {
       "conjunction": "#38bdf8",
       "opposition": "#ef4444",

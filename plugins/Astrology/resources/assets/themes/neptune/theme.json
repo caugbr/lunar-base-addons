@@ -1,0 +1,160 @@
+{
+  "name": "Neptune",
+  "slug": "neptune",
+  "version": "2.0",
+  "author": "Lunar Base",
+  "description": "Tema de Netuno.",
+
+  "canvas": {
+    "viewBoxWidth": 1000,
+    "viewBoxHeight": 1414,
+    "backgroundColor": "#ffffff"
+  },
+
+  "modules": {
+    "chartInfo": true,
+    "logo": true,
+    "footerText": true
+  },
+
+  "layout": {
+    "wheel": {
+      "centerX": 500,
+      "centerY": 500,
+      "width": 800,
+      "height": 800
+    },
+    "aspectGrid": {
+      "x": 50,
+      "y": 920,
+      "cellSize": 34
+    },
+    "elementsQualities": {
+      "x": 620,
+      "y": 920
+    },
+    "footer": {
+      "text": "Mapa calculado via Lunar Apps",
+      "fontSize": 24,
+      "color": "#063160"
+    },
+    "logo": {
+      "width": 200,
+      "height": 160
+    },
+    "chartInfo": {
+      "fontSize": 24,
+      "color": "#063160"
+    }
+  },
+
+  "axes": {
+    "showMarkers": true,
+    "distance": 430,
+    "mode": "auto",
+    "fontSize": 20,
+    "fontWeight": "bold",
+    "color": "#063160",
+    "showTicks": false,
+    "ticksInnerRadius": 358,
+    "ticksOuterRadius": 365,
+    "tickStrokeWidth": 1.6,
+    "labels": {
+      "asc": "ASC",
+      "dsc": "DSC",
+      "mc": "MC",
+      "ic": "FC"
+    },
+    "images": {
+      "asc": null,
+      "dsc": null,
+      "mc": null,
+      "ic": null
+    }
+  },
+
+  "assets": {
+    "base": "chart.svg",
+    "background": "background.jpg",
+    "logo": "logo.png",
+    "planetsDir": "planets/",
+    "signsDir": "signs/",
+    "extension": "png"
+  },
+
+  "planets": {
+    "showDegrees": true,
+    "showRetrograde": true
+  },
+
+  "typography": {
+    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=Neucha&display=swap",
+    "fontFamily": "'Neucha', sans-serif",
+    "headingFontFamily": "'Neucha', Georgia, serif",
+    "monoFontFamily": "monospace"
+  },
+
+  "bands": [
+    {
+      "name": "aspect_line",
+      "innerRadius": 186,
+      "outerRadius": 187,
+      "opacity": 0.5,
+      "eclipticOffset": 0,
+      "colors": ["#333333"]
+    }
+  ],
+
+  "radii": {
+    "signsDistance": 356,
+    "ticksDistance": 298,
+    "ticksLength": 6,
+    "planetsDistance": 270,
+    "housesInnerRadius": 186,
+    "housesOuterRadius": 414,
+    "aspectsInnerRadius": 184
+  },
+
+  "houses": {
+    "showLines": true,
+    "strokeWidth": 1.0,
+    "axisStrokeWidth": 1.8,
+    "color": "#4a3110",
+    "axisColor": "#4a3110",
+    "showNumbers": true,
+    "numberColor": "#64748b",
+    "numberSize": 17,
+    "degSize": 15
+  },
+
+  "dimensions": {
+    "signWidth": 44,
+    "signHeight": 44,
+    "planetWidth": 36,
+    "planetHeight": 36,
+    "planetDegreeFontSize": 16,
+    "planetDegreeOffset": 28,
+    "retrogradeFontSize": 11,
+    "retrogradeRightGap": 12,
+    "retrogradeTopGap": -12,
+    "degreeMinuteSpace": 3
+  },
+
+  "aspects": {
+    "showLines": true,
+    "showAngleLines": false,
+    "showNodeLines": false,
+    "strokeWidth": 1.3,
+    "colors": {
+      "conjunction": "#38bdf8",
+      "opposition": "#ef4444",
+      "trine": "#10b981",
+      "square": "#f87171",
+      "sextile": "#60a5fa",
+      "quincunx": "#a855f7",
+      "semisquare": "#fb923c",
+      "sesquiquadrate": "#fb923c",
+      "semisextile": "#94a3b8"
+    }
+  }
+}

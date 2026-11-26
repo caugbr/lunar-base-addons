@@ -6,12 +6,15 @@ Este guia estabelece os parâmetros, as regras de herança e as restrições té
 
 ## Estrutura de diretórios
 
-Cada tema deve ser encapsulado dentro de seu próprio diretório em `public/plugins/astrology/themes/{slug-do-tema}/` ou `Astrology/resources/assets/themes/{slug-do-tema}/`.
+Cada tema deve ser encapsulado dentro de seu próprio diretório em `Astrology/resources/assets/themes/{slug-do-tema}/`.
+
+- `theme-biwheel.json` é obrigatório em todo tema válido.
+- Execute `php artisan astrology:sync` sempre que adicionar, remover ou alterar metadados (`name`, `description`, `owner`) de um tema. O comando valida `theme.json` + `theme-biwheel.json`, gera `resources/assets/themes/manifest.json` (separando `public` e `private`) e limpa o cache do `ThemeManager`.
 
 ```text
 meu-tema/
 ├── theme.json
-├── theme-biwheel.json (opcional — habilita o tema para sobreposição de dois mapas)
+├── theme-biwheel.json
 ├── base.svg
 ├── base-biwheel.svg (padrão no bi-wheel caso assets.base não seja sobrescrito)
 ├── background.jpg (opcional — svg, png, jpg ou webp)
@@ -31,7 +34,6 @@ meu-tema/
 Observações sobre carregamento e cache:
 - Caso exista uma pasta com o mesmo `slug` em `public/plugins/astrology/themes/` e em `Astrology/resources/assets/themes/`, o diretório em `public/` tem prioridade.
 - Em ambiente com `app.debug = true`, o `ThemeManager` relê os manifestos do disco a cada requisição. Em produção, os manifestos ficam em cache até a execução de `ThemeManager::clearCache()` ou `php artisan cache:clear`.
-- Apenas temas que possuírem `theme-biwheel.json` aparecem na seleção de temas do modo bi-wheel (`ThemeManager::getBiwheelThemes()`).
 
 ---
 
@@ -43,7 +45,7 @@ Tanto o construtor de mapa simples (`ChartSvgBuilder`) quanto o de roda dupla (`
 1. Fundo do canvas (rect sólido com canvas.backgroundColor)
 2. Imagem decorativa de fundo (assets.background — opcional)
 3. Cabeçalho da prancha (informações do(s) mapa(s) e assets.logo)
-4. Grupo #mandala-wheel (espaço interno 1000x1000 escalado por layout.wheel):
+4. Grupo #mandala-wheel (coordenadas reais 1:1 do viewBox, centradas em: centerX, centerY):
    4.1. Faixas dinâmicas de cores (bands)
    4.2. Mandala estrutural (assets.base — base.svg ou base-biwheel.svg)
    4.3. Glifos dos doze signos (signsDir)
@@ -69,6 +71,7 @@ Tanto o construtor de mapa simples (`ChartSvgBuilder`) quanto o de roda dupla (`
 * `version` *(string)*: versão do manifesto.
 * `author` *(string)*: autor ou responsável pelo design.
 * `description` *(string)*: resumo técnico do estilo visual.
+* `owner` *(inteiro|null, opcional)*: ID do usuário dono do tema. Quando omitido ou `null`, o tema é público (`manifest.json -> public`); quando informado, o tema vai para `private` e fica disponível apenas para o dono (e para administradores).
 
 ### 2. Canvas e módulos (`canvas` e `modules`)
 * `canvas.viewBoxWidth` *(inteiro, padrão: 1000)*: largura total da prancha SVG.
@@ -79,12 +82,15 @@ Tanto o construtor de mapa simples (`ChartSvgBuilder`) quanto o de roda dupla (`
 * `modules.footerText` *(boolean, padrão: false)*: exibe o texto configurado em `layout.footer` na base da prancha.
 
 ### 3. Layout da prancha (`layout`)
-O espaço interno da mandala opera sempre em `1000 x 1000` (centro em `500, 500`) e é posicionado na prancha através de `layout.wheel`.
+O espaço interno da mandala opera sempre em relação ao tamanho da mandala e é posicionado na prancha através de `layout.wheel`.
 
 #### Mandala (`layout.wheel`)
-* `centerX` *(float, padrão: 500)*: coordenada X do centro da mandala na prancha.
-* `centerY` *(float, padrão: 530)*: coordenada Y do centro da mandala na prancha.
-* `scale` *(float, padrão: 0.85)*: fator de escala aplicado ao grupo `#mandala-wheel`.
+Apenas a imagem base (`assets.base`) é redimensionada e centralizada em `(centerX, centerY)`. Raios, fontes, glifos e espessuras operam em escala `1:1` no `viewBox`.
+* `centerX` *(float, padrão: `viewBoxWidth / 2`)*: coordenada X do centro da mandala na prancha.
+* `centerY` *(float, padrão: `530` no mapa simples / `475` no bi-wheel)*: coordenada Y do centro da mandala na prancha.
+* `width` e `height` *(float, opcionais)*: dimensões finais da imagem base na prancha (ou use `size` para valor quadrado único). Se omitidos, o padrão é `min(viewBoxWidth, viewBoxHeight) * 0.8` (ex.: `800 x 800` em A4 `1000 x 1414`), garantindo margem automática.
+* `margin` *(float, opcional)*: alternativa para calcular o tamanho descontando a margem lateral (`min(viewBoxWidth, viewBoxHeight) - 2 * margin`).
+* `scale` *(float, opcional/legado)*: mantido apenas como fallback quando `width`, `height`, `size` e `margin` são omitidos (`1000 * scale`).
 
 #### Informações do mapa no cabeçalho (`layout.chartInfo`)
 * `x` *(float ou string com `%`, padrão: 50)*: posição X de ancoragem do bloco (ex.: `50` ou `"50%"`).
@@ -109,8 +115,8 @@ O espaço interno da mandala opera sempre em `1000 x 1000` (centro em `500, 500`
 * `bottomDistance` *(float, padrão: 52)*: distância em unidades do `viewBox` entre a borda inferior da prancha e o texto (`viewBoxHeight - bottomDistance`).
 
 #### Blocos analíticos inferiores (`layout.aspectGrid` e `layout.elementsQualities`)
-* `layout.aspectGrid` *(objeto ou `false`)*: defina `false` para ocultar a grade triangular de aspectos no SVG, ou informe `x` (padrão `50`), `y` (padrão `990`) e `cellSize` (padrão `24`).
-* `layout.elementsQualities` *(objeto ou `false`)*: defina `false` para ocultar a matriz 4x3 de elementos e qualidades no SVG, ou informe `x` (padrão `620`) e `y` (padrão `990`).
+* `layout.aspectGrid` *(objeto ou `false`)*: `x` (`50`), `y` (`990`), `cellSize` (`24`), `summaryWidth` (`170`), `borderColor` (herda `houses.color`), `backgroundColor` (`"none"`), `headerBackgroundColor` (herda `backgroundColor`), `diagonalBackgroundColor` (herda `headerBackgroundColor`), `headerTextColor` (herda `textColor`), `textColor` (`"#334155"`), `mutedTextColor` (`"#64748b"`).
+* `layout.elementsQualities` *(objeto ou `false`)*: `x` (`620`), `y` (`990`), `borderColor` (herda `houses.color`), `backgroundColor` (`"none"`), `headerBackgroundColor` (`"none"`), `headerTextColor` (herda `textColor`), `rowHeaderBackgroundColor` (`"none"`), `rowHeaderTextColor` (herda `headerTextColor`), `textColor` (`"#334155"`).
 
 ### 4. Tipografia (`typography`)
 * `googleFontsUrl` *(string|null)*: URL CSS (ex.: Google Fonts) inserida via `@import` dentro de `<style>` no `<defs>` do SVG.
@@ -127,11 +133,11 @@ O espaço interno da mandala opera sempre em `1000 x 1000` (centro em `500, 500`
 * `extension` *(string, padrão: "svg")*: extensão dos arquivos de glifos (`svg`, `png`, `jpg`, `webp`).
 
 ### 6. Faixas dinâmicas de cor (`bands`)
-Coleção de anéis concêntricos desenhados no espaço `1000 x 1000` da mandala, girando conforme o signo do Ascendente.
+Coleção de anéis concêntricos desenhados no espaço da mandala, girando conforme o signo do Ascendente.
 
 Cada objeto dentro de `bands` aceita:
 * `name` *(string, obrigatório)*: identificador da faixa para rastreabilidade em mensagens de erro.
-* `innerRadius` *(float, obrigatório)*: raio interno relativo ao espaço `1000 x 1000`.
+* `innerRadius` *(float, obrigatório)*: raio interno relativo ao espaço da mandala.
 * `outerRadius` *(float, obrigatório)*: raio externo (deve ser maior que `innerRadius`).
 * `opacity` *(float, padrão: 1.0)*: opacidade entre `0.0` e `1.0`.
 * `eclipticOffset` *(float, padrão: 0.0)*: deslocamento inicial em graus na eclíptica (`0` = 0° de Áries).
@@ -237,6 +243,7 @@ Ao carregar um tema via `ThemeManager::getBiwheelTheme($slug)`:
   * `y` *(float, padrão: 885)*: origem Y da matriz.
   * `cellSize` *(float, padrão: 28)*: tamanho alvo das células (reduzido automaticamente para caber na largura útil de `900 px`).
   * `summaryWidth` *(float, padrão: 165)*: largura da coluna esquerda com as posições do mapa interno.
+  * `borderColor` (herda `houses.color`), `backgroundColor` (`"none"`), `cornerBackgroundColor` (`"#f8fafc"`), `headerBackgroundColor` (`"#fdf2f8"`), `headerTextColor` (herda `rings.outer.tickColor`), `headerMutedColor` (herda `mutedTextColor`), `innerLabelColor` (herda `rings.inner.tickColor`), `outerLabelColor` (herda `headerTextColor`), `panelHeaderBackgroundColor` (herda `headerBackgroundColor`), `panelHeaderTextColor` (herda `headerTextColor`), `textColor` (`"#334155"`), `mutedTextColor` (`"#64748b"`).
 
 #### 2. Configuração independente por anel (`rings.inner` e `rings.outer`)
 Substitui os raios únicos de planetas do mapa simples por dois blocos independentes, permitindo calibração distinta para a órbita interna (menor circunferência) e a coroa externa (maior circunferência):

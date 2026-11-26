@@ -1,7 +1,7 @@
 {
     "name": "Astrology",
     "description": "Gerenciamento e renderização de mapas astrológicos (mapas simples e sobreposição de mapas), com suporte a temas personalizados.",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "provider": "Plugins\\Astrology\\AstrologyServiceProvider",
     "configurable": {
         "menuAfterItem": {
@@ -33,6 +33,11 @@
             "type": "string",
             "default": "classic",
             "description": "Slug do tema visual padrão usado na calculadora pública (ex: classic, old)."
+        },
+        "chartMessage": {
+            "type": "string",
+            "default": "",
+            "description": "Uma mensagem para exibir junto a um mapa calculado na interface pública. Útil para publicidade (HTML aceito)"
         }
     },
     "dependencies": {

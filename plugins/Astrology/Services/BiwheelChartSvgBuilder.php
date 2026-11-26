@@ -52,60 +52,78 @@ class BiwheelChartSvgBuilder
         $svg .= $this->renderBiwheelHeader($data, $theme, $themeDir, (float) $vbWidth, (float) $vbHeight);
 
         $wheelConfig = $theme['layout']['wheel'] ?? [];
-        $targetCx = (float) ($wheelConfig['centerX'] ?? 500);
+        $targetCx = (float) ($wheelConfig['centerX'] ?? ($vbWidth / 2));
         $targetCy = (float) ($wheelConfig['centerY'] ?? 475);
-        $scale = (float) ($wheelConfig['scale'] ?? 0.80);
 
-        $svg .= "  <!-- Mandala Bi-Wheel Escalada -->\n";
-        $svg .= "  <g id=\"mandala-wheel\" transform=\"translate({$targetCx}, {$targetCy}) scale({$scale}) translate(-500, -500)\">\n";
+        // Padrão com margem ao redor da mandala (80% do menor lado do papel)
+        $defaultSize = min($vbWidth, $vbHeight) * 0.8;
+
+        if (isset($wheelConfig['margin'])) {
+            $defaultSize = max(100, min($vbWidth, $vbHeight) - ((float) $wheelConfig['margin'] * 2.0));
+        } elseif (
+            isset($wheelConfig['scale'])
+            && !isset($wheelConfig['width'], $wheelConfig['height'], $wheelConfig['size'])
+        ) {
+            $defaultSize = 1000.0 * (float) $wheelConfig['scale'];
+        }
+
+        $baseWidth  = (float) ($wheelConfig['width']  ?? $wheelConfig['size'] ?? $defaultSize);
+        $baseHeight = (float) ($wheelConfig['height'] ?? $wheelConfig['size'] ?? $defaultSize);
+
+        // Centraliza apenas a imagem base da mandala em (targetCx, targetCy)
+        $baseX = $targetCx - ($baseWidth / 2.0);
+        $baseY = $targetCy - ($baseHeight / 2.0);
+
+        $svg .= "  <!-- Mandala Bi-Wheel -->\n";
+        $svg .= "  <g id=\"mandala-wheel\">\n";
 
         if (!empty($theme['bands']) && is_array($theme['bands'])) {
             $svg .= "    <g class=\"chart-bands\">\n";
-            $svg .= $this->renderBands($theme['bands'], $ascendantLon, 500, 500);
+            $svg .= $this->renderBands($theme['bands'], $ascendantLon, $targetCx, $targetCy);
             $svg .= "    </g>\n";
         }
 
         if ($baseDataUri) {
-            $svg .= "    <image href=\"{$baseDataUri}\" x=\"0\" y=\"0\" width=\"1000\" height=\"1000\" />\n";
+            $svg .= "    <image href=\"{$baseDataUri}\" x=\"{$baseX}\" y=\"{$baseY}\" width=\"{$baseWidth}\" height=\"{$baseHeight}\" preserveAspectRatio=\"xMidYMid meet\" />\n";
         }
 
         $svg .= "    <g class=\"chart-signs\">\n";
-        $svg .= $this->renderSigns($ascendantLon, $theme, $themeDir, 500, 500);
+        $svg .= $this->renderSigns($ascendantLon, $theme, $themeDir, $targetCx, $targetCy);
         $svg .= "    </g>\n";
 
         $svg .= "    <g class=\"chart-houses\">\n";
-        $svg .= $this->renderHouseLines($data->inner->houses, $ascendantLon, $theme, 500, 500);
+        $svg .= $this->renderHouseLines($data->inner->houses, $ascendantLon, $theme, $targetCx, $targetCy);
         $svg .= "    </g>\n";
 
         if (!empty($theme['axes']['showMarkers'])) {
             $svg .= "    <g class=\"chart-axes-inner\">\n";
-            $svg .= $this->renderAxisMarkers($data->inner->angles, $data->inner->houses, $ascendantLon, $theme, $themeDir, 500, 500, null, 'Interno');
+            $svg .= $this->renderAxisMarkers($data->inner->angles, $data->inner->houses, $ascendantLon, $theme, $themeDir, $targetCx, $targetCy, null, 'Interno');
             $svg .= "    </g>\n";
         }
 
         $svg .= "    <g class=\"chart-cross-aspects\">\n";
-        $svg .= $this->renderCrossAspectLines($data, $ascendantLon, $theme, 500, 500);
+        $svg .= $this->renderCrossAspectLines($data, $ascendantLon, $theme, $targetCx, $targetCy);
         $svg .= "    </g>\n";
 
         $innerRing = $theme['rings']['inner'] ?? [];
         $svg .= "    <g class=\"chart-planets-inner\">\n";
-        $svg .= $this->renderRingPlanets($data->inner->planets, $ascendantLon, $innerRing, $theme, $themeDir, 500, 500, 'inner');
+        $svg .= $this->renderRingPlanets($data->inner->planets, $ascendantLon, $innerRing, $theme, $themeDir, $targetCx, $targetCy, 'inner');
         $svg .= "    </g>\n";
 
         $outerRing = $theme['rings']['outer'] ?? [];
         $svg .= "    <g class=\"chart-planets-outer\">\n";
-        $svg .= $this->renderRingPlanets($data->outer->planets, $ascendantLon, $outerRing, $theme, $themeDir, 500, 500, 'outer');
+        $svg .= $this->renderRingPlanets($data->outer->planets, $ascendantLon, $outerRing, $theme, $themeDir, $targetCx, $targetCy, 'outer');
         $svg .= "    </g>\n";
 
         if (!empty($outerRing['showAngleMarkers']) && !empty($data->outer->angles)) {
             $svg .= "    <g class=\"chart-outer-angles\">\n";
-            $svg .= $this->renderOuterAngleMarkers($data->outer->angles, $data->outer->houses, $ascendantLon, $outerRing, $theme, $themeDir, 500, 500);
+            $svg .= $this->renderOuterAngleMarkers($data->outer->angles, $data->outer->houses, $ascendantLon, $outerRing, $theme, $themeDir, $targetCx, $targetCy);
             $svg .= "    </g>\n";
         }
 
         if (!empty($outerRing['showHouseTicks']) && !empty($data->outer->houses)) {
             $svg .= "    <g class=\"chart-outer-house-ticks\">\n";
-            $svg .= $this->renderOuterHouseTicks($data->outer->houses, $ascendantLon, $theme, 500, 500);
+            $svg .= $this->renderOuterHouseTicks($data->outer->houses, $ascendantLon, $theme, $targetCx, $targetCy);
             $svg .= "    </g>\n";
         }
 
@@ -266,7 +284,7 @@ class BiwheelChartSvgBuilder
                 };
                 $yRatio = ($logoYFrom === 'bottom') ? 'YMax' : 'YMin';
 
-                $svg .= "    <image data-logo href=\"{$logoUri}\" x=\"{$logoX}\" y=\"{$logoY}\" width=\"{$width}\" height=\"{$height}\" preserveAspectRatio=\"{$xRatio}{$yRatio} meet\" />\n";
+                $svg .= "    <image href=\"{$logoUri}\" x=\"{$logoX}\" y=\"{$logoY}\" width=\"{$width}\" height=\"{$height}\" preserveAspectRatio=\"{$xRatio}{$yRatio} meet\" />\n";
             }
         }
 
@@ -317,7 +335,7 @@ class BiwheelChartSvgBuilder
             return '';
         }
 
-        $radius = (float) ($theme['radii']['aspectsInnerRadius'] ?? 144);
+        $radius = (float) ($theme['radii']['aspectsInnerRadius'] ?? 115);
         $innerPoints = array_merge($data->inner->planets, $data->inner->angles);
         $outerPoints = array_merge($data->outer->planets, $data->outer->angles);
 
@@ -397,13 +415,13 @@ class BiwheelChartSvgBuilder
         $showDegrees = (bool) ($ringConfig['showDegrees'] ?? ($theme['planets']['showDegrees'] ?? true));
         $showRetrograde = (bool) ($ringConfig['showRetrograde'] ?? ($theme['planets']['showRetrograde'] ?? true));
 
-        $baseRadius = (float) ($ringConfig['planetsDistance'] ?? ($ringKey === 'outer' ? 447 : 240));
-        $pWidth = (float) ($ringConfig['planetWidth'] ?? 30);
-        $pHeight = (float) ($ringConfig['planetHeight'] ?? 30);
+        $baseRadius = (float) ($ringConfig['planetsDistance'] ?? ($ringKey === 'outer' ? 358 : 192));
+        $pWidth = (float) ($ringConfig['planetWidth'] ?? 26);
+        $pHeight = (float) ($ringConfig['planetHeight'] ?? 26);
         $ext = $theme['assets']['extension'] ?? 'svg';
 
-        $ticksInnerR = (float) ($ringConfig['ticksInnerRadius'] ?? ($ringKey === 'outer' ? 376 : 268));
-        $ticksOuterR = (float) ($ringConfig['ticksOuterRadius'] ?? ($ringKey === 'outer' ? 384 : 276));
+        $ticksInnerR = (float) ($ringConfig['ticksInnerRadius'] ?? ($ringKey === 'outer' ? 301 : 214));
+        $ticksOuterR = (float) ($ringConfig['ticksOuterRadius'] ?? ($ringKey === 'outer' ? 307 : 221));
 
         $defaultTickColor = $ringKey === 'outer' ? '#db2777' : '#0284c7';
         $tickColor = $ringConfig['tickColor'] ?? ($theme['ticks']['color'] ?? $defaultTickColor);
@@ -414,7 +432,7 @@ class BiwheelChartSvgBuilder
 
         $degFontSize = (float) ($ringConfig['degreeFontSize'] ?? 12);
         $minFontSize = max(6.5, $degFontSize - 2.0);
-        $degOffset = (float) ($ringConfig['degreeOffset'] ?? 24);
+        $degOffset = (float) ($ringConfig['degreeOffset'] ?? 22);
         $degMinSpace = (float) ($ringConfig['degreeMinuteSpace'] ?? 3);
 
         $isOutwardLabels = ($ringConfig['labelDirection'] ?? 'inward') === 'outward';
@@ -424,7 +442,7 @@ class BiwheelChartSvgBuilder
         $minRadius = $degRadius + ($dir * ($degFontSize + $degMinSpace));
 
         $minSeparation = (float) ($ringConfig['minSeparationDeg'] ?? ($ringKey === 'outer' ? 5.5 : 8.5));
-        $guideAnchorOffset = (float) ($ringConfig['guideAnchorOffset'] ?? ($ticksInnerR > $baseRadius ? 14.0 : -14.0));
+        $guideAnchorOffset = (float) ($ringConfig['guideAnchorOffset'] ?? ($ticksInnerR > $baseRadius ? 11.0 : -11.0));
 
         $planetGlyphs = $this->getDefaultPlanetGlyphs();
 
@@ -564,17 +582,17 @@ class BiwheelChartSvgBuilder
     ): string {
         $defaults = [
             'showMarkers'      => true,
-            'distance'         => 484,
+            'distance'         => 387,
             'mode'             => 'auto',
-            'imageWidth'       => 24,
-            'imageHeight'      => 24,
+            'imageWidth'       => 20,
+            'imageHeight'      => 20,
             'fontSize'         => 10,
             'fontWeight'       => 'bold',
             'color'            => '#db2777',
             'showTicks'        => true,
-            'ticksInnerRadius' => 464,
-            'ticksOuterRadius' => 474,
-            'tickStrokeWidth'  => 2.0,
+            'ticksInnerRadius' => 371,
+            'ticksOuterRadius' => 379,
+            'tickStrokeWidth'  => 1.6,
             'labels'           => [
                 'asc' => 'AC',
                 'dsc' => null,
@@ -592,6 +610,10 @@ class BiwheelChartSvgBuilder
     protected function renderOuterHouseTicks(array $houses, float $ascLon, array $theme, float $cx, float $cy): string
     {
         $fonts = ChartSvgBuilder::resolveFonts($theme);
+        $outerRing = $theme['rings']['outer'] ?? [];
+        $innerR = (float) ($outerRing['houseTicksInnerRadius'] ?? 373);
+        $outerR = (float) ($outerRing['houseTicksOuterRadius'] ?? 379);
+        $labelR = (float) ($outerRing['houseTicksLabelRadius'] ?? 385);
         $output = '';
 
         for ($i = 1; $i <= 12; $i++) {
@@ -600,9 +622,9 @@ class BiwheelChartSvgBuilder
             }
 
             $ang = $this->toDisplayAngle((float) $houses[$i]['longitude'], $ascLon);
-            $p1 = $this->polarToCartesian($ang, 466, $cx, $cy);
-            $p2 = $this->polarToCartesian($ang, 474, $cx, $cy);
-            $lbl = $this->polarToCartesian($ang + 2.0, 481, $cx, $cy);
+            $p1 = $this->polarToCartesian($ang, $innerR, $cx, $cy);
+            $p2 = $this->polarToCartesian($ang, $outerR, $cx, $cy);
+            $lbl = $this->polarToCartesian($ang + 2.0, $labelR, $cx, $cy);
 
             $output .= "    <line x1=\"{$p1['x']}\" y1=\"{$p1['y']}\" x2=\"{$p2['x']}\" y2=\"{$p2['y']}\" stroke=\"#94a3b8\" stroke-width=\"1\" stroke-dasharray=\"2,2\" />\n";
             $output .= "    <text x=\"{$lbl['x']}\" y=\"{$lbl['y']}\" font-size=\"8\" font-family=\"{$fonts['body']}\" fill=\"#94a3b8\" text-anchor=\"middle\" dominant-baseline=\"central\">{$i}</text>\n";

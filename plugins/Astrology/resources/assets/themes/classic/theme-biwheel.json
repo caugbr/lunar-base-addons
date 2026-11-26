@@ -2,7 +2,7 @@
   "name": "Clássico Bi-Wheel",
   "slug": "classic",
   "version": "1.0",
-  "description": "Tema bi-wheel para sobreposição de dois mapas.",
+  "description": "Tema Clássico bi-wheel para exibir dois mapas.",
 
   "canvas": {
     "viewBoxWidth": 1000,
@@ -20,7 +20,9 @@
     "wheel": {
       "centerX": 500,
       "centerY": 475,
-      "scale": 0.80
+      "width": 800,
+      "height": 800,
+      "scale": 0.6
     },
     "header": {
       "innerX": 50,
@@ -34,21 +36,21 @@
       "summaryWidth": 165
     },
     "footer": {
-      "text": "Mapa calculado via Lunar Base Astrology — Todos os direitos reservados."
+      "text": "Mapa calculado via Lunar Apps"
     }
   },
 
   "axes": {
     "showMarkers": true,
-    "distance": 468,
+    "distance": 400,
     "mode": "auto",
     "fontSize": 13,
     "fontWeight": "bold",
     "color": "#38bdf8",
     "showTicks": true,
-    "ticksInnerRadius": 448,
-    "ticksOuterRadius": 456,
-    "tickStrokeWidth": 2.0,
+    "ticksInnerRadius": 378,
+    "ticksOuterRadius": 385,
+    "tickStrokeWidth": 1.6,
     "labels": {
       "asc": "ASC",
       "dsc": "DSC",
@@ -83,8 +85,8 @@
   "bands": [
     {
       "name": "sign_segments",
-      "innerRadius": 296.25,
-      "outerRadius": 375,
+      "innerRadius": 237,
+      "outerRadius": 300,
       "opacity": 0.25,
       "eclipticOffset": 0,
       "colors": [
@@ -95,8 +97,8 @@
     },
     {
       "name": "inner_planets_bg",
-      "innerRadius": 145,
-      "outerRadius": 276.25,
+      "innerRadius": 116,
+      "outerRadius": 221,
       "opacity": 0.14,
       "eclipticOffset": 0,
       "colors": [
@@ -105,8 +107,8 @@
     },
     {
       "name": "outer_planets_bg",
-      "innerRadius": 400,
-      "outerRadius": 470,
+      "innerRadius": 320,
+      "outerRadius": 376,
       "opacity": 0.10,
       "eclipticOffset": 0,
       "colors": [
@@ -116,68 +118,75 @@
   ],
 
   "radii": {
-    "signsDistance": 335.6,
-    "housesInnerRadius": 145,
-    "housesOuterRadius": 276.25,
-    "aspectsInnerRadius": 144
+    "signsDistance": 268.5,
+    "housesInnerRadius": 116,
+    "housesOuterRadius": 221,
+    "aspectsInnerRadius": 115
   },
 
   "rings": {
     "inner": {
-      "planetsDistance": 240,
-      "ticksInnerRadius": 268,
-      "ticksOuterRadius": 276,
-      "guideAnchorOffset": 14,
-      "planetWidth": 30,
-      "planetHeight": 30,
-      "degreeFontSize": 13,
-      "degreeOffset": 26,
-      "degreeMinuteSpace": 3,
-      "retrogradeFontSize": 10,
-      "retrogradeRightGap": 8,
-      "retrogradeTopGap": -10,
-      "labelDirection": "inward",
-      "minSeparationDeg": 9.0
-    },
-    "outer": {
-      "planetsDistance": 447,
-      "ticksInnerRadius": 376,
-      "ticksOuterRadius": 384,
-      "guideAnchorOffset": -14,
-      "planetWidth": 28,
-      "planetHeight": 28,
-      "degreeFontSize": 11,
-      "degreeOffset": 24,
+      "planetsDistance": 192,
+      "ticksInnerRadius": 214,
+      "ticksOuterRadius": 221,
+      "guideAnchorOffset": 11,
+      "planetWidth": 26,
+      "planetHeight": 26,
+      "degreeFontSize": 12,
+      "degreeOffset": 22,
       "degreeMinuteSpace": 3,
       "retrogradeFontSize": 9.5,
       "retrogradeRightGap": 8,
       "retrogradeTopGap": -9,
       "labelDirection": "inward",
+      "minSeparationDeg": 9.0
+    },
+    "outer": {
+      "planetsDistance": 362,
+      "ticksInnerRadius": 311,
+      "ticksOuterRadius": 318,
+      "guideAnchorOffset": -11,
+      "planetWidth": 24,
+      "planetHeight": 24,
+      "degreeFontSize": 11,
+      "degreeOffset": 20,
+      "degreeMinuteSpace": 3,
+      "retrogradeFontSize": 9,
+      "retrogradeRightGap": 8,
+      "retrogradeTopGap": -8,
+      "labelDirection": "inward",
       "minSeparationDeg": 5.5,
       "showAngleMarkers": true,
-      "showHouseTicks": false
+      "showHouseTicks": false,
+      "angleMarkers": {
+        "distance": 394,
+        "ticksInnerRadius": 376,
+        "ticksOuterRadius": 384
+      }
     }
   },
 
   "dimensions": {
-    "signWidth": 42,
-    "signHeight": 42
+    "signWidth": 36,
+    "signHeight": 36
   },
 
   "houses": {
     "showLines": true,
     "strokeWidth": 1.0,
-    "axisStrokeWidth": 2.0,
+    "axisStrokeWidth": 1.8,
     "color": "#475569",
     "axisColor": "#38bdf8",
     "showNumbers": true,
-    "numberColor": "#64748b"
+    "numberColor": "#64748b",
+    "numberSize": 12,
+    "degSize": 10
   },
 
   "aspects": {
     "showLines": true,
     "showAngleLines": false,
     "showNodeLines": false,
-    "strokeWidth": 1.4
+    "strokeWidth": 1.2
   }
 }

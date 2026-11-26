@@ -88,7 +88,6 @@
                 <div class="admin-form-row">
                     <div class="form-group">
                         <label class="field-label" for="transit_date">Data do trânsito</label>
-                        {{-- <input type="date" name="transit_date" id="transit_date" class="form-input" value="{{ $transitDate }}"> --}}
                         <x-roller-picker
                             type="date"
                             id="transit_date"
@@ -101,7 +100,6 @@
                     </div>
                     <div class="form-group">
                         <label class="field-label" for="transit_time">Hora</label>
-                        {{-- <input type="time" name="transit_time" id="transit_time" class="form-input" value="{{ substr($transitTime, 0, 5) }}"> --}}
                         <x-roller-picker
                             type="time"
                             id="transit_time"

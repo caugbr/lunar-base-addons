@@ -34,9 +34,124 @@ class ElementsQualitiesSvgBuilder
         2 => ['id' => 'mutable',  'label' => 'MUTÁVEL', 'abbr' => 'MUT'],
     ];
 
+    // public function build(NatalChart $chart, array $theme, float $originX, float $originY): string
+    // {
+    //     $distribution = $this->calculateDistribution($chart, $theme);
+
+    //     $rowLabelWidth = 65.0;
+    //     $colWidth = 85.0;
+    //     $headerHeight = 26.0;
+    //     $rowHeight = 32.0;
+
+    //     $totalWidth = $rowLabelWidth + (3 * $colWidth);
+    //     $totalHeight = $headerHeight + (4 * $rowHeight);
+
+    //     $borderColor = $theme['houses']['color'] ?? '#94a3b8';
+    //     $borderWidth = 1.0;
+    //     $textColor = '#334155';
+    //     $mutedTextColor = '#64748b';
+
+    //     $svg = "  <g class=\"chart-elements-qualities\" transform=\"translate({$originX}, {$originY})\">\n";
+
+    //     // Borda externa da tabela
+    //     $svg .= "    <rect x=\"0\" y=\"0\" width=\"{$totalWidth}\" height=\"{$totalHeight}\" "
+    //          . "fill=\"none\" stroke=\"{$borderColor}\" stroke-width=\"{$borderWidth}\" />\n";
+
+    //     // Linha divisória horizontal do cabeçalho
+    //     $svg .= "    <line x1=\"0\" y1=\"{$headerHeight}\" x2=\"{$totalWidth}\" y2=\"{$headerHeight}\" "
+    //          . "stroke=\"{$borderColor}\" stroke-width=\"{$borderWidth}\" />\n";
+
+    //     // Linha divisória vertical da coluna de rótulos dos elementos
+    //     $svg .= "    <line x1=\"{$rowLabelWidth}\" y1=\"0\" x2=\"{$rowLabelWidth}\" y2=\"{$totalHeight}\" "
+    //          . "stroke=\"{$borderColor}\" stroke-width=\"{$borderWidth}\" />\n";
+
+    //     // Cabeçalhos de coluna (Modalidades + Totais)
+    //     for ($c = 0; $c < 3; $c++) {
+    //         $colX = $rowLabelWidth + ($c * $colWidth);
+
+    //         if ($c > 0) {
+    //             $svg .= "    <line x1=\"{$colX}\" y1=\"0\" x2=\"{$colX}\" y2=\"{$totalHeight}\" "
+    //                  . "stroke=\"{$borderColor}\" stroke-width=\"{$borderWidth}\" />\n";
+    //         }
+
+    //         $midX = $colX + ($colWidth / 2.0);
+    //         $midY = $headerHeight / 2.0;
+    //         $qualityMeta = $this->qualities[$c];
+    //         $count = $distribution['qualityTotals'][$c] ?? 0;
+    //         $headerText = htmlspecialchars("{$qualityMeta['abbr']} {$count}", ENT_QUOTES | ENT_XML1, 'UTF-8');
+
+    //         $svg .= "    <text x=\"{$midX}\" y=\"{$midY}\" font-size=\"10\" font-weight=\"bold\" "
+    //              . "font-family=\"sans-serif\" fill=\"{$textColor}\" text-anchor=\"middle\" dominant-baseline=\"central\">\n";
+    //         $svg .= "      {$headerText}\n";
+    //         $svg .= "    </text>\n";
+    //     }
+
+    //     // Linhas de dados (Elementos + Totais + Células)
+    //     for ($r = 0; $r < 4; $r++) {
+    //         $rowY = $headerHeight + ($r * $rowHeight);
+
+    //         if ($r > 0) {
+    //             $svg .= "    <line x1=\"0\" y1=\"{$rowY}\" x2=\"{$totalWidth}\" y2=\"{$rowY}\" "
+    //                  . "stroke=\"{$borderColor}\" stroke-width=\"{$borderWidth}\" />\n";
+    //         }
+
+    //         // Rótulo do elemento na primeira coluna
+    //         $elementMeta = $this->elements[$r];
+    //         $rowCount = $distribution['elementTotals'][$r] ?? 0;
+    //         $rowLabelText = htmlspecialchars("{$elementMeta['abbr']} {$rowCount}", ENT_QUOTES | ENT_XML1, 'UTF-8');
+    //         $labelMidY = $rowY + ($rowHeight / 2.0);
+
+    //         $svg .= "    <text x=\"10\" y=\"{$labelMidY}\" font-size=\"10\" font-weight=\"bold\" "
+    //              . "font-family=\"sans-serif\" fill=\"{$textColor}\" text-anchor=\"start\" dominant-baseline=\"central\">\n";
+    //         $svg .= "      {$rowLabelText}\n";
+    //         $svg .= "    </text>\n";
+
+    //         // Células com os corpos celestes
+    //         for ($c = 0; $c < 3; $c++) {
+    //             $cellX = $rowLabelWidth + ($c * $colWidth);
+    //             $cellPoints = $distribution['matrix'][$r][$c] ?? [];
+    //             $pointCount = count($cellPoints);
+
+    //             if ($pointCount === 0) {
+    //                 continue;
+    //             }
+
+    //             $iconSize = 16.0;
+    //             $spacing = 3.0;
+    //             $itemsTotalWidth = ($pointCount * $iconSize) + (($pointCount - 1) * $spacing);
+
+    //             // Centraliza os ícones horizontalmente dentro da célula
+    //             $startX = $cellX + max(6.0, ($colWidth - $itemsTotalWidth) / 2.0);
+    //             $itemCenterY = $rowY + ($rowHeight / 2.0);
+
+    //             foreach ($cellPoints as $idx => $pt) {
+    //                 $itemX = $startX + ($idx * ($iconSize + $spacing));
+    //                 $titleText = htmlspecialchars("{$pt['label']} em {$pt['signName']}", ENT_QUOTES | ENT_XML1, 'UTF-8');
+
+    //                 $svg .= "    <g transform=\"translate({$itemX}, " . ($itemCenterY - ($iconSize / 2.0)) . ")\">\n";
+    //                 $svg .= "      <title>{$titleText}</title>\n";
+
+    //                 if (!empty($pt['iconUri'])) {
+    //                     $svg .= "      <image href=\"{$pt['iconUri']}\" x=\"0\" y=\"0\" width=\"{$iconSize}\" height=\"{$iconSize}\" />\n";
+    //                 } else {
+    //                     $escapedGlyph = htmlspecialchars($pt['glyph'], ENT_QUOTES | ENT_XML1, 'UTF-8');
+    //                     $svg .= "      <text x=\"" . ($iconSize / 2.0) . "\" y=\"" . ($iconSize / 2.0) . "\" font-size=\"10\" font-weight=\"bold\" "
+    //                          . "font-family=\"sans-serif\" fill=\"{$textColor}\" text-anchor=\"middle\" dominant-baseline=\"central\">{$escapedGlyph}</text>\n";
+    //                 }
+
+    //                 $svg .= "    </g>\n";
+    //             }
+    //         }
+    //     }
+
+    //     $svg .= "  </g>\n";
+
+    //     return $svg;
+    // }
     public function build(NatalChart $chart, array $theme, float $originX, float $originY): string
     {
         $distribution = $this->calculateDistribution($chart, $theme);
+        $fonts = ChartSvgBuilder::resolveFonts($theme);
 
         $rowLabelWidth = 65.0;
         $colWidth = 85.0;
@@ -46,12 +161,34 @@ class ElementsQualitiesSvgBuilder
         $totalWidth = $rowLabelWidth + (3 * $colWidth);
         $totalHeight = $headerHeight + (4 * $rowHeight);
 
-        $borderColor = $theme['houses']['color'] ?? '#94a3b8';
-        $borderWidth = 1.0;
-        $textColor = '#334155';
-        $mutedTextColor = '#64748b';
+        $eqCfg = $theme['layout']['elementsQualities'] ?? [];
+        $eqCfg = is_array($eqCfg) ? $eqCfg : [];
+
+        $esc = fn (string $v): string => htmlspecialchars($v, ENT_QUOTES | ENT_XML1, 'UTF-8');
+
+        $borderColor     = $esc((string) ($eqCfg['borderColor'] ?? ($theme['houses']['color'] ?? '#94a3b8')));
+        $borderWidth     = 1.0;
+        $bgColor         = $esc((string) ($eqCfg['backgroundColor'] ?? 'none'));
+        $headerBgColor   = $esc((string) ($eqCfg['headerBackgroundColor'] ?? 'none'));
+        $textColor       = $esc((string) ($eqCfg['textColor'] ?? '#334155'));
+        $headerTextColor = $esc((string) ($eqCfg['headerTextColor'] ?? $textColor));
+        $rowHeaderBg     = $esc((string) ($eqCfg['rowHeaderBackgroundColor'] ?? 'none'));
+        $rowHeaderText   = $esc((string) ($eqCfg['rowHeaderTextColor'] ?? $headerTextColor));
 
         $svg = "  <g class=\"chart-elements-qualities\" transform=\"translate({$originX}, {$originY})\">\n";
+
+        // Fundos (desenhados antes das bordas para não cobrir as linhas)
+        if ($bgColor !== 'none' && $bgColor !== 'transparent') {
+            $svg .= "    <rect x=\"0\" y=\"0\" width=\"{$totalWidth}\" height=\"{$totalHeight}\" fill=\"{$bgColor}\" stroke=\"none\" />\n";
+        }
+
+        if ($headerBgColor !== 'none' && $headerBgColor !== 'transparent') {
+            $svg .= "    <rect x=\"0\" y=\"0\" width=\"{$totalWidth}\" height=\"{$headerHeight}\" fill=\"{$headerBgColor}\" stroke=\"none\" />\n";
+        }
+
+        if ($rowHeaderBg !== 'none' && $rowHeaderBg !== 'transparent') {
+            $svg .= "    <rect x=\"0\" y=\"{$headerHeight}\" width=\"{$rowLabelWidth}\" height=\"" . ($totalHeight - $headerHeight) . "\" fill=\"{$rowHeaderBg}\" stroke=\"none\" />\n";
+        }
 
         // Borda externa da tabela
         $svg .= "    <rect x=\"0\" y=\"0\" width=\"{$totalWidth}\" height=\"{$totalHeight}\" "
@@ -81,7 +218,7 @@ class ElementsQualitiesSvgBuilder
             $headerText = htmlspecialchars("{$qualityMeta['abbr']} {$count}", ENT_QUOTES | ENT_XML1, 'UTF-8');
 
             $svg .= "    <text x=\"{$midX}\" y=\"{$midY}\" font-size=\"10\" font-weight=\"bold\" "
-                 . "font-family=\"sans-serif\" fill=\"{$textColor}\" text-anchor=\"middle\" dominant-baseline=\"central\">\n";
+                 . "font-family=\"{$fonts['body']}\" fill=\"{$headerTextColor}\" text-anchor=\"middle\" dominant-baseline=\"central\">\n";
             $svg .= "      {$headerText}\n";
             $svg .= "    </text>\n";
         }
@@ -102,7 +239,7 @@ class ElementsQualitiesSvgBuilder
             $labelMidY = $rowY + ($rowHeight / 2.0);
 
             $svg .= "    <text x=\"10\" y=\"{$labelMidY}\" font-size=\"10\" font-weight=\"bold\" "
-                 . "font-family=\"sans-serif\" fill=\"{$textColor}\" text-anchor=\"start\" dominant-baseline=\"central\">\n";
+                 . "font-family=\"{$fonts['body']}\" fill=\"{$rowHeaderText}\" text-anchor=\"start\" dominant-baseline=\"central\">\n";
             $svg .= "      {$rowLabelText}\n";
             $svg .= "    </text>\n";
 
@@ -136,7 +273,7 @@ class ElementsQualitiesSvgBuilder
                     } else {
                         $escapedGlyph = htmlspecialchars($pt['glyph'], ENT_QUOTES | ENT_XML1, 'UTF-8');
                         $svg .= "      <text x=\"" . ($iconSize / 2.0) . "\" y=\"" . ($iconSize / 2.0) . "\" font-size=\"10\" font-weight=\"bold\" "
-                             . "font-family=\"sans-serif\" fill=\"{$textColor}\" text-anchor=\"middle\" dominant-baseline=\"central\">{$escapedGlyph}</text>\n";
+                             . "font-family=\"{$fonts['body']}\" fill=\"{$textColor}\" text-anchor=\"middle\" dominant-baseline=\"central\">{$escapedGlyph}</text>\n";
                     }
 
                     $svg .= "    </g>\n";

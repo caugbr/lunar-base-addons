@@ -6,7 +6,7 @@ use Plugins\Astrology\Http\Controllers\BiwheelChartController;
 use Plugins\Astrology\Http\Controllers\PublicChartController;
 
 // Rotas Administrativas
-Route::middleware(['web', 'auth', 'role:admin,editor'])
+Route::middleware(['web', 'auth', 'role:admin,editor,astrologer', 'permission:manage-charts'])
     ->prefix('admin/astrology')
     ->name('admin.astrology.')
     ->group(function () {
@@ -57,4 +57,8 @@ Route::middleware(['web'])
         // Endpoint JSON para componentes Vue/AJAX consumirem os dados do mapa
         Route::get('api/chart/{chart:slug}', [NatalChartController::class, 'apiData'])
             ->name('api.chart');
+
+        Route::match(['get', 'post'], 'calculadora/clock', [PublicChartController::class, 'astroClock'])
+            ->middleware('throttle:20,1')
+            ->name('calculator.sky-now');
     });

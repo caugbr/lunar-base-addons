@@ -5,6 +5,7 @@ namespace Plugins\Astrology;
 use App\Helpers\ContentHelper;
 use Illuminate\Support\ServiceProvider;
 use Plugins\Astrology\Models\NatalChart;
+use Plugins\Astrology\Console\Commands\SyncThemesCommand;
 
 class AstrologyServiceProvider extends ServiceProvider
 {
@@ -92,13 +93,22 @@ class AstrologyServiceProvider extends ServiceProvider
             'role'   => 'admin',
         ]);
 
-        // \App\Support\AdminMenu::addSubItem('Mapas Astrais', [
-        //     'label'  => 'Sobreposição (Bi-Wheel)',
-        //     'icon'   => 'layers',
-        //     'route'  => 'admin.astrology.biwheel.index',
-        //     'active' => 'admin.astrology.biwheel.*',
-        //     'role'   => 'admin',
-        // ]);
+        addRole(
+            slug: 'astrologer',
+            name: 'Astrólogo',
+            description: 'Gerencia mapas e pode ter seus próprios temas.',
+            permissions: [ 'view-dashboard', 'manage-charts' ]
+        );
+
+        addPermission('manage-charts', 'Gerenciar mapas astrológicos');
+        assignPermissionsToRole('admin', 'manage-charts');
+
+        // Comando artisan para sincronizar temas e themes.json
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                SyncThemesCommand::class,
+            ]);
+        }
 
         // Registra o componente da grade triangular de aspectos
         \Illuminate\Support\Facades\Blade::component('astrology::components.aspect-grid', 'astrology-aspect-grid');

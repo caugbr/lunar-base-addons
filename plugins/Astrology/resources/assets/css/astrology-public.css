@@ -38,8 +38,8 @@
 
 .aspect-grid-table {
     border-collapse: collapse;
-    background: var(--color-bg-dark, #12152B);
-    border: 1px solid var(--color-border, rgba(200, 182, 255, 0.12));
+    /* background: var(--color-bg-dark, #12152B);
+    border: 1px solid var(--color-border, rgba(200, 182, 255, 0.12)); */
     margin: 0 auto;
 }
 
@@ -220,7 +220,7 @@
 }
 
 .astro-calc-title {
-    margin: 0 0 var(--space-xs, 0.5rem);
+    margin: var(--space-2xl) 0 var(--space-xs, 0.5rem);
     font-family: var(--font-heading, Georgia, serif);
     font-size: var(--font-size-6xl, 2.5rem);
     font-weight: 700;
@@ -281,14 +281,56 @@
 /* Abas de seleção */
 .astro-calc-tabs {
     display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-xs, 0.5rem);
+    justify-content: space-between;
     border-bottom: 1px solid var(--color-border, rgba(200, 182, 255, 0.12));
     padding-bottom: var(--space-md, 1rem);
     margin-bottom: var(--space-lg, 1.5rem);
 }
 
-.astro-calc-tab {
+.astro-calc-tabs .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs, 0.5rem);
+}
+
+.astro-calc-card .info-title {
+    display: none;
+    font-size: 1.2em;
+}
+
+.astro-calc-tabs .astro-tabs-toggle .expand {
+    display: inline-block;
+}
+
+.astro-calc-tabs .astro-tabs-toggle .shrink {
+    display: none;
+}
+
+.astro-calc-card.collapsed .astro-tabs-toggle .shrink {
+    display: inline-block;
+}
+
+.astro-calc-card.collapsed .astro-tabs-toggle .expand {
+    display: none;
+}
+
+.astro-calc-card.collapsed .astro-calc-section,
+.astro-calc-card.collapsed .astro-calc-tab,
+.astro-calc-card.collapsed .astro-calc-actions {
+    display: none;
+}
+
+.astro-calc-card.collapsed .info-title {
+    display: block;
+}
+
+.astro-calc-card.collapsed .astro-calc-tabs {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border: 0;
+}
+
+.astro-calc-tab, .astro-tabs-toggle {
     appearance: none;
     background: var(--color-bg-dark, #12152B);
     border: 1px solid var(--color-border, rgba(200, 182, 255, 0.12));
@@ -614,10 +656,19 @@
     box-shadow: 0 6px 24px rgba(123, 95, 199, 0.1);
 }
 
+.chart-message {
+    margin: 0 auto var(--space-lg, 1.5rem);
+    text-align: center;
+}
+
 .astro-calc-tables-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--space-lg, 1.5rem);
+}
+
+.astro-calc-tables-grid > :only-child {
+    grid-column: 1 / -1;
 }
 
 .astro-calc-table-title {
@@ -705,9 +756,9 @@ span.astrology-position-inline img {
     background: rgba(255, 255, 255, 0.88);
     border-radius: 4px;
     padding: 1px;
-    width: 30px;
+    width: 24px;
     vertical-align: middle;
-    margin-right: 0.5rem;
+    margin: 0 0.4rem;
 }
 
 [data-theme="light"] .astro-calc .astrology-sign-img,

@@ -116,43 +116,62 @@ class ChartSvgBuilder
         $svg .= $this->renderHeader($chart, $theme, $themeDir);
 
         $wheelConfig = $theme['layout']['wheel'] ?? [];
-        $targetCx = (float) ($wheelConfig['centerX'] ?? 500);
+        $targetCx = (float) ($wheelConfig['centerX'] ?? ($vbWidth / 2));
         $targetCy = (float) ($wheelConfig['centerY'] ?? 530);
-        $scale = (float) ($wheelConfig['scale'] ?? 0.85);
 
-        $svg .= "  <!-- Mandala Central Escalada -->\n";
-        $svg .= "  <g id=\"mandala-wheel\" transform=\"translate({$targetCx}, {$targetCy}) scale({$scale}) translate(-500, -500)\">\n";
+        // Padrão com margem de respiro ao redor da mandala (80% do menor lado do papel)
+        $defaultSize = min($vbWidth, $vbHeight) * 0.8;
+
+        if (isset($wheelConfig['margin'])) {
+            $defaultSize = max(100, min($vbWidth, $vbHeight) - ((float) $wheelConfig['margin'] * 2.0));
+        } elseif (
+            isset($wheelConfig['scale'])
+            && !isset($wheelConfig['width'], $wheelConfig['height'], $wheelConfig['size'])
+        ) {
+            // Compatibilidade opcional caso algum tema antigo ainda defina apenas "scale"
+            $defaultSize = 1000.0 * (float) $wheelConfig['scale'];
+        }
+
+        $baseWidth  = (float) ($wheelConfig['width']  ?? $wheelConfig['size'] ?? $defaultSize);
+        $baseHeight = (float) ($wheelConfig['height'] ?? $wheelConfig['size'] ?? $defaultSize);
+
+        // Centraliza apenas a imagem da mandala em (targetCx, targetCy)
+        $baseX = $targetCx - ($baseWidth / 2.0);
+        $baseY = $targetCy - ($baseHeight / 2.0);
+
+        $svg .= "  <!-- Mandala Central -->\n";
+        $svg .= "  <g id=\"mandala-wheel\">\n";
 
         if (!empty($theme['bands']) && is_array($theme['bands'])) {
             $svg .= "    <g class=\"chart-bands\">\n";
-            $svg .= $this->renderBands($theme['bands'], $ascendantLon, 500, 500);
+            $svg .= $this->renderBands($theme['bands'], $ascendantLon, $targetCx, $targetCy);
             $svg .= "    </g>\n";
         }
 
         if ($baseDataUri) {
-            $svg .= "    <image href=\"{$baseDataUri}\" x=\"0\" y=\"0\" width=\"1000\" height=\"1000\" />\n";
+            $svg .= "    <image href=\"{$baseDataUri}\" x=\"{$baseX}\" y=\"{$baseY}\" width=\"{$baseWidth}\" height=\"{$baseHeight}\" preserveAspectRatio=\"xMidYMid meet\" />\n";
         }
 
         $svg .= "    <g class=\"chart-signs\">\n";
-        $svg .= $this->renderSigns($ascendantLon, $theme, $themeDir, 500, 500);
+        $svg .= $this->renderSigns($ascendantLon, $theme, $themeDir, $targetCx, $targetCy);
         $svg .= "    </g>\n";
 
         $svg .= "    <g class=\"chart-houses\">\n";
-        $svg .= $this->renderHouseLines($houses, $ascendantLon, $theme, 500, 500);
+        $svg .= $this->renderHouseLines($houses, $ascendantLon, $theme, $targetCx, $targetCy);
         $svg .= "    </g>\n";
 
         if (!empty($theme['axes']['showMarkers'])) {
             $svg .= "    <g class=\"chart-axes\">\n";
-            $svg .= $this->renderAxisMarkers($angles, $houses, $ascendantLon, $theme, $themeDir, 500, 500);
+            $svg .= $this->renderAxisMarkers($angles, $houses, $ascendantLon, $theme, $themeDir, $targetCx, $targetCy);
             $svg .= "    </g>\n";
         }
 
         $svg .= "    <g class=\"chart-aspects\">\n";
-        $svg .= $this->renderAspectLines($aspects, $planets, $angles, $ascendantLon, $theme, 500, 500);
+        $svg .= $this->renderAspectLines($aspects, $planets, $angles, $ascendantLon, $theme, $targetCx, $targetCy);
         $svg .= "    </g>\n";
 
         $svg .= "    <g class=\"chart-planets\">\n";
-        $svg .= $this->renderPlanets($planets, $ascendantLon, $theme, $themeDir, 500, 500);
+        $svg .= $this->renderPlanets($planets, $ascendantLon, $theme, $themeDir, $targetCx, $targetCy);
         $svg .= "    </g>\n";
 
         $svg .= "  </g>\n";
@@ -218,10 +237,14 @@ class ChartSvgBuilder
                 default            => 'start',
             };
 
+            $infoFooterLine = ($chart->house_system && $chart->house_system !== 'none')
+                ? "{$location} | Casas: {$houseSystem}"
+                : $location;
+
             $svg .= "    <text x=\"{$infoX}\" y=\"{$infoY}\" font-size=\"{$fontSize}\" font-family=\"{$fonts['body']}\" fill=\"{$color}\" text-anchor=\"{$textAnchor}\">\n";
             $svg .= "        <tspan x=\"{$infoX}\" dy=\"0\" font-weight=\"bold\" font-family=\"{$fonts['heading']}\">{$name}</tspan>\n";
             $svg .= "        <tspan x=\"{$infoX}\" dy=\"1.7em\" font-size=\"{$subFontSize}\" fill-opacity=\"0.8\">{$date} ({$timezone})</tspan>\n";
-            $svg .= "        <tspan x=\"{$infoX}\" dy=\"1.4em\" font-size=\"{$subFontSize}\" fill-opacity=\"0.8\">{$location} | Casas: {$houseSystem}</tspan>\n";
+            $svg .= "        <tspan x=\"{$infoX}\" dy=\"1.4em\" font-size=\"{$subFontSize}\" fill-opacity=\"0.8\">{$infoFooterLine}</tspan>\n";
             $svg .= "    </text>\n";
         }
 
@@ -275,7 +298,7 @@ class ChartSvgBuilder
                 };
                 $yRatio = ($logoYFrom === 'bottom') ? 'YMax' : 'YMin';
 
-                $svg .= "    <image data-logo href=\"{$logoUri}\" x=\"{$logoX}\" y=\"{$logoY}\" width=\"{$width}\" height=\"{$height}\" preserveAspectRatio=\"{$xRatio}{$yRatio} meet\" />\n";
+                $svg .= "    <image href=\"{$logoUri}\" x=\"{$logoX}\" y=\"{$logoY}\" width=\"{$width}\" height=\"{$height}\" preserveAspectRatio=\"{$xRatio}{$yRatio} meet\" />\n";
             }
         }
 

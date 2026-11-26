@@ -21,7 +21,8 @@
     "wheel": {
       "centerX": 500,
       "centerY": 500,
-      "scale": 0.85
+      "width": 850,
+      "height": 850
     },
     "aspectGrid": {
       "x": 50,
@@ -39,15 +40,15 @@
 
   "axes": {
     "showMarkers": true,
-    "distance": 468,
+    "distance": 428,
     "mode": "auto",
-    "fontSize": 13,
+    "fontSize": 14,
     "fontWeight": "bold",
     "color": "#38bdf8",
     "showTicks": true,
-    "ticksInnerRadius": 448,
-    "ticksOuterRadius": 456,
-    "tickStrokeWidth": 2.0,
+    "ticksInnerRadius": 381,
+    "ticksOuterRadius": 410,
+    "tickStrokeWidth": 1.8,
     "labels": {
       "asc": "ASC",
       "dsc": "DSC",
@@ -86,8 +87,8 @@
   "bands": [
     {
       "name": "sign_segments",
-      "innerRadius": 366,
-      "outerRadius": 448,
+      "innerRadius": 311,
+      "outerRadius": 381,
       "opacity": 0.25,
       "eclipticOffset": 0,
       "colors": [
@@ -98,8 +99,8 @@
     },
     {
       "name": "planets_bg",
-      "innerRadius": 142,
-      "outerRadius": 346,
+      "innerRadius": 121,
+      "outerRadius": 294,
       "opacity": 0.15,
       "eclipticOffset": 0,
       "colors": [
@@ -109,43 +110,45 @@
   ],
 
   "radii": {
-    "signsDistance": 405,
-    "ticksDistance": 345,
-    "ticksLength": 8,
-    "planetsDistance": 310,
-    "housesInnerRadius": 145,
-    "housesOuterRadius": 360,
-    "aspectsInnerRadius": 144
+    "signsDistance": 344,
+    "ticksDistance": 293,
+    "ticksLength": 7,
+    "planetsDistance": 264,
+    "housesInnerRadius": 123,
+    "housesOuterRadius": 295,
+    "aspectsInnerRadius": 122
   },
 
   "houses": {
     "showLines": true,
     "strokeWidth": 1.0,
-    "axisStrokeWidth": 2.0,
+    "axisStrokeWidth": 1.8,
     "color": "#475569",
     "axisColor": "#38bdf8",
     "showNumbers": true,
-    "numberColor": "#64748b"
+    "numberColor": "#64748b",
+    "numberSize": 13,
+    "degSize": 10
   },
 
   "dimensions": {
-    "signWidth": 48,
-    "signHeight": 48,
-    "planetWidth": 38,
-    "planetHeight": 38,
-    "planetDegreeFontSize": 18,
-    "planetDegreeOffset": 35,
-    "retrogradeFontSize": 12,
+    "signWidth": 42,
+    "signHeight": 42,
+    "planetWidth": 34,
+    "planetHeight": 34,
+    "planetDegreeFontSize": 15,
+    "planetDegreeOffset": 29,
+    "retrogradeFontSize": 11,
     "retrogradeRightGap": 10,
-    "retrogradeTopGap": -12,
-    "degreeMinuteSpace": 5
+    "retrogradeTopGap": -11,
+    "degreeMinuteSpace": 4
   },
 
   "aspects": {
     "showLines": true,
     "showAngleLines": false,
     "showNodeLines": false,
-    "strokeWidth": 1.5,
+    "strokeWidth": 1.3,
     "colors": {
       "conjunction": "#38bdf8",
       "opposition": "#ef4444",

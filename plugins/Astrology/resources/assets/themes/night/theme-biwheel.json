@@ -1,0 +1,113 @@
+{
+  "name": "Old Bi-Wheel",
+  "slug": "old",
+  "version": "1.0",
+  "description": "Versão bi-wheel do tema antigo com sobreposição externa.",
+
+  "layout": {
+    "wheel": {
+      "centerX": 500,
+      "centerY": 630,
+      "width": 660,
+      "height": 660
+    },
+    "crossAspectGrid": false,
+    "header": {
+      "innerX": "50%",
+      "innerY": 45,
+      "outerX": "50%",
+      "outerY": 130,
+      "align": "center"
+    }
+  },
+
+  "assets": {
+    "base": "base.svg"
+  },
+
+  "bands": [
+    {
+      "name": "aspect_line",
+      "innerRadius": 131,
+      "outerRadius": 132,
+      "opacity": 0.5,
+      "eclipticOffset": 0,
+      "colors": ["#333333"]
+    }
+  ],
+
+  "radii": {
+    "signsDistance": 271,
+    "housesInnerRadius": 132,
+    "housesOuterRadius": 348,
+    "aspectsInnerRadius": 132
+  },
+
+  "axes": {
+    "showMarkers": true,
+    "ticksOuterRadius": 304
+  },
+
+  "dimensions": {
+    "signWidth": 36,
+    "signHeight": 36
+  },
+
+  "houses": {
+    "numberSize": 12,
+    "degSize": 11
+  },
+
+  "rings": {
+    "inner": {
+      "planetsDistance": 194,
+      "ticksInnerRadius": 213,
+      "ticksOuterRadius": 223,
+      "tickColor": "#4a3110",
+      "guideAnchorOffset": 10,
+      "planetWidth": 24,
+      "planetHeight": 24,
+      "degreeFontSize": 11,
+      "degreeOffset": 18,
+      "degreeMinuteSpace": 2,
+      "retrogradeFontSize": 9,
+      "retrogradeRightGap": 9,
+      "retrogradeTopGap": -9,
+      "labelDirection": "inward",
+      "minSeparationDeg": 9.5,
+      "showAngleMarkers": true
+    },
+    "outer": {
+      "planetsDistance": 366,
+      "ticksInnerRadius": 325,
+      "ticksOuterRadius": 330,
+      "tickColor": "#7c2d12",
+      "guideAnchorOffset": -10,
+      "planetWidth": 24,
+      "planetHeight": 24,
+      "degreeFontSize": 10,
+      "degreeOffset": 17,
+      "degreeMinuteSpace": 2,
+      "retrogradeFontSize": 9,
+      "retrogradeRightGap": 9,
+      "retrogradeTopGap": -9,
+      "labelDirection": "inward",
+      "minSeparationDeg": 6.0,
+      "showAngleMarkers": true,
+      "showHouseTicks": false,
+      "angleMarkers": {
+        "distance": 399,
+        "fontSize": 13,
+        "color": "#4a3110",
+        "ticksInnerRadius": 326,
+        "ticksOuterRadius": 386,
+        "labels": {
+          "asc": "ASC",
+          "dsc": "DSC",
+          "mc": "MC",
+          "ic": "FC"
+        }
+      }
+    }
+  }
+}

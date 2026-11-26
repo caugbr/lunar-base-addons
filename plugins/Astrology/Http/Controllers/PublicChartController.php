@@ -24,12 +24,12 @@ class PublicChartController extends Controller
     public function index(Request $request)
     {
         $now = Carbon::now('America/Sao_Paulo');
-        $availableThemes = ThemeManager::getThemes();
+        $availableThemes = ThemeManager::getPublicThemes($request->user());
         $publicLayout = $this->resolvePublicLayout();
         $defaultTheme = $this->resolvePublicTheme($availableThemes);
 
         $defaults = [
-            'mode'              => in_array($request->query('mode'), ['natal', 'transit', 'solar_return', 'synastry'], true)
+            'mode'              => in_array($request->query('mode'), ['natal', 'transit', 'solar_return', 'synastry', 'sky_now'], true)
                 ? $request->query('mode')
                 : 'natal',
             'name'              => '',
@@ -149,8 +149,46 @@ class PublicChartController extends Controller
         BiwheelChartSvgBuilder $biwheelBuilder
     ) {
         $mode = $request->input('mode', 'natal');
-        if (!in_array($mode, ['natal', 'transit', 'solar_return', 'synastry'], true)) {
+        if (!in_array($mode, ['natal', 'transit', 'solar_return', 'synastry', 'sky_now'], true)) {
             $mode = 'natal';
+        }
+
+        if ($mode === 'sky_now') {
+            $validated = $request->validate([
+                'mode'  => 'required|in:sky_now',
+                'theme' => 'nullable|string|max:80',
+            ]);
+
+            $availableThemes = ThemeManager::getPublicThemes($request->user());
+            $defaultTheme = $this->resolvePublicTheme($availableThemes);
+            $themeSlug = !empty($validated['theme']) ? (string) $validated['theme'] : $defaultTheme;
+            if (!isset($availableThemes[$themeSlug])) {
+                $themeSlug = $defaultTheme;
+            }
+
+            try {
+                $payload = $this->buildSkyNowPayload($themeSlug, $calculationService, $svgBuilder);
+            } catch (Throwable $e) {
+                return back()
+                    ->withInput()
+                    ->with('astrology_error', 'Não foi possível calcular o céu de agora neste momento: ' . $e->getMessage());
+            }
+
+            $payload['mode'] = 'sky_now';
+            $payload['include_outer_angles'] = false;
+            $payload['theme'] = $themeSlug;
+            $payload['inputs'] = array_merge($request->only([
+                'name', 'birth_date', 'birth_time', 'city', 'latitude', 'longitude', 'timezone', 'house_system',
+            ]), [
+                'mode'         => 'sky_now',
+                'unknown_time' => $request->boolean('unknown_time'),
+                'theme'        => $themeSlug,
+            ]);
+
+            $token = Str::random(32);
+            Cache::put(self::CACHE_PREFIX . $token, $payload, now()->addMinutes(90));
+
+            return redirect()->route('astrology.calculator.index', ['r' => $token]);
         }
 
         $rules = [
@@ -212,9 +250,9 @@ class PublicChartController extends Controller
 
         $validated = $request->validate($rules, $messages);
 
-        $themeSlug = (string) ($validated['theme'] ?? 'classic');
-        $availableThemes = ThemeManager::getThemes();
+        $availableThemes = ThemeManager::getPublicThemes($request->user());
         $defaultTheme = $this->resolvePublicTheme($availableThemes);
+        $themeSlug = !empty($validated['theme']) ? (string) $validated['theme'] : $defaultTheme;
         if (!isset($availableThemes[$themeSlug])) {
             $themeSlug = $defaultTheme;
         }
@@ -803,6 +841,83 @@ class PublicChartController extends Controller
         ];
     }
 
+    protected function buildSkyNowPayload(
+        string $themeSlug,
+        ChartCalculationService $calculationService,
+        ChartSvgBuilder $svgBuilder
+    ): array {
+        $timezone = 'America/Sao_Paulo';
+        $now = Carbon::now($timezone);
+        $date = $now->format('Y-m-d');
+        $time = $now->format('H:i');
+
+        $chartData = $calculationService->calculateEphemeral([
+            'date'           => $date,
+            'time'           => $time,
+            'timezone'       => $timezone,
+            'latitude'       => 0.0,
+            'longitude'      => 0.0,
+            'house_system'   => 'whole_sign',
+            'aspects'        => true,
+            'include_minors' => false,
+            'orb_general'    => 6.0,
+            'orb_luminaries' => 10.0,
+        ]);
+
+        $chartData['houses'] = [];
+        $chartData['angles'] = [];
+
+        if (!empty($chartData['planets']) && is_array($chartData['planets'])) {
+            foreach ($chartData['planets'] as &$planet) {
+                unset($planet['house']);
+            }
+            unset($planet);
+        }
+
+        $angleKeys = ['Ascendant', 'MC', 'Descendant', 'Imum Coeli'];
+        $chartData['aspects'] = array_values(array_filter(
+            $chartData['aspects'] ?? [],
+            fn (array $asp) => !in_array($asp['point1'] ?? '', $angleKeys, true)
+                && !in_array($asp['point2'] ?? '', $angleKeys, true)
+        ));
+
+        $summary = $calculationService->extractSummarySigns($chartData);
+
+        $attributes = [
+            'name'           => 'Céu de Agora',
+            'slug'           => 'ceu-de-agora-' . $now->format('Y-m-d-Hi'),
+            'birth_date'     => $date,
+            'birth_time'     => $time,
+            'timezone'       => $timezone,
+            'city'           => 'Posição Geocêntrica (Sem Casas)',
+            'latitude'       => 0.0,
+            'longitude'      => 0.0,
+            'house_system'   => 'none',
+            'include_minors' => false,
+            'orb_general'    => 6.0,
+            'orb_luminaries' => 10.0,
+            'status'         => 'completed',
+            'sun_sign'       => $summary['sun_sign'],
+            'moon_sign'      => $summary['moon_sign'],
+            'ascendant_sign' => null,
+            'chart_data'     => $chartData,
+        ];
+
+        $chart = new NatalChart($attributes);
+        $svg = $svgBuilder->build($chart, $themeSlug);
+
+        return [
+            'view_type'        => 'single',
+            'hide_houses'      => true,
+            'title'            => 'Céu de Agora',
+            'subtitle'         => $now->format('d/m/Y \à\s H:i') . " ({$timezone}) — Sem casas",
+            'unknown_time'     => false,
+            'svg'              => $svg,
+            'filename'         => 'ceu-de-agora-' . $now->format('Y-m-d-Hi') . '.svg',
+            'chart_attributes' => $attributes,
+        ];
+    }
+
     protected function resolvePublicLayout(): ?string
     {
         $configured = config('pluginSettings.Astrology.publicLayout');
@@ -820,6 +935,16 @@ class PublicChartController extends Controller
 
     protected function resolvePublicTheme(array $availableThemes): string
     {
+        $user = auth()->user();
+        if ($user !== null) {
+            $userId = (int) $user->getAuthIdentifier();
+            foreach ($availableThemes as $slug => $theme) {
+                if ((int) ($theme['owner'] ?? 0) === $userId) {
+                    return (string) $slug;
+                }
+            }
+        }
+
         $configured = trim((string) config('pluginSettings.Astrology.publicTheme', 'classic'));
 
         if ($configured !== '' && isset($availableThemes[$configured])) {
@@ -831,5 +956,103 @@ class PublicChartController extends Controller
         }
 
         return (string) (array_key_first($availableThemes) ?? 'classic');
+    }
+
+    public function astroClock(
+        Request $request,
+        ChartCalculationService $calculationService,
+        ChartSvgBuilder $svgBuilder
+    ) {
+        $availableThemes = ThemeManager::getThemes();
+        $defaultTheme = $this->resolvePublicTheme($availableThemes);
+        $requestedTheme = (string) $request->input('theme', $defaultTheme);
+        $themeSlug = isset($availableThemes[$requestedTheme]) ? $requestedTheme : $defaultTheme;
+
+        $timezone = 'America/Sao_Paulo';
+        $now = Carbon::now($timezone);
+        $date = $now->format('Y-m-d');
+        $time = $now->format('H:i');
+
+        try {
+            $chartData = $calculationService->calculateEphemeral([
+                'date'           => $date,
+                'time'           => $time,
+                'timezone'       => $timezone,
+                'latitude'       => 0.0,
+                'longitude'      => 0.0,
+                'house_system'   => 'whole_sign',
+                'aspects'        => true,
+                'include_minors' => false,
+                'orb_general'    => 6.0,
+                'orb_luminaries' => 10.0,
+            ]);
+
+            // Remove casas, ângulos e referências a casas nos planetas/aspectos
+            $chartData['houses'] = [];
+            $chartData['angles'] = [];
+
+            if (!empty($chartData['planets']) && is_array($chartData['planets'])) {
+                foreach ($chartData['planets'] as &$planet) {
+                    unset($planet['house']);
+                }
+                unset($planet);
+            }
+
+            $angleKeys = ['Ascendant', 'MC', 'Descendant', 'Imum Coeli'];
+            $chartData['aspects'] = array_values(array_filter(
+                $chartData['aspects'] ?? [],
+                fn (array $asp) => !in_array($asp['point1'] ?? '', $angleKeys, true)
+                    && !in_array($asp['point2'] ?? '', $angleKeys, true)
+            ));
+
+            $summary = $calculationService->extractSummarySigns($chartData);
+
+            $attributes = [
+                'name'           => 'Céu de Agora',
+                'slug'           => 'ceu-de-agora-' . $now->format('Y-m-d-Hi'),
+                'birth_date'     => $date,
+                'birth_time'     => $time,
+                'timezone'       => $timezone,
+                'city'           => 'Posição Geocêntrica (Sem Casas)',
+                'latitude'       => 0.0,
+                'longitude'      => 0.0,
+                'house_system'   => 'none',
+                'include_minors' => false,
+                'orb_general'    => 6.0,
+                'orb_luminaries' => 10.0,
+                'status'         => 'completed',
+                'sun_sign'       => $summary['sun_sign'],
+                'moon_sign'      => $summary['moon_sign'],
+                'ascendant_sign' => null,
+                'chart_data'     => $chartData,
+            ];
+
+            $chart = new NatalChart($attributes);
+            $svg = $svgBuilder->build($chart, $themeSlug);
+        } catch (Throwable $e) {
+            return back()->with('astrology_error', 'Não foi possível gerar o céu de agora: ' . $e->getMessage());
+        }
+
+        $payload = [
+            'view_type'        => 'single',
+            'mode'             => 'sky_now',
+            'hide_houses'      => true,
+            'title'            => 'Céu de Agora',
+            'subtitle'         => $now->format('d/m/Y \à\s H:i') . " ({$timezone}) — Sem casas",
+            'unknown_time'     => false,
+            'svg'              => $svg,
+            'filename'         => 'ceu-de-agora-' . $now->format('Y-m-d-Hi') . '.svg',
+            'chart_attributes' => $attributes,
+            'theme'            => $themeSlug,
+            'inputs'           => [
+                'mode'  => 'natal',
+                'theme' => $themeSlug,
+            ],
+        ];
+
+        $token = Str::random(32);
+        Cache::put(self::CACHE_PREFIX . $token, $payload, now()->addMinutes(90));
+
+        return redirect()->route('astrology.calculator.index', ['r' => $token]);
     }
 }

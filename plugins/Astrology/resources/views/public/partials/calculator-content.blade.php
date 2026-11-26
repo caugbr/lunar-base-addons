@@ -45,28 +45,40 @@
         </div>
     @endif
 
-    <form method="POST" action="{{ route('astrology.calculator.calculate') }}" class="astro-calc-card" id="astro_public_form">
+    <form method="POST" action="{{ route('astrology.calculator.calculate') }}" class="astro-calc-card @if($result) collapsed @endif" id="astro_public_form">
         @csrf
         <input type="hidden" name="mode" id="astro_mode_input" value="{{ $activeMode }}">
 
         {{-- Abas de selecao do tipo de mapa --}}
         <div class="astro-calc-tabs" role="tablist" aria-label="Tipo de cálculo astrológico">
-            <button type="button" class="astro-calc-tab {{ $activeMode === 'natal' ? 'is-active' : '' }}" data-mode="natal">
-                Mapa Natal
-            </button>
-            <button type="button" class="astro-calc-tab {{ $activeMode === 'transit' ? 'is-active' : '' }}" data-mode="transit">
-                Trânsitos
-            </button>
-            <button type="button" class="astro-calc-tab {{ $activeMode === 'solar_return' ? 'is-active' : '' }}" data-mode="solar_return">
-                Revolução Solar
-            </button>
-            <button type="button" class="astro-calc-tab {{ $activeMode === 'synastry' ? 'is-active' : '' }}" data-mode="synastry">
-                Sinastria
+            <div class="tabs">
+                <button type="button" class="astro-calc-tab {{ $activeMode === 'natal' ? 'is-active' : '' }}" data-mode="natal">
+                    Mapa Natal
+                </button>
+                <button type="button" class="astro-calc-tab {{ $activeMode === 'transit' ? 'is-active' : '' }}" data-mode="transit">
+                    Trânsitos
+                </button>
+                <button type="button" class="astro-calc-tab {{ $activeMode === 'solar_return' ? 'is-active' : '' }}" data-mode="solar_return">
+                    Revolução Solar
+                </button>
+                <button type="button" class="astro-calc-tab {{ $activeMode === 'synastry' ? 'is-active' : '' }}" data-mode="synastry">
+                    Sinastria
+                </button>
+                <button type="button" class="astro-calc-tab {{ $activeMode === 'sky_now' ? 'is-active' : '' }}" data-mode="sky_now">
+                    Céu Agora
+                </button>
+                <div class="info-title">
+                    Expanda este box para modificar as opções de cálculo.
+                </div>
+            </div>
+            <button type="button" class="astro-tabs-toggle">
+                <x-lucide-chevron-up class="lucid-icon expand" />
+                <x-lucide-chevron-down class="lucid-icon shrink" />
             </button>
         </div>
 
         {{-- Bloco comum: Pessoa 1 (Dados Natais) --}}
-        <section class="astro-calc-section">
+        <section class="astro-calc-section" id="p1_section" style="{{ $activeMode === 'sky_now' ? 'display:none;' : '' }}">
             <h2 class="astro-calc-section-title" id="p1_heading">
                 {{ $activeMode === 'synastry' ? '1ª Pessoa — Dados de nascimento' : 'Seus dados de nascimento' }}
             </h2>
@@ -80,15 +92,29 @@
 
                 <div class="astro-calc-field">
                     <label for="p1_birth_date">Data de nascimento *</label>
-                    <input type="date" id="p1_birth_date" name="birth_date" class="astro-calc-input"
-                           value="{{ old('birth_date', $inputs['birth_date']) }}" required>
+                    <x-roller-picker
+                        type="date"
+                        id="p1_birth_date"
+                        name="birth_date"
+                        class="astro-calc-input"
+                        modal-title="Data de nascimento"
+                        :value="old('birth_date', $inputs['birth_date'])"
+                        :min-year="1900"
+                        breakpoint="768"
+                    />
                 </div>
 
                 <div class="astro-calc-field">
                     <label for="p1_birth_time">Hora de nascimento</label>
-                    <input type="time" id="p1_birth_time" name="birth_time" class="astro-calc-input"
-                           value="{{ old('birth_time', $inputs['birth_time']) }}"
-                           {{ $p1Unknown ? 'disabled' : '' }}>
+                    <x-roller-picker
+                        type="time"
+                        id="p1_birth_time"
+                        name="birth_time"
+                        class="astro-calc-input"
+                        modal-title="Hora de nascimento"
+                        :value="old('birth_time', $inputs['birth_time'])"
+                        breakpoint="768"
+                    />
                     <label class="astro-calc-checkbox">
                         <input type="checkbox" name="unknown_time" id="p1_unknown_time" value="1" {{ $p1Unknown ? 'checked' : '' }}>
                         <span>Não sei a hora exata (usar 12:00)</span>
@@ -145,15 +171,38 @@
                     </div>
 
                     @if(count($availableThemes) > 1)
+                        @php
+                            $curTheme = old('theme', $inputs['theme']);
+                            $privateThemes = array_filter($availableThemes, fn ($t) => !empty($t['owner']));
+                            $publicThemes  = array_filter($availableThemes, fn ($t) => empty($t['owner']));
+                            $isAdmin = auth()->user()?->role === 'admin';
+                        @endphp
+
                         <div class="astro-calc-field">
                             <label for="astro_theme">Estilo visual da mandala</label>
-                            @php $curTheme = old('theme', $inputs['theme']); @endphp
                             <select id="astro_theme" name="theme" class="astro-calc-input">
-                                @foreach($availableThemes as $tSlug => $tData)
-                                    <option value="{{ $tSlug }}" {{ $curTheme === $tSlug ? 'selected' : '' }}>
-                                        {{ $tData['name'] ?? ucfirst($tSlug) }}
-                                    </option>
-                                @endforeach
+                                @if(!empty($privateThemes))
+                                    <optgroup label="{{ $isAdmin ? 'Temas Privados' : 'Seus temas exclusivos' }}">
+                                        @foreach($privateThemes as $tSlug => $tData)
+                                            <option value="{{ $tSlug }}" {{ $curTheme === $tSlug ? 'selected' : '' }}>
+                                                {{ $tData['name'] ?? ucfirst($tSlug) }}@if($isAdmin && !empty($tData['owner_name'])) ({{ $tData['owner_name'] }})@elseif($isAdmin) (#{{ $tData['owner'] }})@endif
+                                            </option>
+                                        @endforeach
+                                    </optgroup>
+                                    <optgroup label="Temas Públicos">
+                                        @foreach($publicThemes as $tSlug => $tData)
+                                            <option value="{{ $tSlug }}" {{ $curTheme === $tSlug ? 'selected' : '' }}>
+                                                {{ $tData['name'] ?? ucfirst($tSlug) }}
+                                            </option>
+                                        @endforeach
+                                    </optgroup>
+                                @else
+                                    @foreach($publicThemes as $tSlug => $tData)
+                                        <option value="{{ $tSlug }}" {{ $curTheme === $tSlug ? 'selected' : '' }}>
+                                            {{ $tData['name'] ?? ucfirst($tSlug) }}
+                                        </option>
+                                    @endforeach
+                                @endif
                             </select>
                         </div>
                     @else
@@ -169,13 +218,28 @@
             <div class="astro-calc-grid astro-calc-grid-3">
                 <div class="astro-calc-field">
                     <label for="transit_date">Data</label>
-                    <input type="date" id="transit_date" name="transit_date" class="astro-calc-input"
-                           value="{{ old('transit_date', $inputs['transit_date']) }}">
+                    <x-roller-picker
+                        type="date"
+                        id="transit_date"
+                        name="transit_date"
+                        class="astro-calc-input"
+                        modal-title="Data"
+                        :value="old('transit_date', $inputs['transit_date'])"
+                        :min-year="1900"
+                        breakpoint="768"
+                    />
                 </div>
                 <div class="astro-calc-field">
                     <label for="transit_time">Hora</label>
-                    <input type="time" id="transit_time" name="transit_time" class="astro-calc-input"
-                           value="{{ old('transit_time', substr((string) $inputs['transit_time'], 0, 5)) }}">
+                    <x-roller-picker
+                        type="time"
+                        id="transit_time"
+                        name="transit_time"
+                        class="astro-calc-input"
+                        modal-title="Data"
+                        :value="old('transit_time', substr((string) $inputs['transit_time'], 0, 5))"
+                        breakpoint="768"
+                    />
                 </div>
                 <div class="astro-calc-field">
                     <label for="transit_city">Cidade atual <span class="astro-calc-opt">(opcional)</span></label>
@@ -278,15 +342,29 @@
 
                 <div class="astro-calc-field">
                     <label for="p2_birth_date">Data de nascimento *</label>
-                    <input type="date" id="p2_birth_date" name="p2_birth_date" class="astro-calc-input"
-                           value="{{ old('p2_birth_date', $inputs['p2_birth_date']) }}">
+                    <x-roller-picker
+                        type="date"
+                        id="p2_birth_date"
+                        name="p2_birth_date"
+                        class="astro-calc-input"
+                        modal-title="Data"
+                        :value="old('p2_birth_date', $inputs['p2_birth_date'])"
+                        :min-year="1900"
+                        breakpoint="768"
+                    />
                 </div>
 
                 <div class="astro-calc-field">
                     <label for="p2_birth_time">Hora de nascimento</label>
-                    <input type="time" id="p2_birth_time" name="p2_birth_time" class="astro-calc-input"
-                           value="{{ old('p2_birth_time', $inputs['p2_birth_time']) }}"
-                           {{ $p2Unknown ? 'disabled' : '' }}>
+                    <x-roller-picker
+                        type="time"
+                        id="p2_birth_time"
+                        name="p2_birth_time"
+                        class="astro-calc-input"
+                        modal-title="Data"
+                        :value="old('p2_birth_time', $inputs['p2_birth_time'])"
+                        breakpoint="768"
+                    />
                     <label class="astro-calc-checkbox">
                         <input type="checkbox" name="p2_unknown_time" id="p2_unknown_time" value="1" {{ $p2Unknown ? 'checked' : '' }}>
                         <span>Não sei a hora exata (usar 12:00)</span>
@@ -331,9 +409,23 @@
             </details>
         </section>
 
-        <div class="astro-calc-actions">
+        {{-- Painel extra: Ceu de Agora --}}
+        <section class="astro-calc-section astro-calc-mode-panel" data-panel="sky_now" style="{{ $activeMode === 'sky_now' ? '' : 'display:none;' }}">
+            <h2 class="astro-calc-section-title">Céu de Agora (Relógio Astrológico)</h2>
+            <p class="astro-calc-hint" style="margin: 0;">
+                Calcula as posições planetárias e os aspectos do momento atual, sem divisão de casas ou Ascendente.
+                Não é necessário preencher dados de nascimento.
+            </p>
+        </section>
+
+        {{-- <div class="astro-calc-actions">
             <button type="submit" class="astro-calc-btn-primary">
                 Calcular mapa
+            </button>
+        </div> --}}
+        <div class="astro-calc-actions">
+            <button type="submit" class="astro-calc-btn-primary" id="astro_submit_btn">
+                {{ $activeMode === 'sky_now' ? 'Ver Céu de Agora' : 'Calcular mapa' }}
             </button>
         </div>
     </form>
@@ -396,12 +488,14 @@
                             <x-astrology-sign-icon :sign="$displayChart->moon_sign" :theme="$result['theme']" :showName="true" />
                         </div>
                     </div>
-                    <div class="astro-calc-big3-card">
-                        <span class="astro-calc-big3-label">Ascendente</span>
-                        <div class="astro-calc-big3-val">
-                            <x-astrology-sign-icon :sign="$displayChart->ascendant_sign" :theme="$result['theme']" :showName="true" />
+                    @if(empty($result['hide_houses']))
+                        <div class="astro-calc-big3-card">
+                            <span class="astro-calc-big3-label">Ascendente</span>
+                            <div class="astro-calc-big3-val">
+                                <x-astrology-sign-icon :sign="$displayChart->ascendant_sign" :theme="$result['theme']" :showName="true" />
+                            </div>
                         </div>
-                    </div>
+                    @endif
                 </div>
             @elseif(($result['view_type'] ?? '') === 'biwheel')
                 <div class="astro-calc-biwheel-legend">
@@ -427,8 +521,19 @@
                 {!! $result['svg'] !!}
             </div>
 
+            @php
+            $message = config('pluginSettings.Astrology.chartMessage', null);
+            @endphp
+
+            @if($message)
+            <div class="chart-message">
+                {!! $message !!}
+            </div>
+            @endif
+
             {{-- Tabelas e Grade de Aspectos abaixo da Mandala --}}
             @if(($result['view_type'] ?? '') === 'single' && $displayChart)
+                @php $hideHouses = !empty($result['hide_houses']); @endphp
                 <div class="astro-calc-tables-grid">
                     <div class="astro-calc-card">
                         <h3 class="astro-calc-table-title">Posições Planetárias</h3>
@@ -438,7 +543,9 @@
                                     <tr>
                                         <th>Astro</th>
                                         <th>Posição</th>
-                                        <th>Casa</th>
+                                        @unless($hideHouses)
+                                            <th>Casa</th>
+                                        @endunless
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -451,7 +558,9 @@
                                                 @endif
                                             </td>
                                             <td><x-astrology-position :value="$pData['formatted']" :theme="$result['theme']" /></td>
-                                            <td>{{ isset($pData['house']) ? 'Casa ' . $pData['house'] : '—' }}</td>
+                                            @unless($hideHouses)
+                                                <td>{{ isset($pData['house']) ? 'Casa ' . $pData['house'] : '—' }}</td>
+                                            @endunless
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -459,6 +568,7 @@
                         </div>
                     </div>
 
+                    @unless($hideHouses)
                     <div class="astro-calc-card">
                         <h3 class="astro-calc-table-title">Ângulos e Casas</h3>
                         <div class="astro-calc-table-wrap">
@@ -486,6 +596,7 @@
                             </table>
                         </div>
                     </div>
+                    @endunless
                 </div>
 
                 @if(!empty($displayChart->aspects))
@@ -623,6 +734,13 @@
     const p1Heading = document.getElementById('p1_heading');
     const tabs = document.querySelectorAll('.astro-calc-tab');
     const panels = document.querySelectorAll('.astro-calc-mode-panel');
+    const p1Section = document.getElementById('p1_section');
+    const submitBtn = document.getElementById('astro_submit_btn');
+    const toggle = document.querySelector('.astro-tabs-toggle');
+
+    toggle.addEventListener('click', () => {
+        form.classList.toggle('collapsed');
+    });
 
     function setMode(mode) {
         if (!modeInput) return;
@@ -635,6 +753,16 @@
         panels.forEach(panel => {
             panel.style.display = (panel.dataset.panel === mode) ? '' : 'none';
         });
+
+        if (p1Section) {
+            p1Section.style.display = (mode === 'sky_now') ? 'none' : '';
+        }
+
+        if (submitBtn) {
+            submitBtn.textContent = (mode === 'sky_now')
+                ? 'Ver Céu de Agora'
+                : 'Calcular mapa';
+        }
 
         if (p1Heading) {
             p1Heading.textContent = (mode === 'synastry')

@@ -171,13 +171,16 @@ class ChartCalculationService
     protected function normalizeCalculatedData(array $chartData): array
     {
         if (isset($chartData['planets'])) {
-            $chartData['planets'] = $this->normalizeLunarNodes($chartData['planets']);
+            $chartData['planets'] = $this->normalizeLunarNodes(
+                $chartData['planets'],
+                $chartData['houses'] ?? []
+            );
         }
 
         return $chartData;
     }
 
-    protected function normalizeLunarNodes(array $planets): array
+    protected function normalizeLunarNodes(array $planets, array $houses = []): array
     {
         $nodeKey = null;
         foreach (['North Node', 'True Node', 'mean Node'] as $candidate) {
@@ -195,19 +198,66 @@ class ChartCalculationService
         $planets['North Node'] = $northNode;
         unset($planets['True Node'], $planets['mean Node']);
 
-        $southLongitude = fmod((float) $northNode['longitude'] + 180.0, 360.0);
-        $degreesInSign = fmod($southLongitude, 30.0);
-        $degrees = (int) floor($degreesInSign);
-        $minutes = (int) round(($degreesInSign - $degrees) * 60);
+        $southLongitude = fmod(fmod((float) $northNode['longitude'] + 180.0, 360.0) + 360.0, 360.0);
+
+        $signNames = [
+            0 => 'Aries', 1 => 'Taurus', 2 => 'Gemini', 3 => 'Cancer',
+            4 => 'Leo', 5 => 'Virgo', 6 => 'Libra', 7 => 'Scorpio',
+            8 => 'Sagittarius', 9 => 'Capricorn', 10 => 'Aquarius', 11 => 'Pisces',
+        ];
+
+        $totalArcSeconds = (int) round($southLongitude * 3600) % (360 * 3600);
+        $signIndex = intdiv($totalArcSeconds, 30 * 3600);
+        $inSignSeconds = $totalArcSeconds % (30 * 3600);
+        $degrees = intdiv($inSignSeconds, 3600);
+        $minutes = intdiv($inSignSeconds % 3600, 60);
+        $seconds = $inSignSeconds % 60;
+        $southSign = $signNames[$signIndex] ?? 'Aries';
+
+        // Calcula a casa exata pelas cúspides; se não houver casas no array, inverte a do Nodo Norte (+6)
+        $southHouse = $this->findHouseForLongitude($southLongitude, $houses);
+        if ($southHouse === null && isset($northNode['house'])) {
+            $southHouse = (((int) $northNode['house'] + 5) % 12) + 1;
+        }
 
         $planets['South Node'] = [
             'longitude'     => round($southLongitude, 6),
-            'formatted'     => sprintf("%02d° %02d'", $degrees, $minutes),
+            'sign'          => $southSign,
+            'formatted'     => sprintf("%02d° %s %02d'%02d\"", $degrees, $southSign, $minutes, $seconds),
+            'house'         => $southHouse,
             'is_retrograde' => $northNode['is_retrograde'] ?? true,
             'daily_speed'   => $northNode['daily_speed'] ?? 0,
         ];
 
         return $planets;
+    }
+
+    protected function findHouseForLongitude(float $longitude, array $houses): ?int
+    {
+        if (count($houses) < 12) {
+            return null;
+        }
+
+        $lon = fmod(fmod($longitude, 360.0) + 360.0, 360.0);
+
+        for ($h = 1; $h <= 12; $h++) {
+            $next = ($h === 12) ? 1 : ($h + 1);
+            if (!isset($houses[$h]['longitude'], $houses[$next]['longitude'])) {
+                continue;
+            }
+
+            $cusp = fmod(fmod((float) $houses[$h]['longitude'], 360.0) + 360.0, 360.0);
+            $nextCusp = fmod(fmod((float) $houses[$next]['longitude'], 360.0) + 360.0, 360.0);
+
+            $arcSize = fmod($nextCusp - $cusp + 360.0, 360.0);
+            $offset = fmod($lon - $cusp + 360.0, 360.0);
+
+            if ($arcSize > 0 && $offset < $arcSize) {
+                return $h;
+            }
+        }
+
+        return null;
     }
 
     public function extractSummarySigns(array $chartData): array

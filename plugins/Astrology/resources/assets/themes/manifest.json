@@ -1,0 +1,29 @@
+{
+    "generated_at": "2026-11-25",
+    "public": {
+        "classic": {
+            "name": "Clássico",
+            "description": "Tema padrão do sistema."
+        },
+        "luminars": {
+            "name": "Luminars",
+            "description": "Tema Sol e Lua."
+        },
+        "old": {
+            "name": "Old",
+            "description": "Tema antigo."
+        }
+    },
+    "private": {
+        "neptune": {
+            "name": "Neptune",
+            "description": "Tema de Netuno.",
+            "owner": 1
+        },
+        "night": {
+            "name": "Night",
+            "description": "Tema noturno.",
+            "owner": 5
+        }
+    }
+}

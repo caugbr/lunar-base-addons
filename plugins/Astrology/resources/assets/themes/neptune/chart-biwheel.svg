@@ -1,0 +1,56 @@
+
+
+<svg xmlns="http://www.w3.org/2000/svg" width="694" height="694" viewBox="0 0 694 694">
+  <title>Mandala astrológica com signos e decanatos</title>
+  <desc>Mandala circular de 690 pixels de diâmetro externo, com faixa externa para os símbolos dos signos e faixa interna fina para marcação dos decanatos. Doze setores de 30 graus, com os limites dos signos deslocados 15 graus em relação aos eixos principais, de modo que os eixos atravessem o meio de cada setor.</desc>
+  <g fill="none" stroke="#063160" stroke-width="1.2321" stroke-linecap="round" transform="rotate(15 347 347)">
+
+    <circle cx="347" cy="347" r="345" />
+    <circle cx="347" cy="347" r="287.8286" />
+    <circle cx="347" cy="347" r="266.1429" />
+
+
+    <g stroke-width="1.035">
+      <path d="M347 2 L347 80.8571" transform="rotate(0 347 347)" />
+      <path d="M347 2 L347 80.8571" transform="rotate(30 347 347)" />
+      <path d="M347 2 L347 80.8571" transform="rotate(60 347 347)" />
+      <path d="M347 2 L347 80.8571" transform="rotate(90 347 347)" />
+      <path d="M347 2 L347 80.8571" transform="rotate(120 347 347)" />
+      <path d="M347 2 L347 80.8571" transform="rotate(150 347 347)" />
+      <path d="M347 2 L347 80.8571" transform="rotate(180 347 347)" />
+      <path d="M347 2 L347 80.8571" transform="rotate(210 347 347)" />
+      <path d="M347 2 L347 80.8571" transform="rotate(240 347 347)" />
+      <path d="M347 2 L347 80.8571" transform="rotate(270 347 347)" />
+      <path d="M347 2 L347 80.8571" transform="rotate(300 347 347)" />
+      <path d="M347 2 L347 80.8571" transform="rotate(330 347 347)" />
+    </g>
+
+
+    <g stroke-width="0.7886" opacity="0.9">
+      <path d="M347 59.1714 L347 80.8571" transform="rotate(10 347 347)" />
+      <path d="M347 59.1714 L347 80.8571" transform="rotate(20 347 347)" />
+      <path d="M347 59.1714 L347 80.8571" transform="rotate(40 347 347)" />
+      <path d="M347 59.1714 L347 80.8571" transform="rotate(50 347 347)" />
+      <path d="M347 59.1714 L347 80.8571" transform="rotate(70 347 347)" />
+      <path d="M347 59.1714 L347 80.8571" transform="rotate(80 347 347)" />
+      <path d="M347 59.1714 L347 80.8571" transform="rotate(100 347 347)" />
+      <path d="M347 59.1714 L347 80.8571" transform="rotate(110 347 347)" />
+      <path d="M347 59.1714 L347 80.8571" transform="rotate(130 347 347)" />
+      <path d="M347 59.1714 L347 80.8571" transform="rotate(140 347 347)" />
+      <path d="M347 59.1714 L347 80.8571" transform="rotate(160 347 347)" />
+      <path d="M347 59.1714 L347 80.8571" transform="rotate(170 347 347)" />
+      <path d="M347 59.1714 L347 80.8571" transform="rotate(190 347 347)" />
+      <path d="M347 59.1714 L347 80.8571" transform="rotate(200 347 347)" />
+      <path d="M347 59.1714 L347 80.8571" transform="rotate(220 347 347)" />
+      <path d="M347 59.1714 L347 80.8571" transform="rotate(230 347 347)" />
+      <path d="M347 59.1714 L347 80.8571" transform="rotate(250 347 347)" />
+      <path d="M347 59.1714 L347 80.8571" transform="rotate(260 347 347)" />
+      <path d="M347 59.1714 L347 80.8571" transform="rotate(280 347 347)" />
+      <path d="M347 59.1714 L347 80.8571" transform="rotate(290 347 347)" />
+      <path d="M347 59.1714 L347 80.8571" transform="rotate(310 347 347)" />
+      <path d="M347 59.1714 L347 80.8571" transform="rotate(320 347 347)" />
+      <path d="M347 59.1714 L347 80.8571" transform="rotate(340 347 347)" />
+      <path d="M347 59.1714 L347 80.8571" transform="rotate(350 347 347)" />
+    </g>
+  </g>
+</svg>

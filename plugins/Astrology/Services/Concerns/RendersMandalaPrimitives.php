@@ -202,6 +202,7 @@ trait RendersMandalaPrimitives
         $numberColor = $theme['houses']['numberColor'] ?? '#64748b';
         $numberSize = (float) ($theme['houses']['numberSize'] ?? 10.5);
         $degSize = (float) ($theme['houses']['degSize'] ?? 8.5);
+        $fonts = ChartSvgBuilder::resolveFonts($theme);
 
         $output = '';
 
@@ -229,7 +230,6 @@ trait RendersMandalaPrimitives
             $output .= "      <title>{$escapedTitle}</title>\n";
             $output .= "    </line>\n";
 
-            $fonts = ChartSvgBuilder::resolveFonts($theme);
             $cuspDeg = (int) floor(fmod($cuspLon, 30.0));
             $degPos = $this->polarToCartesian($displayAngle + 2.0, $degreeR, $cx, $cy);
             $output .= "    <text x=\"{$degPos['x']}\" y=\"{$degPos['y']}\" "
